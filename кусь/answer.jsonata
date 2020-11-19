@@ -1,0 +1,64 @@
+(
+
+$from := [
+    "выпрыгивает из-за угла",
+    "нападает из кустов",
+    "выбирается из подвала",
+    "запрыгивает в форточку",
+    "вылезает из вентиляции",
+    "выбирается из горящего танка",
+    "высовывается из шкафа",
+    "пролезает сквозь текстуры",
+    "выходит из КБ",
+    "возникает из ниоткуда",
+    "тихо кродёться",
+    "влетает с двух ног",
+    "выползает из под кровати",
+    "выскакивает из тени",
+    "вываливается из пододеяльника"
+];
+
+$what := [
+    "за жопу gachiHYPER",
+    "за ASS gachiBASS",
+    "за Орду SMOrc",
+    "за глаз WutFace",
+    "за пятку ariW",
+    "за ICQ Aptisha",
+    "за сосок BSUHey",
+    "за шею Pepega",
+    "за ляжку PepeLaugh",
+    "за тыщу, BSUDAI",
+    "за нос dead5What",
+    "за палец BSUTrolled",
+    "за себя и за Сашку BSURage",
+    "за любовь FeelsLoveMan",
+    "за монолит в конце-то концов gachiBASS",
+    "за ушко Kappa",
+    "за бочок OhMyDog",
+    "за подмышку DansGame",
+    "за пипу PETTHEPEEPO",
+    "за кукусики NomNom"
+];
+
+$choose := function ($l) {(
+    $id := $floor($random() * $count($l));
+    $l[$id]
+)};
+
+($count(parsed.mentions_list) > 1) ? (
+    '@' & payload.userstate.username & ' ' & $choose($from) & ' и каким-то образом одновременно кусает ' & (
+        $index := parsed.mentions ~> $split('') ~> $map(function ($v, $i) { $v = ',' ? $i }) ~> $max;
+        parsed.mentions ~> $split('') ~> $map(function ($v, $i) { $i = $index ? ' и' : $v }) ~> $join('')
+    ) & ' ' & $choose($what)
+) : ($count(parsed.mentions_list) = 1) ? (
+    '@' & payload.userstate.username & ' ' & $choose($from) & ' и кусает @' & parsed.mentions_list[0] & ' ' & (
+        parsed.mentions_list[0] = 'my4hoe' ? 'за мучное NomNom' :
+        $choose($what)
+    )
+) : (
+    '/me ' & $choose($from) & ' и кусает @' & payload.userstate.username & ' ' & $choose($what)
+)
+
+)
+

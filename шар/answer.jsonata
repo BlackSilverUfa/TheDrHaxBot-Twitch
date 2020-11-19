@@ -1,0 +1,68 @@
+(
+
+$positive := [
+    'определённо да OkayChamping',
+    'можешь быть уверен в этом OkayChamping',
+    'никаких сомнений OkayChamping',
+    'абсолютли OkayChamping'
+];
+
+$plausible := [
+    'хорошие шансы SeemsGood',
+    'вероятнее всего SeemsGood',
+    'думаю, что да SeemsGood',
+    'не исключено SeemsGood',
+    'немаловероятно SeemsGood'
+];
+
+$uncertain := [
+    'пока не ясно PepoThink',
+    'не уверен PepoThink',
+    'тут всё не так однозначно PepoThink',
+    'скажу за небольшую сумму, BSUDAI',
+    'не стоит вскрывать эту тему. Вы молодые, шутливые, вам все легко. Это не то monkaGunshake'
+];
+
+$unplausible := [
+    'да нет, наверное BSUHee',
+    'шансы не очень BSUHee',
+    'скорее нет, чем да BSUHee',
+    'я бы не надеялся BSUHee'
+];
+
+$negative := [
+    'даже не надейся WeirdChamping',
+    'весьма сомнительно WeirdChamping',
+    'определённо нет WeirdChamping',
+    'вероятность КРАЙНЕ мала WeirdChamping'
+];
+
+$choose := function ($l) {(
+    $id := $floor($random() * $count($l));
+    $l[$id]
+)};
+
+parsed.query ~> $match(/ (или|or) /) ? (
+    $options := parsed.query
+        ~> $substringBefore('?') ~> $replace(/ (или|or) /, ', ')
+        ~> $split(',') ~> $map(function ($i) { $trim($i) });
+    $option := $choose($options);
+    
+    $choose([
+        'скорее всего ' & $option & ' PepoThink',
+        'определённо ' & $option & ' OkayChamping',
+        $option & ' — наш выбор SeemsGood'
+    ])
+) : (
+    $answers := [
+        $choose($positive),
+        $choose($plausible),
+        $choose($uncertain),
+        $choose($unplausible),
+        $choose($negative)
+    ];
+
+    $choose($answers)
+)
+
+)
