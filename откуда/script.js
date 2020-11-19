@@ -80,6 +80,7 @@ async function main() {
     for (let [key, answer] of Object.entries(answers)) {
         if (typeof(answer) == 'object' && answer.regex) {
             let regex = new RegExp(answer.regex, 'ig');
+
             if (query.match(regex)) {
                 query = query.replace(regex, key);
             }
