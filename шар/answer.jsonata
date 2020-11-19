@@ -54,15 +54,13 @@ parsed.query ~> $match(/ (или|or) /) ? (
         $option & ' — наш выбор SeemsGood'
     ])
 ) : (
-    $answers := [
+    $choose([
         $choose($positive),
         $choose($plausible),
         $choose($uncertain),
         $choose($unplausible),
         $choose($negative)
-    ];
-
-    $choose($answers)
+    ])
 )
 
 )
