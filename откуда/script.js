@@ -107,6 +107,10 @@ async function main() {
             if (answer.items) {
                 msg.key = null;
                 msg.reply = answer.prefix + choose(answer.items);
+                
+                if (answer.suffix) {
+                    msg.reply += answer.suffix;
+                }
             } else if (answer.answer) {
                 msg.key = key;
                 msg.reply = answer.answer;
