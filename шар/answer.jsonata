@@ -46,13 +46,18 @@ parsed.query ~> $match(/ (или|or) /) ? (
     $options := parsed.query
         ~> $substringBefore('?') ~> $replace(/ (или|or) /, ', ')
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
-    $option := $choose($options);
-    
-    $choose([
-        'скорее всего ' & $option & ' PepoThink',
-        'определённо ' & $option & ' OkayChamping',
-        $option & ' — наш выбор SeemsGood'
-    ])
+        
+    ($options[0] = 'быть' and $options[1] = 'не быть') ? (
+        'вот в чём вопрос Kojimaptyp'
+    ) : (
+        $option := $choose($options);
+        
+        $choose([
+            'скорее всего ' & $option & ' PepoThink',
+            'определённо ' & $option & ' OkayChamping',
+            $option & ' — наш выбор SeemsGood'
+        ])
+    )
 ) : (
     $choose([
         $choose($positive),
