@@ -19,7 +19,7 @@ $from := [
 ];
 
 $what := [
-    "за жопу gachiHYPER",
+    "за жопу gachiGASM",
     "за ASS gachiBASS",
     "за Орду SMOrc",
     "за глаз WutFace",
@@ -39,7 +39,8 @@ $what := [
     "за подмышку DansGame",
     "за пипу PETTHEPEEPO",
     "за кукусики NomNom",
-    "за борщ ANYA"
+    "за борщ ANYA",
+    "за мегамаки gachiHYPER"
 ];
 
 $choose := function ($l) {(
