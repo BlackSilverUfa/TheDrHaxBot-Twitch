@@ -40,7 +40,8 @@ $what := [
     "за пипу PETTHEPEEPO",
     "за кукусики NomNom",
     "за борщ ANYA",
-    "за мегамаки gachiHYPER"
+    "за мегамаки gachiHYPER",
+    "за стримера PETTHEAPTEEPO"
 ];
 
 $choose := function ($l) {(
