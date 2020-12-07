@@ -50,14 +50,16 @@ $choose := function ($l) {(
     $l[$id]
 )};
 
-($count(parsed.mentions_list) > 1) ? (
+$mentions := parsed.mentions_list;
+
+($count($mentions) > 1) ? (
     '@' & payload.userstate.username & ' ' & $choose($from) & ' и каким-то образом одновременно кусает ' & (
-        $index := parsed.mentions ~> $split('') ~> $map(function ($v, $i) { $v = ',' ? $i }) ~> $max;
-        parsed.mentions ~> $split('') ~> $map(function ($v, $i) { $i = $index ? ' и' : $v }) ~> $join('')
+        $index := $mentions ~> $count;
+        $join($mentions[[0..$index-2]] ~> $map(function ($v) { '@' & $v }), ', ') & ' и @' & $mentions[$index-1]
     ) & ' ' & $choose($what)
-) : ($count(parsed.mentions_list) = 1) ? (
-    '@' & payload.userstate.username & ' ' & $choose($from) & ' и кусает @' & parsed.mentions_list[0] & ' ' & (
-        parsed.mentions_list[0] = 'my4hoe' ? 'за мучное NomNom' :
+) : ($count($mentions) = 1) ? (
+    '@' & payload.userstate.username & ' ' & $choose($from) & ' и кусает @' & $mentions[0] & ' ' & (
+        $mentions[0] = 'my4hoe' ? 'за мучное NomNom' :
         $choose($what)
     )
 ) : (
