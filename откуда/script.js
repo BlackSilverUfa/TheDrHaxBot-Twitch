@@ -70,7 +70,7 @@ async function main() {
 
     elasticlunr.clearStopWords();
     elasticlunr.addStopWords([
-        'of', 'the', 'я', 'и', 'с', 'на', 'не', 'из', 'о', 'за'
+        'of', 'the', 'я', 'и', 'с', 'на', 'не', 'из', 'о', 'за', 'в'
     ].map((s) => strip(s)));
     
     const index = elasticlunr();
