@@ -42,7 +42,7 @@ $choose := function ($l) {(
     $l[$id]
 )};
 
-parsed.query ~> $match(/ (или|or) /) ? (
+(parsed.query ~> $match(/ (или|or) /)) ? (
     $options := parsed.query
         ~> $substringBefore('?') ~> $replace(/ (или|or) /, ', ')
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
@@ -58,7 +58,9 @@ parsed.query ~> $match(/ (или|or) /) ? (
             $option & ' — наш выбор SeemsGood'
         ])
     )
-) : (
+) :
+(parsed.query ~> $match(/ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
+(
     $choose([
         $choose($positive),
         $choose($plausible),
