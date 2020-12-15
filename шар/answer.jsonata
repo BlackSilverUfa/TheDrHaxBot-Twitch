@@ -59,8 +59,8 @@ $choose := function ($l) {(
         ])
     )
 ) :
-(parsed.query ~> $match(/ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
-(parsed.query ~> $match(/^[UO][wω][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
+(parsed.query_filtered ~> $match(/ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
+(parsed.query_filtered ~> $match(/^[UO][wω][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
 (
     $choose([
         $choose($positive),
