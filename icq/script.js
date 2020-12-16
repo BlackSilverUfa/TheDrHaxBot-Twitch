@@ -47,7 +47,7 @@ async function main() {
     } else {
         let icq = db[user];
         
-        if (msg.payload.message[4] == '?') { // !icq?
+        if (msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
             msg.icq = icq;
             msg.delta = 0;
             return msg;
