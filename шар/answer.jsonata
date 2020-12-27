@@ -46,10 +46,14 @@ $choose := function ($l) {(
     $options := parsed.query
         ~> $substringBefore('?') ~> $replace(/ (или|or) /, ', ')
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
-        
-    ($options[0] = 'быть' and $options[1] = 'не быть') ? (
+
+    ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? (
         'вот в чём вопрос Kojimaptyp'
-    ) : (
+    ) :
+    ($count($options) = 2 and $options[0] = $options[1]) ? (
+        'да OkayChamping'
+    ) :
+    (
         $option := $choose($options);
         
         $choose([
