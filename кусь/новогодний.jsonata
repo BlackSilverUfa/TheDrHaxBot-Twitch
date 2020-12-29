@@ -1,0 +1,53 @@
+(
+
+$choose := function ($l) {(
+    $id := $floor($random() * $count($l));
+    $l[$id]
+)};
+
+$from := [
+    "выползает из мешка с подарками",
+    "выскакивает из снега",
+    "вылезает из-под новогоднего стола",
+    "выбирается из оливье",
+    "выныривает селёдкой из под шубы",
+    "приезжает с горы monkaSTEER",
+    "нападает из-под ёлки"
+];
+
+$what := [
+    "за ёлочный ШАААР OMEGALUL",
+    "за мишуру WaitWhat",
+    "за оливье CatoPog",
+    "за мандарин Peka1",
+    "за гирлянду gachiOnFIRE",
+    "за снежок peepoSnow",
+    "за фейерверк hinxRocket",
+    "за ёлку HolidayTree",
+    "за селёдку под шубой SabaPing",
+    $choose([
+        "за мотыгу pepeSmack",
+        "за фотографию Памелы Андерсон Kreygasm",
+        "за краски и кисти peepoClap",
+        "за медведя bigBossSalut"
+    ])
+];
+
+$mentions := parsed.mentions_list;
+
+($count($mentions) > 1) ? (
+    '@' & payload.userstate.username & ' ' & $choose($from) & ' и каким-то образом одновременно кусает ' & (
+        $index := $mentions ~> $count;
+        $join($mentions[[0..$index-2]] ~> $map(function ($v) { '@' & $v }), ', ') & ' и @' & $mentions[$index-1]
+    ) & ' ' & $choose($what)
+) : ($count($mentions) = 1) ? (
+    '@' & payload.userstate.username & ' ' & $choose($from) & ' и кусает @' & $mentions[0] & ' ' & (
+        $mentions[0] = 'my4hoe' ? 'за мучное NomNom' :
+        $choose($what)
+    )
+) : (
+    '/me ' & $choose($from) & ' и кусает @' & payload.userstate.username & ' ' & $choose($what)
+)
+
+)
+
