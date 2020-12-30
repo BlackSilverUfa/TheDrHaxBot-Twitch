@@ -48,7 +48,8 @@ $what := [
     "за красный нос peepoLeave",
     "за холодец NomNom",
     "за плед peepoComfy",
-    "за Снегурочку BSUHey"
+    "за Снегурочку BSUHey",
+    "за хлопушку PepegaAim"
 ];
 
 $mentions := parsed.mentions_list;
