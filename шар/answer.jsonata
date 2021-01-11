@@ -31,10 +31,10 @@ $unplausible := [
 ];
 
 $negative := [
-    'даже не надейся NOPERS',
-    'весьма сомнительно NOPERS',
-    'определённо нет NOPERS',
-    'вероятность КРАЙНЕ мала NOPERS'
+    'даже не надейся WeirdChamping',
+    'весьма сомнительно WeirdChamping',
+    'определённо нет WeirdChamping',
+    'вероятность КРАЙНЕ мала WeirdChamping'
 ];
 
 $choose := function ($l) {(
