@@ -63,7 +63,16 @@ $choose := function ($l) {(
         ])
     )
 ) :
-(parsed.query_filtered ~> $match(/^а+\.*$/i)) ? $choose(['...ня ANYA', '...лло ANYA']) :
+(parsed.query_filtered ~> $match(/^а+\.*$/i)) ? (
+    $random() < 0.01 ? '...ааа вам не кажется, что сегодня прекрасный день, сударь? peepoCocoa' :
+    $choose([
+        '...ня ANYA',
+        '...лло ANYA',
+        '...да, я люблю тебя ANYA',
+        '...ыаыа ANYA',
+        '...уф 🐺'
+    ])
+) :
 (parsed.query_filtered ~> $match(/ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
 (parsed.query_filtered ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
 (
