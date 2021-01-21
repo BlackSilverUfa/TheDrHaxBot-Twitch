@@ -64,7 +64,6 @@ $choose := function ($l) {(
     )
 ) :
 (parsed.query_filtered ~> $match(/^а+\.*$/i)) ? (
-    $random() < 0.01 ? '...ааа вам не кажется, что сегодня прекрасный день, сударь? peepoCocoa' :
     $choose([
         '...ня ANYA',
         '...лло ANYA',
