@@ -36,31 +36,31 @@
   - '841556992?at=1882'
 
 'трейлеры Мамая':
-  'prefix': 'это сложно объяснить без примера. Вот трейлер'
+  'prefix': 'это сложно объяснить без примера. Вот трейлер '
   'suffix': ' dead5What SmokeTime'
   'items':
-  - ' Human Farm bsu.us.to/586412927?at=2267'
-  - ' PsyHotel Simulator bsu.us.to/599255447?at=3251'
-  - ' MicroMan bsu.us.to/602188455?at=1354'
-  - ' Redneck Ed bsu.us.to/622728652?at=3961'
-  - ' Punch Boom bsu.us.to/622728652?at=4792'
-  - ' Lifeguard Simulator bsu.us.to/625606171?at=2039'
-  - ' Chex Quest HD bsu.us.to/626564087?at=1591'
-  - ' Just Die Already bsu.us.to/628517071?at=1209'
-  - ' Just Die Already bsu.us.to/650534841?at=2211'
-  - ' Techno Chicken bsu.us.to/661040084?at=522'
-  - ' Say No More bsu.us.to/665878817?at=987'
-  - ' Adventures of Chris bsu.us.to/675494632?at=3712'
-  - ' Never Breakup bsu.us.to/675494632?at=4092'
-  - ' Indika bsu.us.to/700057034?at=654'
-  - ' Just Die Already bsu.us.to/731025039?at=2176'
-  - ' Militsioner bsu.us.to/734046513?at=1404'
-  - ' Time To Stop Time bsu.us.to/754538542?at=1939'
-  - ' Crash Bandicoot 4 bsu.us.to/821805079?at=6786'
-  - ' Happy Game bsu.us.to/839294640?at=1247'
-  - ' Hijacker Jack bsu.us.to/839294640?at=1648'
-  - ' DEEEER Simulator bsu.us.to/860924750?at=2225'
-  - ' OnlyCans: Thirst Date bsu.us.to/870760177?at=2121'
+  - 'Human Farm bsu.us.to/586412927?at=2267'
+  - 'PsyHotel Simulator bsu.us.to/599255447?at=3251'
+  - 'MicroMan bsu.us.to/602188455?at=1354'
+  - 'Redneck Ed bsu.us.to/622728652?at=3961'
+  - 'Punch Boom bsu.us.to/622728652?at=4792'
+  - 'Lifeguard Simulator bsu.us.to/625606171?at=2039'
+  - 'Chex Quest HD bsu.us.to/626564087?at=1591'
+  - 'Just Die Already bsu.us.to/628517071?at=1209'
+  - 'Just Die Already bsu.us.to/650534841?at=2211'
+  - 'Techno Chicken bsu.us.to/661040084?at=522'
+  - 'Say No More bsu.us.to/665878817?at=987'
+  - 'Adventures of Chris bsu.us.to/675494632?at=3712'
+  - 'Never Breakup bsu.us.to/675494632?at=4092'
+  - 'Indika bsu.us.to/700057034?at=654'
+  - 'Just Die Already bsu.us.to/731025039?at=2176'
+  - 'Militsioner bsu.us.to/734046513?at=1404'
+  - 'Time To Stop Time bsu.us.to/754538542?at=1939'
+  - 'Crash Bandicoot 4 bsu.us.to/821805079?at=6786'
+  - 'Happy Game bsu.us.to/839294640?at=1247'
+  - 'Hijacker Jack bsu.us.to/839294640?at=1648'
+  - 'DEEEER Simulator bsu.us.to/860924750?at=2225'
+  - 'OnlyCans: Thirst Date bsu.us.to/870760177?at=2121'
 
 '4221':
   'regex': 'bufa4221'
@@ -486,3 +486,28 @@
 'отвёртка Джек': >
   отвёртка - самое грозное оружие в серии игр Hitman bsu.us.to/001605310?at=6829
   Во время прохождения эпизода "Марракеш" чат назвал её Джеком bsu.us.to/001605310?at=7083
+
+'веник':
+  'prefix': >
+    на 1-м стриме World War Z Куплинов начал рассказывать притчу про веник, а чат
+    продолжил Pepega bsu.us.to/413860733.1?at=10722 Пример: 
+  'items':
+  - 'веник всему голова'
+  - 'веник венику рознь'
+  - 'семь раз отмерь, один раз веник'
+  - 'волка веник кормит'
+  - 'один веник хорошо, а два лучше'
+  - 'сколько веник не корми - всё равно веник'
+  - 'без труда не выловишь и веник из пруда'
+  - 'был бы веник... был бы веник.'
+  - 'один в поле не веник'
+  - 'лучше веник в руках, чем швабра в небе'
+  - 'был бы веник - остальное приложится'
+  - 'не имей 100 друзей, а имей один веник'
+  - 'два сапога веник'
+  - 'веник живи веник учись'
+  - 'новый веник лучше старых двух, а когда сломается - под лавкою валяется'
+  - 'мал веник, да веник'
+  - 'сколько веник не корми, а его в лес тянет'
+  - 'любишь подметать, люби и веник'
+  - 'в семье не без веника'
