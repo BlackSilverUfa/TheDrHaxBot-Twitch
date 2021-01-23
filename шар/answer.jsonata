@@ -47,12 +47,8 @@ $choose := function ($l) {(
         ~> $substringBefore('?') ~> $replace(/ (или|or) /, ', ')
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
 
-    ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? (
-        'вот в чём вопрос Kojimaptyp'
-    ) :
-    ($count($options) = 2 and $options[0] = $options[1]) ? (
-        'да OkayChamping'
-    ) :
+    ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
+    ($count($options) = 2 and $options[0] = $options[1]) ? 'да OkayChamping' :
     (
         $option := $choose($options);
         
