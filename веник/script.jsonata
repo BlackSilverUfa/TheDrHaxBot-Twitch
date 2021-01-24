@@ -1,0 +1,17 @@
+(
+
+$choose := function ($l) {(
+    $id := $floor($random() * $count($l));
+    $l[$id]
+)};
+
+$choose($split(answers, '\n')) & ' ' & $choose([
+    'BUFANerd',
+    'SeemsGood',
+    'CoolStoryBob',
+    'OkayChamping',
+    'PepoG'
+])
+
+)
+
