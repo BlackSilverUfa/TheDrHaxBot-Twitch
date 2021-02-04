@@ -1,4 +1,4 @@
-const elasticlunr = require('elasticlunr@0.9.5');
+const lunr = require('lunr@2.3.9');
 const translit = require('cyrillic-to-translit-js@3.1.0')();
 
 function strip(string) {
@@ -52,27 +52,31 @@ if (msg.parsed.query_filtered.match(SEGMENT_HASH_REGEX)) {
 
 let query = strip(msg.parsed.query_filtered);
 
-elasticlunr.clearStopWords();
-elasticlunr.addStopWords(['of', 'the']);
-
-const index = elasticlunr();
-index.addField('name');
-index.setRef('id');
-
 let games = msg.index;
 let counter = 0;
 
-games.map((game) => {
-    index.addDoc({
-        name: strip(game.name),
-        id: counter++
+const index = lunr(function () {
+    this.field('name');
+    this.ref('id');
+    
+    games.map((game) => {
+        this.add({
+            name: strip(game.name),
+            id: counter++
+        });
     });
 });
 
 let results = index.search(query);
+let max_rank = 0;
 
 msg.results = results.map((x) => {
-    let game = games[x.ref];
+    let game = {...games[x.ref]};
+    
+    let rank = Object.keys(x.matchData.metadata).length;
+    if (rank > max_rank) {
+        max_rank = rank;
+    }
     
     // Replace joined id with first free segment
     if (game.id.indexOf(',') !== -1) {
@@ -86,8 +90,9 @@ msg.results = results.map((x) => {
     }
 
     game.score = x.score;
+    game.rank = rank;
     return game;
-}).filter((x) => x.score >= 2).splice(0, 5);
+}).filter((x) => x.rank == max_rank).splice(0, 5);
 
 return msg;
 
