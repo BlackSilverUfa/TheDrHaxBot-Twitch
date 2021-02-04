@@ -72,6 +72,13 @@ $choose := function ($l) {(
 ) :
 (parsed.query_filtered ~> $match(/ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
 (parsed.query_filtered ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
+(parsed.query_filtered ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
+    'PETTHEPEEPO',
+    'PETTHEAPTEEPO',
+    'PETTHECAT',
+    'PETTHEEVAN',
+    'PETTHEMOD'
+]) :
 (
     $choose([
         $choose($positive),
