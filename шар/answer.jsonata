@@ -59,6 +59,18 @@ $choose := function ($l) {(
         ])
     )
 ) :
+(parsed.query_filtered ~> $match(/от -?[0-9]+ до -?[0-9]+/)) ? (
+    $range := (parsed.query_filtered ~> $match(/от (-?[0-9]+) до (-?[0-9]+)/)).groups
+        ~> $map(function ($v) { $number($v) }) ~> $sort;
+    
+    $choice := $floor($random() * ($range[1] - $range[0] + 1) + $range[0]);
+    
+    $choose([
+        'определённо ' & $choice & ' OkayChamping',
+        'скорее всего ' & $choice & ' peepoThink',
+        $choice & ' — наш выбор SeemsGood'
+    ])
+) :
 (parsed.query_filtered ~> $match(/^а+\.*$/i)) ? (
     $choose([
         '...ня ANYA',
