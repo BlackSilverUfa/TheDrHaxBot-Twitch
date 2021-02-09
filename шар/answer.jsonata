@@ -4,7 +4,8 @@ $positive := [
     'определённо да OkayChamping',
     'можешь быть уверен в этом OkayChamping',
     'никаких сомнений OkayChamping',
-    'абсолютли OkayChamping'
+    'абсолютли OkayChamping',
+    'ну естественно OkayChamping'
 ];
 
 $plausible := [
