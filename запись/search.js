@@ -28,6 +28,10 @@ const require = global.get('require');
 const lunr = require('lunr');
 const translit = require('cyrillic-to-translit-js')();
 
+const Sugar = require('sugar');
+require('sugar/locales/ru');
+Sugar.Date.setLocale('ru');
+
 function strip(string) {
     return translit.transform(string).trim().split(' ').map((word) => {
         let match = word.toLowerCase().match(/[a-zа-я0-9]+/g);
@@ -142,6 +146,41 @@ async function main() {
 
             return msg;
         }
+    }
+    
+    let parsed_date = Sugar.Date.create(msg.parsed.query_filtered);
+
+    if (parsed_date) {
+        parsed_date = Sugar.Date.advance(parsed_date, {hours: 3});
+        parsed_date = Sugar.Date.format(parsed_date, '%Y-%m-%d');
+        // parsed_date = parsed_date.toISOString().substr(0, 10);
+
+        msg.results = Object.entries(segments).filter(([key, data]) => {
+            return data.date == parsed_date
+        }).filter(([key, data]) => {
+            return data.games.length > 0;
+        }).map(([key, data]) => {
+            let id = key;
+
+            // Replace joined id with first free segment
+            if (id.indexOf(',') !== -1) {
+                let candidates = id.split(',').filter((id) => {
+                    return !segments[id] || segments[id].games.length === 0;
+                });
+    
+                if (candidates.length > 0) {
+                    id = candidates[0];
+                }
+            }
+            
+            return {
+                name: data.name,
+                year: data.date.substr(0, 4),
+                id: id
+            };
+        });
+
+        return msg;
     }
 
     let query = strip(msg.parsed.query_filtered);
