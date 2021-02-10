@@ -148,12 +148,13 @@ async function main() {
         }
     }
     
-    let parsed_date = Sugar.Date.create(msg.parsed.query_filtered);
+    let parsed_date = Sugar.Date.create(msg.parsed.query_filtered, {
+        past: true
+    });
 
-    if (parsed_date) {
+    if (parsed_date != 'Invalid Date') {
         parsed_date = Sugar.Date.advance(parsed_date, {hours: 3});
         parsed_date = Sugar.Date.format(parsed_date, '%Y-%m-%d');
-        // parsed_date = parsed_date.toISOString().substr(0, 10);
 
         msg.results = Object.entries(segments).filter(([key, data]) => {
             return data.date == parsed_date
