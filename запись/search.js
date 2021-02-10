@@ -188,6 +188,7 @@ async function main() {
     let results = index.search(query);
     let max_rank = 0;
 
+    // TODO: Фильтровать результаты, найденные только по числам
     msg.results = results.map((x) => {
         let game = {...games[x.ref]};
 
