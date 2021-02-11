@@ -151,6 +151,8 @@ async function main() {
     let parsed_date = Sugar.Date.create(msg.parsed.query_filtered, {
         past: true
     });
+    
+    msg.date = parsed_date;
 
     if (parsed_date != 'Invalid Date') {
         parsed_date = Sugar.Date.advance(parsed_date, {hours: 3});
@@ -212,8 +214,6 @@ async function main() {
             }
         }
 
-        game.keywords = keywords;
-        game.keywords_nan = keywords.map(x => isNaN(Number(x)));
         game.score = x.score;
         game.rank = rank;
         return game;
