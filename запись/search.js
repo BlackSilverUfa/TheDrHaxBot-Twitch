@@ -26,14 +26,16 @@ function set(context, key, value, store_name) {
 
 const require = global.get('require');
 const lunr = require('lunr');
-const translit = require('cyrillic-to-translit-js')();
+require('lunr-languages/lunr.stemmer.support')(lunr);
+require('lunr-languages/lunr.ru')(lunr);
+require('lunr-languages/lunr.multi')(lunr);
 
 const Sugar = require('sugar');
 require('sugar/locales/ru');
 Sugar.Date.setLocale('ru');
 
 function strip(string) {
-    return translit.transform(string).trim().split(' ').map((word) => {
+    return string.trim().split(' ').map((word) => {
         let match = word.toLowerCase().match(/[a-zа-я0-9]+/g);
         return match ? match.join('') : '';
     }).join(' ');
@@ -73,6 +75,8 @@ if (msg.mode == 'init') {
 
         let counter = 0;
         const index = lunr(function () {
+            this.use(lunr.multiLanguage('en', 'ru'));
+
             this.field('name');
             this.ref('id');
 
