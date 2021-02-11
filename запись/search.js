@@ -45,20 +45,20 @@ if (msg.mode == 'init') {
     async function init() {
         // Source: https://blackufa.thedrhax.pw/data/categories.json
         const categories = await get(flow, 'blackufa_categories');
-        
+
         const games = [].concat(...Object.keys(categories).map((key) => {
             let category = categories[key];
-            
+
             if (category.search === false) {
                 return [];
             }
-            
+
             return [].concat(...category.games.map((game) => {
                 game = {...game};
                 game.group = category.name;
-        
+
                 let names = game.name.split(' / ');
-        
+
                 if (names.length > 1) {
                     return names.map((name) => {
                         let subref = {...game};
@@ -75,7 +75,7 @@ if (msg.mode == 'init') {
         const index = lunr(function () {
             this.field('name');
             this.ref('id');
-    
+
             games.map((game) => {
                 this.add({
                     name: strip(game.name),
@@ -93,7 +93,7 @@ if (msg.mode == 'init') {
 
         return null;
     }
-    
+
     return init();
 }
 
@@ -101,94 +101,85 @@ if (msg.mode == 'init') {
 
 const SEGMENT_HASH_REGEX = /^([0-9]+(\.[0-9]+|,)?)+$/;
 
-async function main() {
-    const [segments, games, index] = await Promise.all([
-        // Source: https://blackufa.thedrhax.pw/data/segments.json
-        get(flow, 'blackufa_segments'),
-        get(context, 'games', 'memory'),
-        get(context, 'index', 'memory')
-    ]);
+function find_by_id(segments, query) {
+    if (!msg.parsed.query_filtered.match(SEGMENT_HASH_REGEX)) {
+        return [];
+    }
 
-    if (msg.parsed.query_filtered.match(SEGMENT_HASH_REGEX)) {
-        let segment = segments[msg.parsed.query_filtered];
+    let segment = segments[query];
 
-        if (!segment || segment.games.length == 0) {
-            segment = null;
+    if (!segment || segment.games.length == 0) {
+        segment = null;
 
-            if (msg.parsed.query_filtered.indexOf(',') !== -1) {
-                let joined_parts = msg.parsed.query_filtered.split(',');
+        if (query.indexOf(',') !== -1) {
+            let joined_parts = query.split(',');
 
-                for (let i = 0; i < joined_parts.length; i++) {
-                    let part = joined_parts[i];
+            for (let i = 0; i < joined_parts.length; i++) {
+                let part = joined_parts[i];
 
-                    if (Object.keys(segments).indexOf(part) !== -1) {
-                        segment = segments[part];
-                        break;
-                    }
+                if (Object.keys(segments).indexOf(part) !== -1) {
+                    segment = segments[part];
+                    break;
                 }
-            } else {
-                let candidates = Object.keys(segments)
-                    .filter((k) => k.indexOf(',') !== -1)
-                    .filter((k) => k.split(',').indexOf(msg.parsed.query_filtered) !== -1);
+            }
+        } else {
+            let candidates = Object.keys(segments)
+                .filter((k) => k.indexOf(',') !== -1)
+                .filter((k) => k.split(',').indexOf(query) !== -1);
 
-                if (candidates.length > 0) {
-                    segment = segments[candidates[0]];
-                }
+            if (candidates.length > 0) {
+                segment = segments[candidates[0]];
+            }
+        }
+    }
+
+    return segment ? [{
+        id: query,
+        name: segment.name,
+        year: segment.date.substr(0, 4)
+    }] : [];
+}
+
+function find_by_date(segments, query) {
+    let date = Sugar.Date.create(msg.parsed.query_filtered, { past: true });
+
+    if (date == 'Invalid Date') {
+        return [];
+    }
+
+    date = Sugar.Date.advance(date, { hours: 3 });
+    date = Sugar.Date.format(date, '%Y-%m-%d');
+
+    return Object.entries(segments).filter(([key, data]) => {
+        return data.date == date && data.games.length > 0;
+    }).map(([key, data]) => {
+        let id = key;
+
+        // Replace joined id with first free segment
+        if (id.indexOf(',') !== -1) {
+            let candidates = id.split(',').filter((id) => {
+                return !segments[id] || segments[id].games.length === 0;
+            });
+
+            if (candidates.length > 0) {
+                id = candidates[0];
             }
         }
 
-        if (segment) {
-            msg.results = [{
-                id: msg.parsed.query_filtered,
-                name: segment.name,
-                year: segment.date.substr(0, 4)
-            }];
-
-            return msg;
-        }
-    }
-    
-    let parsed_date = Sugar.Date.create(msg.parsed.query_filtered, {
-        past: true
+        return {
+            name: data.name,
+            year: data.date.substr(0, 4),
+            id: id
+        };
     });
-    
-    msg.date = parsed_date;
+}
 
-    if (parsed_date != 'Invalid Date') {
-        parsed_date = Sugar.Date.advance(parsed_date, {hours: 3});
-        parsed_date = Sugar.Date.format(parsed_date, '%Y-%m-%d');
-
-        msg.results = Object.entries(segments).filter(([key, data]) => {
-            return data.date == parsed_date && data.games.length > 0;
-        }).map(([key, data]) => {
-            let id = key;
-
-            // Replace joined id with first free segment
-            if (id.indexOf(',') !== -1) {
-                let candidates = id.split(',').filter((id) => {
-                    return !segments[id] || segments[id].games.length === 0;
-                });
-    
-                if (candidates.length > 0) {
-                    id = candidates[0];
-                }
-            }
-            
-            return {
-                name: data.name,
-                year: data.date.substr(0, 4),
-                id: id
-            };
-        });
-
-        return msg;
-    }
-
-    let query = strip(msg.parsed.query_filtered);
+function find_by_text(index, games, segments, query) {
+    query = strip(query);
     let results = index.search(query);
     let max_rank = 0;
 
-    msg.results = results.map((x) => {
+    return results.map((x) => {
         let game = {...games[x.ref]};
 
         let keywords = Object.keys(x.matchData.metadata);
@@ -218,7 +209,31 @@ async function main() {
         game.rank = rank;
         return game;
     }).filter(x => x !== null).filter(x => x.rank == max_rank).splice(0, 5);
+}
 
+async function main() {
+    const [segments, games, index] = await Promise.all([
+        // Source: https://blackufa.thedrhax.pw/data/segments.json
+        get(flow, 'blackufa_segments'),
+        get(context, 'games', 'memory'),
+        get(context, 'index', 'memory')
+    ]);
+
+    let results = find_by_id(segments, msg.parsed.query_filtered);
+
+    if (results.length > 0) {
+        msg.results = results;
+        return msg;
+    }
+
+    results = find_by_date(segments, msg.parsed.query_filtered);
+
+    if (results.length > 0) {
+        msg.results = results;
+        return msg;
+    }
+
+    msg.results = find_by_text(index, games, segments, msg.parsed.query_filtered);
     return msg;
 }
 
