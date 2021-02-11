@@ -157,9 +157,7 @@ async function main() {
         parsed_date = Sugar.Date.format(parsed_date, '%Y-%m-%d');
 
         msg.results = Object.entries(segments).filter(([key, data]) => {
-            return data.date == parsed_date
-        }).filter(([key, data]) => {
-            return data.games.length > 0;
+            return data.date == parsed_date && data.games.length > 0;
         }).map(([key, data]) => {
             let id = key;
 
@@ -188,11 +186,17 @@ async function main() {
     let results = index.search(query);
     let max_rank = 0;
 
-    // TODO: Фильтровать результаты, найденные только по числам
     msg.results = results.map((x) => {
         let game = {...games[x.ref]};
 
-        let rank = Object.keys(x.matchData.metadata).length;
+        let keywords = Object.keys(x.matchData.metadata);
+
+        // Filter results with only numbers as keywords
+        if (keywords.filter(x => isNaN(Number(x))).length == 0) {
+            return null;
+        }
+
+        let rank = keywords.length;
         if (rank > max_rank) {
             max_rank = rank;
         }
@@ -208,10 +212,12 @@ async function main() {
             }
         }
 
+        game.keywords = keywords;
+        game.keywords_nan = keywords.map(x => isNaN(Number(x)));
         game.score = x.score;
         game.rank = rank;
         return game;
-    }).filter((x) => x.rank == max_rank).splice(0, 5);
+    }).filter(x => x !== null).filter(x => x.rank == max_rank).splice(0, 5);
 
     return msg;
 }
