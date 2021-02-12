@@ -83,6 +83,14 @@ $choose := function ($l) {(
         '...яя AYAYA'
     ])
 ) :
+(parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (
+    "Мемы с Blackberry";
+    $choose([
+        '...ля-буля ANYA',
+        '...ляля ANYA',
+        '...ку, ипта ANYA'
+    ])
+) :
 (parsed.query_filtered ~> $match(/ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
 (parsed.query_filtered ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
 (parsed.query_filtered ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
