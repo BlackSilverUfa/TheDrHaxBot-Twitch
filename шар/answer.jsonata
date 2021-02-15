@@ -60,7 +60,7 @@ $choose := function ($l) {(
         ])
     )
 ) :
-(parsed.query_filtered ~> $match(/от [+-]?[0-9]+ до [+-]?[0-9]+/)) ? (
+(parsed.query ~> $match(/от [+-]?[0-9]+ до [+-]?[0-9]+/)) ? (
     $range := (parsed.query_filtered ~> $match(/от ([+-]?[0-9]+) до ([+-]?[0-9]+)/)).groups
         ~> $map(function ($v) { $number($v ~> $replace(/\+/, '')) }) ~> $sort;
     
@@ -91,9 +91,9 @@ $choose := function ($l) {(
         '...ку, ипта ANYA'
     ])
 ) :
-(parsed.query_filtered ~> $match(/ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
-(parsed.query_filtered ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
-(parsed.query_filtered ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
+(parsed.query ~> $match(/^ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
+(parsed.query ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
+(parsed.query ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
     'PETTHEPEEPO',
     'PETTHEAPTEEPO',
     'PETTHECAT',
