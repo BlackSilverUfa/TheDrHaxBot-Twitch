@@ -43,6 +43,14 @@ $choose := function ($l) {(
     $l[$id]
 )};
 
+(parsed.query ~> $length = 0) ? (
+    'чт' & (
+        $match(payload.message, /!ш+([ао]+)р+/i).groups[0]
+        ~> $replace('а', 'o') ~> $replace('А', 'O')
+        ~> $replace('о', 'а') ~> $replace('О', 'А')
+        ~> $replace('o', 'о') ~> $replace('O', 'О')
+    ) & '? Jebaited'
+) :
 (parsed.query ~> $match(/ (или|or) /)) ? (
     $options := parsed.query
         ~> $substringBefore('?') ~> $replace(/ (или|or) /, ', ')
