@@ -88,7 +88,8 @@ $choose := function ($l) {(
         '...ыаыа ANYA',
         '...уф 🐺',
         '...пчхи ANYA',
-        '...яя AYAYA'
+        '...яя AYAYA',
+        '...га OkayChamping'
     ])
 ) :
 (parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (
