@@ -1,11 +1,11 @@
 (
 
 $positive := [
-    'определённо да YESIDOTHINKSO',
-    'можешь быть уверен в этом YESIDOTHINKSO',
-    'никаких сомнений YESIDOTHINKSO',
-    'абсолютли YESIDOTHINKSO',
-    'ну естественно YESIDOTHINKSO'
+    'определённо да YEPPERS',
+    'можешь быть уверен в этом YEPPERS',
+    'никаких сомнений YEPPERS',
+    'абсолютли YEPPERS',
+    'ну естественно YEPPERS'
 ];
 
 $plausible := [
@@ -32,10 +32,10 @@ $unplausible := [
 ];
 
 $negative := [
-    'даже не надейся NOIDONTTHINKSO',
-    'весьма сомнительно NOIDONTTHINKSO',
-    'определённо нет NOIDONTTHINKSO',
-    'вероятность КРАЙНЕ мала NOIDONTTHINKSO'
+    'даже не надейся NOPERS',
+    'весьма сомнительно NOPERS',
+    'определённо нет NOPERS',
+    'вероятность КРАЙНЕ мала NOPERS'
 ];
 
 $choose := function ($l) {(
@@ -57,13 +57,13 @@ $choose := function ($l) {(
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
 
     ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
-    ($count($options) = 2 and $options[0] = $options[1]) ? 'да YESIDOTHINKSO' :
+    ($count($options) = 2 and $options[0] = $options[1]) ? 'да YEPPERS' :
     (
         $option := $choose($options);
         
         $choose([
             'скорее всего ' & $option & ' peepoThink',
-            'определённо ' & $option & ' YESIDOTHINKSO',
+            'определённо ' & $option & ' YEPPERS',
             $option & ' — наш выбор SeemsGood'
         ])
     )
@@ -75,7 +75,7 @@ $choose := function ($l) {(
     $choice := $floor($random() * ($range[1] - $range[0] + 1) + $range[0]);
     
     $choose([
-        'определённо ' & $choice & ' YESIDOTHINKSO',
+        'определённо ' & $choice & ' YEPPERS',
         'скорее всего ' & $choice & ' peepoThink',
         $choice & ' — наш выбор SeemsGood'
     ])
@@ -89,7 +89,7 @@ $choose := function ($l) {(
         '...уф 🐺',
         '...пчхи ANYA',
         '...яя AYAYA',
-        '...га YESIDOTHINKSO'
+        '...га YEPPERS'
     ])
 ) :
 (parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (
