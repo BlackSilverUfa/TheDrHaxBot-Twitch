@@ -21,7 +21,7 @@ $uncertain := [
     'не уверен peepoThink',
     'тут всё не так однозначно peepoThink',
     'скажу за небольшую сумму, BSUDAI',
-    'не стоит вскрывать эту тему. Вы молодые, шутливые, вам все легко. Это не то monkaGunshake'
+    'не стоит вскрывать эту тему. Вы молодые, шутливые, вам все легко. Это не то. Погибнут ВСЁ monkaGunshake'
 ];
 
 $unplausible := [
@@ -101,7 +101,7 @@ $choose := function ($l) {(
     ])
 ) :
 (parsed.query ~> $match(/^может чайку/)) ? 'а может тебя?! Jebaited' :
-(parsed.query ~> $match(/^ты потрясающий/)) ? 'нет, ты потрясающий!' :
+(parsed.query ~> $match(/^ты потрясающий/)) ? 'нет, ты потрясающий! MmmHmm' :
 (parsed.query ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
 (parsed.query ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
     'PETTHEPEEPO',

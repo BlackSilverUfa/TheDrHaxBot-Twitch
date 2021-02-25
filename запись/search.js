@@ -59,6 +59,12 @@ if (msg.mode == 'init') {
                 game = {...game};
                 game.group = category.name;
 
+                if (game.type === 'segment') {
+                    game.id = game.id + '/' + game.segment;
+                }
+                
+                delete game['type'];
+
                 let names = game.name.split(' / ');
 
                 if (names.length > 1) {
