@@ -1,11 +1,11 @@
 (
 
 $positive := [
-    'определённо да OkayChamping',
-    'можешь быть уверен в этом OkayChamping',
-    'никаких сомнений OkayChamping',
-    'абсолютли OkayChamping',
-    'ну естественно OkayChamping'
+    'определённо да YESIDOTHINKSO',
+    'можешь быть уверен в этом YESIDOTHINKSO',
+    'никаких сомнений YESIDOTHINKSO',
+    'абсолютли YESIDOTHINKSO',
+    'ну естественно YESIDOTHINKSO'
 ];
 
 $plausible := [
@@ -32,10 +32,10 @@ $unplausible := [
 ];
 
 $negative := [
-    'даже не надейся WeirdChamping',
-    'весьма сомнительно WeirdChamping',
-    'определённо нет WeirdChamping',
-    'вероятность КРАЙНЕ мала WeirdChamping'
+    'даже не надейся NOIDONTTHINKSO',
+    'весьма сомнительно NOIDONTTHINKSO',
+    'определённо нет NOIDONTTHINKSO',
+    'вероятность КРАЙНЕ мала NOIDONTTHINKSO'
 ];
 
 $choose := function ($l) {(
@@ -57,13 +57,13 @@ $choose := function ($l) {(
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
 
     ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
-    ($count($options) = 2 and $options[0] = $options[1]) ? 'да OkayChamping' :
+    ($count($options) = 2 and $options[0] = $options[1]) ? 'да YESIDOTHINKSO' :
     (
         $option := $choose($options);
         
         $choose([
             'скорее всего ' & $option & ' peepoThink',
-            'определённо ' & $option & ' OkayChamping',
+            'определённо ' & $option & ' YESIDOTHINKSO',
             $option & ' — наш выбор SeemsGood'
         ])
     )
@@ -75,7 +75,7 @@ $choose := function ($l) {(
     $choice := $floor($random() * ($range[1] - $range[0] + 1) + $range[0]);
     
     $choose([
-        'определённо ' & $choice & ' OkayChamping',
+        'определённо ' & $choice & ' YESIDOTHINKSO',
         'скорее всего ' & $choice & ' peepoThink',
         $choice & ' — наш выбор SeemsGood'
     ])
@@ -89,7 +89,7 @@ $choose := function ($l) {(
         '...уф 🐺',
         '...пчхи ANYA',
         '...яя AYAYA',
-        '...га OkayChamping'
+        '...га YESIDOTHINKSO'
     ])
 ) :
 (parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (

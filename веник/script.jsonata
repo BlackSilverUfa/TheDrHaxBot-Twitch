@@ -9,7 +9,7 @@ $choose($split(answers, '\n')) & ' ' & $choose([
     'BUFANerd',
     'SeemsGood',
     'CoolStoryBob',
-    'OkayChamping',
+    'YESIDOTHINKSO',
     'PepoG'
 ])
 
