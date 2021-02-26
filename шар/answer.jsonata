@@ -80,7 +80,7 @@ $choose := function ($l) {(
         $choice & ' — наш выбор SeemsGood'
     ])
 ) :
-(parsed.query_filtered ~> $match(/^а+\.*$/i)) ? (
+(parsed.query_filtered ~> $match(/^[aа]+\.*$/i)) ? (
     $choose([
         '...ня ANYA',
         '...лло ANYA',
@@ -89,7 +89,8 @@ $choose := function ($l) {(
         '...уф 🐺',
         '...пчхи ANYA',
         '...яя AYAYA',
-        '...га YEPPERS'
+        '...га YEPPERS',
+        '...ss gachiBASS'
     ])
 ) :
 (parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (
