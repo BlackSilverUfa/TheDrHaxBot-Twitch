@@ -43,10 +43,29 @@ function strip(string) {
 
 // -----------------------------------------
 
+function short_segment_id(segments, id) {
+    // Replace joined id with first free segment
+    if (id.indexOf(',') !== -1) {
+        let candidates = id.split(',').filter((id) => {
+            return !segments[id] || segments[id].games.length === 0;
+        });
+
+        if (candidates.length > 0) {
+            id = candidates[0];
+        }
+    }
+
+    return id;
+}
+
 if (msg.mode == 'init') {
     async function init() {
-        // Source: https://blackufa.thedrhax.pw/data/categories.json
-        const categories = await get(flow, 'blackufa_categories');
+        const [categories, segments] = await Promise.all([
+            // Source: https://blackufa.thedrhax.pw/data/categories.json
+            get(flow, 'blackufa_categories'),
+            // Source: https://blackufa.thedrhax.pw/data/segments.json
+            get(flow, 'blackufa_segments')
+        ]);
 
         const games = [].concat(...Object.keys(categories).map((key) => {
             let category = categories[key];
@@ -59,23 +78,18 @@ if (msg.mode == 'init') {
                 game = {...game};
                 game.group = category.name;
 
-                if (game.type === 'segment') {
-                    game.id = game.id + '/' + game.segment;
-                }
-                
-                delete game['type'];
+                if (game.start === undefined) { // game
+                    game.url = `bsu.us.to/${game.id}`;
+                } else { // segment
+                    let short_id = short_segment_id(segments, game.segment);
+                    game.url = `bsu.us.to/${short_id}`;
 
-                let names = game.name.split(' / ');
-
-                if (names.length > 1) {
-                    return names.map((name) => {
-                        let subref = {...game};
-                        subref.name = name;
-                        return subref;
-                    });
-                } else {
-                    return game;
+                    if (game.start > 0) {
+                        game.url += `?at=${game.start}`;
+                    }
                 }
+
+                return game;
             }));
         }));
 
@@ -144,7 +158,7 @@ function find_by_id(segments, query) {
     }
 
     return segment ? [{
-        id: query,
+        url: `bsu.us.to/${query}`,
         name: segment.name,
         year: segment.date.substr(0, 4)
     }] : [];
@@ -163,23 +177,12 @@ function find_by_date(segments, query) {
     return Object.entries(segments).filter(([key, data]) => {
         return data.date == date && data.games.length > 0;
     }).map(([key, data]) => {
-        let id = key;
-
-        // Replace joined id with first free segment
-        if (id.indexOf(',') !== -1) {
-            let candidates = id.split(',').filter((id) => {
-                return !segments[id] || segments[id].games.length === 0;
-            });
-
-            if (candidates.length > 0) {
-                id = candidates[0];
-            }
-        }
+        let id = short_segment_id(segments, key);
 
         return {
             name: data.name,
             year: data.date.substr(0, 4),
-            id: id
+            url: `bsu.us.to/${id}`
         };
     });
 }
@@ -202,17 +205,6 @@ function find_by_text(index, games, segments, query) {
         let rank = keywords.length;
         if (rank > max_rank) {
             max_rank = rank;
-        }
-
-        // Replace joined id with first free segment
-        if (game.id.indexOf(',') !== -1) {
-            let candidates = game.id.split(',').filter((id) => {
-                return !segments[id] || segments[id].games.length === 0;
-            });
-
-            if (candidates.length > 0) {
-                game.id = candidates[0];
-            }
         }
 
         game.score = x.score;

@@ -94,11 +94,11 @@ $choose := function ($l) {(
     ])
 ) :
 (parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (
-    "Мемы с Blackberry";
     $choose([
         '...ля-буля ANYA',
         '...ляля ANYA',
-        '...ку, ипта ANYA'
+        '...ку, ипта ANYA',
+        '...кусики NomNom'
     ])
 ) :
 (parsed.query ~> $match(/^может чайку/)) ? 'а может тебя?! Jebaited' :
