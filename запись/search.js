@@ -220,6 +220,11 @@ async function main() {
         get(context, 'games', 'memory'),
         get(context, 'index', 'memory')
     ]);
+    
+    if (msg.parsed.query_filtered.startsWith('дай')) {
+        msg.results = [games[Math.floor(Math.random() * games.length)]];
+        return msg;
+    }
 
     let results = find_by_id(segments, msg.parsed.query_filtered);
 

@@ -57,6 +57,7 @@ $choose := function ($l) {(
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
 
     ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
+    ($count($options) = 2 and 'not ' & $options[0] = $options[1]) ? 'that is the question Kojimaptyp' :
     ($count($options) = 2 and $options[0] = $options[1]) ? 'да YEPPERS' :
     (
         $option := $choose($options);
