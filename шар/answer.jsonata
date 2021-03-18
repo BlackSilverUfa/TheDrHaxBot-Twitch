@@ -103,7 +103,7 @@ $choose := function ($l) {(
     ])
 ) :
 (parsed.query ~> $match(/^может чайку/)) ? 'а может тебя?! Jebaited' :
-(parsed.query ~> $match(/^ты потрясающий/)) ? 'нет, ты потрясающий! MmmHmm' :
+(parsed.query ~> $match(/^ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
 (parsed.query ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ']) :
 (parsed.query ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
     'PETTHEPEEPO',
