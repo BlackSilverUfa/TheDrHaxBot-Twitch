@@ -94,6 +94,9 @@ $choose := function ($l) {(
         '...ss gachiBASS'
     ])
 ) :
+(parsed.query_filtered ~> $match(/^пинг/i)) ? (
+    "понг Pepega"
+) :
 (parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (
     $choose([
         '...ля-буля ANYA',
