@@ -5,7 +5,8 @@ $positive := [
     'можешь быть уверен в этом YEPPERS',
     'никаких сомнений YEPPERS',
     'абсолютли YEPPERS',
-    'ну естественно YEPPERS'
+    'ну естественно YEPPERS',
+    'да YEPPERS'
 ];
 
 $plausible := [
@@ -35,7 +36,9 @@ $negative := [
     'даже не надейся NOPERS',
     'весьма сомнительно NOPERS',
     'определённо нет NOPERS',
-    'вероятность КРАЙНЕ мала NOPERS'
+    'вероятность КРАЙНЕ мала NOPERS',
+    'никогда в жизни NOPERS',
+    'нет, просто нет NOPERS'
 ];
 
 $choose := function ($l) {(
