@@ -101,8 +101,7 @@ $choose := function ($l) {(
     $choose([
         '...ползень popCat',
         '...па peepoGiggles',
-        '...пола AYAYA',
-        '...смотри сзади на Кайнэ, ачивка будет BSUHey'
+        '...пола AYAYA'
     ])
 ) :
 (parsed.query_filtered ~> $match(/^пинг/i)) ? (
