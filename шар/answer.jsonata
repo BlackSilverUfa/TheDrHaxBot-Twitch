@@ -94,7 +94,8 @@ $choose := function ($l) {(
         '...пчхи ANYA',
         '...яя AYAYA',
         '...га YEPPERS',
-        '...ss gachiBASS'
+        '...ss gachiBASS',
+        '...вавава MEGALUL'
     ])
 ) :
 (parsed.query_filtered ~> $match(/^по+\.*$/i)) ? (
