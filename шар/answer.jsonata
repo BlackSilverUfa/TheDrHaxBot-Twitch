@@ -45,6 +45,7 @@ $continuations := [
     'аня ANYA',
     'алло ANYA',
     'ада, я люблю тебя ANYA',
+    'абсолютли YEPPERS',
     'аыаыа ANYA',
     'ауф 🐺',
     'апчхи ANYA',
@@ -87,21 +88,25 @@ $translate := function($text, $from, $to) {
         ~> $join()
 };
 
+$distinctStr := function ($x) {
+    $x ~> $split('') ~> $map(function($y, $i) {
+        $y ~> $match(/[аеоуыэ]/) and $substring($x, $i + 1, 1) = $y ? '' : $y
+    }) ~> $join()
+};
+
 $startsWith := function ($x, $y) {(
-    $x := $substring($x, 0, $length($y))
-        ~> $translate('a', 'а');
-    $y := $y
-        ~> $translate('a', 'а');
-    $x = $y
+    $substring($x, 0, $length($y)) = $y
 )};
 
 $continue := function($text) {(
     $text := $text
         ~> $lowercase
+        ~> $translate('a', 'а')
+        ~> $distinctStr
         ~> $replace(/\.*$/, '');
 
     $candidates := $continuations ~> $map(function($x) {
-        $startsWith($x, $text) ? (
+        $startsWith($x ~> $translate('a', 'а'), $text) ? (
             $substring($x, $length($text))
         ) : null
     }) ~> $filter(function($x) { $x }) ~> $choose
