@@ -41,11 +41,6 @@ $negative := [
     'нет, просто нет NOPERS'
 ];
 
-$choose := function ($l) {(
-    $id := $floor($random() * $count($l));
-    $l[$id]
-)};
-
 $continuations := [
     'аня ANYA',
     'алло ANYA',
@@ -62,6 +57,7 @@ $continuations := [
     
     'поползень popCat',
     'попа peepoGiggles',
+    'понимаю YEPPERS',
     'попола AYAYA',
     'девола AYAYA',
     
@@ -70,6 +66,11 @@ $continuations := [
     'куку, ипта ANYA',
     'кукусики NomNom'
 ];
+
+$choose := function ($l) {(
+    $id := $floor($random() * $count($l));
+    $l[$id]
+)};
 
 $translate := function($text, $from, $to) {
     $text
