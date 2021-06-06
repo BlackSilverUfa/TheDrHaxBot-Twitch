@@ -46,6 +46,66 @@ $choose := function ($l) {(
     $l[$id]
 )};
 
+$continuations := [
+    'аня ANYA',
+    'алло ANYA',
+    'ада, я люблю тебя ANYA',
+    'аыаыа ANYA',
+    'ауф 🐺',
+    'апчхи ANYA',
+    'аяя AYAYA',
+    'ага YEPPERS',
+    'ass gachiBASS',
+    'ававава MEGALUL',
+    
+    'мифа BibleThump',
+    
+    'поползень popCat',
+    'попа peepoGiggles',
+    'попола AYAYA',
+    'девола AYAYA',
+    
+    'куля-буля ANYA',
+    'куляля ANYA',
+    'куку, ипта ANYA',
+    'кукусики NomNom'
+];
+
+$translate := function($text, $from, $to) {
+    $text
+        ~> $split('')
+        ~> $map(function($x) {(
+            $index := $from
+                ~> $split('')
+                ~> $map(function($y, $i) {
+                    $x = $y ? $i
+                })[0];
+            
+            $index != null ? $to[$index] : $x
+        )})
+        ~> $join()
+};
+
+$startsWith := function ($x, $y) {(
+    $x := $substring($x, 0, $length($y))
+        ~> $translate('a', 'а');
+    $y := $y
+        ~> $translate('a', 'а');
+    $x = $y
+)};
+
+$continue := function($text) {(
+    $text := $text
+        ~> $lowercase
+        ~> $replace(/\.*$/, '');
+
+    $candidates := $continuations ~> $map(function($x) {
+        $startsWith($x, $text) ? (
+            $substring($x, $length($text))
+        ) : null
+    }) ~> $filter(function($x) { $x }) ~> $choose
+)};
+
 (parsed.query ~> $length = 0) ? (
     'чт' & (
         $match(payload.message, /!ш+([ао]+)р+/i).groups[0]
@@ -84,37 +144,11 @@ $choose := function ($l) {(
         $choice & ' — наш выбор SeemsGood'
     ])
 ) :
-(parsed.query_filtered ~> $match(/^[aа]+\.*$/i)) ? (
-    $choose([
-        '...ня ANYA',
-        '...лло ANYA',
-        '...да, я люблю тебя ANYA',
-        '...ыаыа ANYA',
-        '...уф 🐺',
-        '...пчхи ANYA',
-        '...яя AYAYA',
-        '...га YEPPERS',
-        '...ss gachiBASS',
-        '...вавава MEGALUL'
-    ])
-) :
-(parsed.query_filtered ~> $match(/^по+\.*$/i)) ? (
-    $choose([
-        '...ползень popCat',
-        '...па peepoGiggles',
-        '...пола AYAYA'
-    ])
+(parsed.query_filtered ~> $continue) ? (
+    '...' & $continue(parsed.query_filtered)
 ) :
 (parsed.query_filtered ~> $match(/^пинг/i)) ? (
     "понг Pepega"
-) :
-(parsed.query_filtered ~> $match(/^ку\.*$/i)) ? (
-    $choose([
-        '...ля-буля ANYA',
-        '...ляля ANYA',
-        '...ку, ипта ANYA',
-        '...кусики NomNom'
-    ])
 ) :
 (parsed.query ~> $match(/^может чайку/)) ? 'а может тебя?! Jebaited' :
 (parsed.query ~> $match(/^ты потрясающий/)) ? 'нет, ты потрясающий! keanU' :
