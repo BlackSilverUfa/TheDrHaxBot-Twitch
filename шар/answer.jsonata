@@ -105,7 +105,9 @@ $continue := function($text) {(
         ~> $distinctStr
         ~> $replace(/\.*$/, '');
 
-    $candidates := $continuations ~> $map(function($x) {
+    $length($text) = 0 ? null :
+
+    $continuations ~> $map(function($x) {
         $startsWith($x ~> $translate('a', 'а'), $text) ? (
             $substring($x, $length($text))
         ) : null
