@@ -75,20 +75,32 @@ $choose := function ($l) {(
     $l[$id]
 )};
 
-$translate := function($text, $from, $to) {
+$choice := function ($x) {
+    $choose([
+        'скорее всего ' & $x & ' peepoThink',
+        'определённо ' & $x & ' YEPPERS',
+        $x & ' — наш выбор SeemsGood'
+    ])
+};
+
+$indexOf := function($list, $item) {
+    ($list ~> $map(function($x, $i) {
+        $x = $item ? $i : null
+    }) ~> $filter(function($x) { $x != null }))[0]
+};
+
+$translate := function($text, $from, $to) {(
+    $from := $split($from, '');
+    $to := $split($to, '');
+
     $text
         ~> $split('')
         ~> $map(function($x) {(
-            $index := $from
-                ~> $split('')
-                ~> $map(function($y, $i) {
-                    $x = $y ? $i
-                })[0];
-            
+            $index := $from ~> $indexOf($x);
             $index != null ? $to[$index] : $x
         )})
         ~> $join()
-};
+)};
 
 $distinctStr := function ($x) {
     $x ~> $split('') ~> $map(function($y, $i) {
@@ -117,12 +129,16 @@ $continue := function($text) {(
 )};
 
 (parsed.query ~> $length = 0) ? (
-    'чт' & (
-        $match(payload.message, /!ш+([ао]+)р+/i).groups[0]
-        ~> $replace('а', 'o') ~> $replace('А', 'O')
-        ~> $replace('о', 'а') ~> $replace('О', 'А')
-        ~> $replace('o', 'о') ~> $replace('O', 'О')
-    ) & '? Jebaited'
+    $choose([
+        'чт' & (
+            $match(payload.message, /!ш+([ао]+)р+/i).groups[0]
+            ~> $translate('АаОо', 'ОоАа')
+        ) & '? Jebaited',
+        (
+            $match(payload.message, /!ш+([ао]+)р+/i).groups[0]
+            ~> $translate('Оо', 'Аа')
+        ) & '? Jebaited'
+    ])
 ) :
 (parsed.query ~> $match(/ (или|or) /)) ? (
     $options := parsed.query
@@ -133,26 +149,14 @@ $continue := function($text) {(
     ($count($options) = 2 and 'not ' & $options[0] = $options[1]) ? 'that is the question Kojimaptyp' :
     ($count($options) = 2 and $options[0] = $options[1]) ? 'да YEPPERS' :
     (
-        $option := $choose($options);
-        
-        $choose([
-            'скорее всего ' & $option & ' peepoThink',
-            'определённо ' & $option & ' YEPPERS',
-            $option & ' — наш выбор SeemsGood'
-        ])
+        $choice($choose($options))
     )
 ) :
 (parsed.query ~> $match(/от [+-]?[0-9]+ до [+-]?[0-9]+/)) ? (
-    $range := (parsed.query_filtered ~> $match(/от ([+-]?[0-9]+) до ([+-]?[0-9]+)/)).groups
+    $range := (parsed.query ~> $match(/от ([+-]?[0-9]+) до ([+-]?[0-9]+)/)).groups
         ~> $map(function ($v) { $number($v ~> $replace(/\+/, '')) }) ~> $sort;
-    
-    $choice := $floor($random() * ($range[1] - $range[0] + 1) + $range[0]);
-    
-    $choose([
-        'определённо ' & $choice & ' YEPPERS',
-        'скорее всего ' & $choice & ' peepoThink',
-        $choice & ' — наш выбор SeemsGood'
-    ])
+
+    $choice($floor($random() * ($range[1] - $range[0] + 1) + $range[0]))
 ) :
 (parsed.query_filtered ~> $continue) ? (
     '...' & $continue(parsed.query_filtered)
