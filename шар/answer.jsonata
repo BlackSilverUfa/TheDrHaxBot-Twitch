@@ -112,6 +112,11 @@ $startsWith := function ($x, $y) {(
     $substring($x, 0, $length($y)) = $y
 )};
 
+$startsWithAny := function ($x, $list) {
+    $map($list, function($y) { $startsWith($x, $y) }) ~>
+    $filter(function ($v) { $v = true }) ~> $count > 0
+};
+
 $continue := function($text) {(
     $text := $text
         ~> $lowercase
@@ -145,12 +150,19 @@ $continue := function($text) {(
         ~> $substringBefore('?') ~> $replace(/ (или|or) /, ', ')
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
 
+    $options := $startsWithAny($options[0] ~> $lowercase, [
+        'что',
+        'как',
+        'где',
+        'когда'
+    ]) ? $options[[1..$count($options)]] : $options;
+
     ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
     ($count($options) = 2 and 'not ' & $options[0] = $options[1]) ? 'that is the question Kojimaptyp' :
     ($count($options) = 2 and $options[0] = $options[1]) ? 'да YEPPERS' :
     (
         $choice($choose($options))
-    )
+    );
 ) :
 (parsed.query ~> $match(/от [+-]?[0-9]+ до [+-]?[0-9]+/)) ? (
     $range := (parsed.query ~> $match(/от ([+-]?[0-9]+) до ([+-]?[0-9]+)/)).groups
