@@ -152,6 +152,7 @@ $continue := function($text) {(
         ~> $split(',') ~> $map(function ($i) { $trim($i) });
 
     $options := $startsWithAny($options[0] ~> $lowercase, [
+        'во что',
         'что',
         'как',
         'где',
