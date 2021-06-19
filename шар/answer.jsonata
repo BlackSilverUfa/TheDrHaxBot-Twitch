@@ -156,6 +156,7 @@ $continue := function($text) {(
         'что',
         'как',
         'где',
+        'куда',
         'когда'
     ]) ? $options[[1..$count($options)]] : $options;
 
