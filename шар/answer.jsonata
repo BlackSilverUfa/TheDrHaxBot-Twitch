@@ -80,7 +80,8 @@ $choice := function ($x) {
         'скорее всего ' & $x & ' peepoThink',
         'определённо ' & $x & ' YEPPERS',
         $x & ' — наш выбор SeemsGood',
-        'мне кажется, что ' & $x & ' peepoThink'
+        'мне кажется, что ' & $x & ' peepoThink',
+        'конечно же ' & $x & ' YEPPERS'
     ])
 };
 
