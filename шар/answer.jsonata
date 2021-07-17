@@ -79,7 +79,10 @@ $continuations := [
     'куля-буля ANYA',
     'куляля ANYA',
     'куку, ипта ANYA',
-    'кукусики NomNom'
+    'кукусики NomNom',
+    'крыжовник терпкий, сладкая сирень ANYA',
+    
+    'фэмэлэ ANYA'
 ];
 
 $choose := function ($l) {(
