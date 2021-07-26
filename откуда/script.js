@@ -46,7 +46,10 @@ function fts(query, items, lambda) {
             const words = tokenize(lambda(item));
 
             const rank = query.map((queryWord) => (
-                words.filter((word) => word.startsWith(queryWord)).length > 0
+                words.filter((word) => (
+                    word.startsWith(queryWord) &&
+                    word.length / 2 <= queryWord.length
+                )).length > 0
             )).reduce((a, b) => a + b);
 
             if (rank > maxRank) {
