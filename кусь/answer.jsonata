@@ -53,6 +53,11 @@ $what := [
     "за окрошку Tastge"
 ];
 
+$how := [
+    'каким-то образом',
+    'изподвыподверта'
+];
+
 $choose := function ($l) {(
     $id := $floor($random() * $count($l));
     $l[$id]
@@ -61,7 +66,7 @@ $choose := function ($l) {(
 $mentions := parsed.mentions_list;
 
 ($count($mentions) > 1) ? (
-    '@' & payload.userstate.username & ' ' & $choose($from) & ' и каким-то образом одновременно кусает ' & (
+    '@' & payload.userstate.username & ' ' & $choose($from) & ' и ' & $choose($how) & ' одновременно кусает ' & (
         $index := $mentions ~> $count;
         $join($mentions[[0..$index-2]] ~> $map(function ($v) { '@' & $v }), ', ') & ' и @' & $mentions[$index-1]
     ) & ' ' & $choose($what)

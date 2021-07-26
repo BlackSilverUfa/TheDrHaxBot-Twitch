@@ -42,6 +42,7 @@ $negative := [
 ];
 
 $continuations := [
+    'а всёёё BSUHee',
     'аня ANYA',
     'анлаки BSUHee',
     'алло peepoPhone',
@@ -70,6 +71,8 @@ $continuations := [
     'оползень popCat',
 
     'мифа BibleThump',
+    
+    'сос мыслом ANYA',
 
     'испанцы! BSURage',
     'игры YEPPERS',
@@ -79,6 +82,8 @@ $continuations := [
     'ууууУУУУ BSUbl',
 
     'переиграю и уничтожу maestroW',
+    'планер дай Jebaited',
+    'повтор YEPPERS',
     'поползень popCat',
     'пипа PETTHEPEEPO',
     'попа peepoGiggles',
@@ -93,6 +98,7 @@ $continuations := [
     'куку, ипта ANYA',
     'кукусики NomNom',
     'крыжовник терпкий, сладкая сирень ANYA',
+    'кодзима гений Kojimaptyp',
     
     'фэмэлэ ANYA'
 ];
@@ -133,7 +139,7 @@ $translate := function($text, $from, $to) {(
 
 $distinctStr := function ($x) {
     $x ~> $split('') ~> $map(function($y, $i) {
-        $y ~> $match(/[аеоуыэ]/) and $substring($x, $i + 1, 1) = $y ? '' : $y
+        $y ~> $match(/[аеиоуыэ]/) and $substring($x, $i + 1, 1) = $y ? '' : $y
     }) ~> $join()
 };
 
@@ -161,6 +167,8 @@ $continue := function($text) {(
         ) : null
     }) ~> $filter(function($x) { $x }) ~> $choose
 )};
+
+$emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
 
 (parsed.query ~> $length = 0) ? (
     $choose([
@@ -200,6 +208,9 @@ $continue := function($text) {(
         ~> $map(function ($v) { $number($v ~> $replace(/\+/, '')) }) ~> $sort;
 
     $choice($floor($random() * ($range[1] - $range[0] + 1) + $range[0]))
+) :
+(parsed.query_filtered in $emotes) ? (
+    parsed.query_filtered
 ) :
 (parsed.query_filtered ~> $continue) ? (
     '...' & $continue(parsed.query_filtered)
