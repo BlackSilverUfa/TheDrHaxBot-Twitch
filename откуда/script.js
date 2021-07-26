@@ -127,6 +127,4 @@ async function main() {
     return msg;
 }
 
-main().then(function (msg) {
-    node.send(msg);
-});
+return main();
