@@ -105,7 +105,9 @@ $continuations := [
     'крыжовник терпкий, сладкая сирень ANYA',
     'кодзима гений Kojimaptyp',
     
-    'фэмэлэ ANYA'
+    'фэмэлэ ANYA',
+    
+    'ыаыаы ANYA'
 ];
 
 $choose := function ($l) {(
