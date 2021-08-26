@@ -109,7 +109,9 @@ $continuations := [
     
     'фэмэлэ ANYA',
     
-    'ыаыаы ANYA'
+    'ыаыаы ANYA',
+    
+    'хубики ANYA'
 ];
 
 $choose := function ($l) {(
