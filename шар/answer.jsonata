@@ -79,6 +79,7 @@ $continuations := [
     
     'реакция мангуста Pepega',
     
+    'скайрим toddW',
     'сос мыслом ANYA',
     'сов падение BSUbl',
     'супер YEPPERS',
@@ -86,6 +87,7 @@ $continuations := [
     'испанцы! BSURage',
     'игры YEPPERS',
     'игорь тонет CatCrying',
+    'итан ariW',
 
     'уль BSUWait',
     'уву UwU',
@@ -101,6 +103,8 @@ $continuations := [
     'попола AYAYA',
     'девола AYAYA',
     
+    'ташон CatCrying',
+    
     'кб ANYA',
     'куля-буля ANYA',
     'куляля ANYA',
@@ -114,7 +118,10 @@ $continuations := [
     
     'ыаыаы ANYA',
     
-    'хубики ANYA'
+    'хубики ANYA',
+    
+    'эбби pepeSmack',
+    'энвиронментал сторителлинг ANYA'
 ];
 
 $choose := function ($l) {(
