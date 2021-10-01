@@ -215,7 +215,8 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
         'как',
         'где',
         'куда',
-        'когда'
+        'когда',
+        'кто'
     ]) ? $options[[1..$count($options)]] : $options;
 
     ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
