@@ -1,12 +1,12 @@
 (
 
 $positive := [
-    'определённо да YEPPERS',
-    'можешь быть уверен в этом YEPPERS',
-    'никаких сомнений YEPPERS',
-    'абсолютли YEPPERS',
-    'ну естественно YEPPERS',
-    'да YEPPERS'
+    'определённо да NODDERS',
+    'можешь быть уверен в этом NODDERS',
+    'никаких сомнений NODDERS',
+    'абсолютли NODDERS',
+    'ну естественно NODDERS',
+    'да NODDERS'
 ];
 
 $plausible := [
@@ -47,14 +47,14 @@ $continuations := [
     'анлаки BSUHee',
     'алло peepoPhone',
     'ада, я люблю тебя ANYA',
-    'абсолютли YEPPERS',
+    'абсолютли NODDERS',
     'аыаыа ANYA',
     'ауф 🐺',
     'апчхи ANYA',
     'амамам popCat',
     'амогус ඞ',
     'аяя AYAYA',
-    'ага YEPPERS',
+    'ага NODDERS',
     'ass gachiBASS',
     'ававава MEGALUL',
     
@@ -67,9 +67,9 @@ $continuations := [
     
     'вертуфайзен bUrself',
     'вы продоёте рыбов? ANYA',
-    'выходной peepoComfy',
+    'выходной PeepoComfy',
 
-    'гивасасай MonkaChrist',
+    'гивасасай monkaChrist',
 
     'ооо, элден ринг KOgasm',
     'оп оп PepoG',
@@ -88,10 +88,10 @@ $continuations := [
     'скайрим toddW',
     'сос мыслом ANYA',
     'сов падение BSUbl',
-    'супер YEPPERS',
+    'супер NODDERS',
 
     'испанцы! BSURage',
-    'игры YEPPERS',
+    'игры NODDERS',
     'игорь тонет CatCrying',
     'итан ariW',
 
@@ -101,11 +101,11 @@ $continuations := [
 
     'переиграю и уничтожу maestroW',
     'планер дай Jebaited',
-    'повтор YEPPERS',
+    'повтор NODDERS',
     'поползень popCat',
     'пипа PETTHEPEEPO',
     'попа peepoGiggles',
-    'понимаю YEPPERS',
+    'понимаю NODDERS',
     'попола AYAYA',
     'девола AYAYA',
     
@@ -138,10 +138,10 @@ $choose := function ($l) {(
 $choice := function ($x) {
     $choose([
         'скорее всего ' & $x & ' peepoThink',
-        'определённо ' & $x & ' YEPPERS',
+        'определённо ' & $x & ' NODDERS',
         $x & ' — наш выбор SeemsGood',
         'мне кажется, что ' & $x & ' peepoThink',
-        'конечно же ' & $x & ' YEPPERS'
+        'конечно же ' & $x & ' NODDERS'
     ])
 };
 
@@ -226,7 +226,7 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
 
     ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
     ($count($options) = 2 and 'not ' & $options[0] = $options[1]) ? 'that is the question Kojimaptyp' :
-    ($count($options) = 2 and $options[0] = $options[1]) ? 'да YEPPERS' :
+    ($count($options) = 2 and $options[0] = $options[1]) ? 'да NODDERS' :
     (
         $choice($choose($options))
     );
