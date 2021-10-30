@@ -232,11 +232,16 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
         $choice($choose($options))
     );
 ) :
-(parsed.query ~> $match(/от [+-]?[0-9]+ до [+-]?[0-9]+/)) ? (
-    $range := (parsed.query ~> $match(/от ([+-]?[0-9]+) до ([+-]?[0-9]+)/)).groups
+(parsed.query ~> $match(/от [+-]?[0-9]+ до [+-]?[0-9]+/i)) ? (
+    $range := (parsed.query ~> $match(/от ([+-]?[0-9]+) до ([+-]?[0-9]+)/i)).groups
         ~> $map(function ($v) { $number($v ~> $replace(/\+/, '')) }) ~> $sort;
 
-    $choice($floor($random() * ($range[1] - $range[0] + 1) + $range[0]))
+    $x := $range[1] - $range[0];
+    $x := $random() * $x * 1.2 + $range[0] - $x * 0.1;
+
+    $x > $range[1] ? 'думаю, что больше NODDERS' :
+    $x < $range[0] ? 'думаю, что меньше NOPERS' :
+    $choice($round($x))
 ) :
 (parsed.query_filtered in $emotes) ? (
     parsed.query_filtered
