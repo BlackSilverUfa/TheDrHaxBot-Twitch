@@ -200,15 +200,10 @@ $continue := function($text) {(
 $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
 
 (parsed.query ~> $length = 0) ? (
+    $vowels := (parsed.command ~> $match(/ш+([ао]+)р+/i)).groups[0];
     $choose([
-        'чт' & (
-            $match(payload.message, /!ш+([ао]+)р+/i).groups[0]
-            ~> $translate('АаОо', 'ОоАа')
-        ) & '? Jebaited',
-        (
-            $match(payload.message, /!ш+([ао]+)р+/i).groups[0]
-            ~> $translate('Оо', 'Аа')
-        ) & '? Jebaited'
+        'чт' & $translate($vowels, 'АаОо', 'ОоАа') & '? Jebaited',
+        $translate($vowels, 'Оо', 'Аа') & '? Jebaited'
     ])
 ) :
 (parsed.query ~> $match(/ (или|or) /)) ? (
@@ -240,8 +235,8 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
     $x := $range[1] - $range[0];
     $x := $random() * $x * 1.2 + $range[0] - $x * 0.1;
 
-    $x > $range[1] ? 'думаю, что больше YEPPERS' :
-    $x < $range[0] ? 'думаю, что меньше NOPERS' :
+    $x > $range[1] ? 'думаю, что больше ' & $range[1] & ' YEPPERS' :
+    $x < $range[0] ? 'думаю, что меньше ' & $range[0] & ' NOPERS' :
     $choice($round($x))
 ) :
 (parsed.query_filtered in $emotes) ? (
