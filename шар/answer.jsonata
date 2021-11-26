@@ -222,6 +222,7 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
         'кто'
     ]) ? $options[[1..$count($options)]] : $options;
 
+    ($count($options) = 2 and 'будь' = $options[0] and 'не будь' = $options[1]) ? 'сделай же что-нибудь LetMeIn' :
     ($count($options) = 2 and 'не ' & $options[0] = $options[1]) ? 'вот в чём вопрос Kojimaptyp' :
     ($count($options) = 2 and 'not ' & $options[0] = $options[1]) ? 'that is the question Kojimaptyp' :
     ($count($options) = 2 and $options[0] = $options[1]) ? 'да YEPPERS' :
