@@ -1,6 +1,5 @@
 const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
 const rerun = flow.get('rerun_status', 'file');
-const query = msg.parsed.query_filtered;
 
 // https://stackoverflow.com/a/32180863
 function msToDelta(ms) {
