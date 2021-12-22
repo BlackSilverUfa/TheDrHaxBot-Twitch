@@ -1,4 +1,4 @@
-const stream = flow.get('stream_status', 'file')
+const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
 const rerun = flow.get('rerun_status', 'file');
 const query = msg.parsed.query_filtered;
 
@@ -30,9 +30,15 @@ function msToTime(duration) {
 
 if (stream.active) {
     let total = msToTime(+new Date() - new Date(stream.date));
-    let category = msToDelta(+new Date() - new Date(stream.game_changed_at));
 
-    msg.reply = `стрим идёт уже ${total}, игра изменена ${category} назад YEPPERS`;
+    if (stream.game_history.length <= 1) {
+        msg.reply = `стрим идёт уже ${total}, категория пока не менялась YEPPERS`;
+    } else {
+        let lastCategory = stream.game_history[stream.game_history.length - 1];
+        let catAge = msToDelta(+new Date() - new Date(lastCategory.date));
+
+        msg.reply = `стрим идёт уже ${total}, игра изменена ${catAge} назад YEPPERS`;
+    }
 } else if (rerun.active) {
     let total = msToTime(+new Date() - new Date(rerun.date));
 
