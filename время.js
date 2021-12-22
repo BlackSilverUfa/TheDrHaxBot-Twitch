@@ -41,7 +41,7 @@ if (stream.active) {
     let total = msToTime(+new Date(stream.date_end) - new Date(stream.date));
     let when = msToDelta(+new Date() - new Date(stream.date_end));
 
-    msg.reply = `стрим закончился ${when} назад и шёл ${total} peepoSHAKE`;
+    msg.reply = `стрим шёл ${total} и закончился ${when} назад peepoSHAKE`;
 }
 
 return msg;
