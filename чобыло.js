@@ -1,5 +1,4 @@
 const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
-const games = stream.game_history;
 
 // https://stackoverflow.com/a/32180863
 function msToDelta(ms) {
