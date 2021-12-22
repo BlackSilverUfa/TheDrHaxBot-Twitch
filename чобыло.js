@@ -14,7 +14,11 @@ function msToDelta(ms) {
 
 let timeline = stream.game_history.map((game, i, arr) => [
     game.name,
-    msToDelta(+(arr[i+1] ? new Date(arr[i+1].date) : new Date()) - new Date(game.date))
+    msToDelta(+(
+        arr[i+1] ?
+            new Date(arr[i+1].date) :
+            new Date()
+    ) - new Date(game.date))
 ]).map(([name, duration]) => (
     `${name} (${duration})`
 ));

@@ -34,9 +34,9 @@ if (stream.active) {
         msg.reply = `стрим идёт уже ${total}, категория пока не менялась YEPPERS`;
     } else {
         let lastCategory = stream.game_history[stream.game_history.length - 1];
-        let catAge = msToDelta(+new Date() - new Date(lastCategory.date));
+        let catAge = msToTime(+new Date() - new Date(lastCategory.date));
 
-        msg.reply = `стрим идёт уже ${total}, игра изменена ${catAge} назад YEPPERS`;
+        msg.reply = `стрим идёт уже ${total}, а эта игра - ${catAge} YEPPERS`;
     }
 } else if (rerun.active) {
     let total = msToTime(+new Date() - new Date(rerun.date));
