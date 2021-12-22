@@ -17,7 +17,9 @@ let timeline = stream.game_history.map((game, i, arr) => [
     msToDelta(+(
         arr[i+1] ?
             new Date(arr[i+1].date) :
-            new Date()
+            stream.active ?
+                new Date() :
+                new Date(stream.date_end)
     ) - new Date(game.date))
 ]).map(([name, duration]) => (
     `${name} (${duration})`
