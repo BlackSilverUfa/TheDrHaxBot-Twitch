@@ -21,7 +21,8 @@ if (msg.init) {
 
     const index = lunr(function() {
         this.use(lunr.multiLanguage('en', 'ru'));
-        // this.pipeline.remove(lunr.stopWordFilter);
+        this.pipeline.remove(lunr.stopWordFilter);
+        this.pipeline.remove(lunr.ru.stopWordFilter);
         this.field('query');
         this.ref('id');
 
