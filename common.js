@@ -1,6 +1,8 @@
 // Code added here will be run once
 // whenever the node is started.
 
+const TZ = 3 * 60 * 60 * 1000; // GMT+3
+
 function agreeWithNum(num, words) {
     if (num >= 20) {
         num = num % 10;
@@ -47,10 +49,16 @@ function msToTime(duration) {
     return `${hours}:${minutes}:${seconds}`;
 }
 
+function msToDate(ms) {
+    return new Date(ms).toISOString().split('T')[0];
+}
+
 flow.set('func', {
+    TZ,
     agreeWithNum,
     msToDelta,
-    msToTime
+    msToTime,
+    msToDate
 }, 'memory');
 
 node.status('Ready');
