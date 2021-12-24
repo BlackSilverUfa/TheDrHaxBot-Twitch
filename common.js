@@ -53,12 +53,28 @@ function msToDate(ms) {
     return new Date(ms).toISOString().split('T')[0];
 }
 
+function choose(list) {
+    return list[Math.floor(Math.random() * list.length)];
+}
+
+function smartJoin(list, sep, last_sep) {
+    sep = sep || ', ';
+    last_sep = last_sep || ' и ';
+
+    if (list.length == 0) return '';
+    if (list.length == 1) return list[0];
+
+    return list.slice(0, list.length - 1).join(sep) + last_sep + list[list.length - 1];
+}
+
 flow.set('func', {
     TZ,
     agreeWithNum,
     msToDelta,
     msToTime,
-    msToDate
+    msToDate,
+    choose,
+    smartJoin
 }, 'memory');
 
 node.status('Ready');
