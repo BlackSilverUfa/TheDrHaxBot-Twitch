@@ -81,7 +81,7 @@ if (msg.parsed.command == 'куст') {
     msg.reply += ' и';
 
     if (mentions.length > 1) {
-        msg.reply += ` ${choose(how)}`
+        msg.reply += ` ${choose(how)} одновременно`;
     }
 
     msg.reply += ' кусает ';
@@ -93,6 +93,10 @@ if (msg.parsed.command == 'куст') {
     }
 }
 
-msg.reply += ` ${choose(what)}`;
+if (mentions.length == 1 & mentions[0] == 'my4hoe') {
+    msg.reply += ' за мучное NomNom';
+} else {
+    msg.reply += ` ${choose(what)}`;
+}
 
 return msg;
