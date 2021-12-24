@@ -57,6 +57,11 @@ function choose(list) {
     return list[Math.floor(Math.random() * list.length)];
 }
 
+function rchoose(list) {
+    const choice = choose(list);
+    return Array.isArray(choice) ? rchoose(choice) : choice;
+}
+
 function smartJoin(list, sep, last_sep) {
     sep = sep || ', ';
     last_sep = last_sep || ' и ';
@@ -74,6 +79,7 @@ flow.set('func', {
     msToTime,
     msToDate,
     choose,
+    rchoose,
     smartJoin
 }, 'memory');
 
