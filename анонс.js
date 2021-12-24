@@ -6,7 +6,7 @@ const lag = TZ - 6*60*60*1000; // reset date at 6:00
 
 const query = msg.parsed.query_filtered;
 
-if (msg.parsed.level < 0) { // mods and up <= 1
+if (msg.parsed.level <= 1) { // mods and up
     [cmd, ...args] = query.split(' ');
 
     switch (cmd) {
