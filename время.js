@@ -6,12 +6,12 @@ if (stream.active) {
     let total = msToTime(+new Date() - new Date(stream.date));
 
     if (stream.game_history.length <= 1) {
-        msg.reply = `стрим идёт уже ${total}, категория пока не менялась YEPPERS`;
+        msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК), категория пока не менялась YEPPERS`;
     } else {
         let lastCategory = stream.game_history[stream.game_history.length - 1];
         let catAge = msToTime(+new Date() - new Date(lastCategory.date));
 
-        msg.reply = `стрим идёт уже ${total}, а эта игра - ${catAge} YEPPERS`;
+        msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК), а эта игра - ${catAge} YEPPERS`;
     }
 } else if (rerun.active) {
     let total = msToTime(+new Date() - new Date(rerun.date));
