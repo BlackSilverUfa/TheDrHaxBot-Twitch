@@ -15,7 +15,7 @@ let parsed = {};
  * Level based on badges
  */
 
-const badges = Object.keys(msg.payload.userstate.badges);
+const badges = Object.keys(msg.payload.userstate.badges || {});
 
 parsed.level = (
     msg.payload.userstate.username == 'thedrhax' ? -1 :
@@ -32,7 +32,7 @@ parsed.level = (
  */
 
 parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION)
-    .filter(x => x != msg.payload.channel.substring(1) || parsed.level <= 2);
+    .filter(x => (x != msg.payload.channel.substring(1) || parsed.level <= 2));
 
 parsed.mentions = parsed.mentions_list
     .map(x => `@${x}`)

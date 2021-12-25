@@ -58,8 +58,9 @@ if (msg.parsed.level <= 1) { // mods and up
 
 if (stream.announcement.date == msToDate(now + lag)) {
     const text = stream.announcement.text
-        .replace(/\n/, ' ')
-        .replace(/\s*<.*?>.*?<\/.*?>\s*/i, ' ');
+        .replace(/\n/g, ' ')
+        .replace(/\s*<.*?>.*?<\/.*?>\s*/ig, ' ')
+        .trim();
 
     msg.reply = `сегодняшний ${msg.parsed.command}: ${text}`;
 } else {
