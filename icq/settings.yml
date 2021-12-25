@@ -49,3 +49,20 @@ groups:
   special:
     '69': RiasSenpai
     '150': AYAYA AYAYA AYAYA
+- name: ANYA
+  weight: 5
+  templates:
+    simple: 'ваш уровень борща: {value} {emote}'
+    delta: 'ваш уровень борща: {value} ({delta}) {emote}'
+  emotes:
+  - Nervous
+  - BSEpt
+  - BSNONO
+  - WTFFF
+  - BSUSHO
+  - maestroW
+  - ANYA
+  special:
+    '0': NoWay
+    '69': DealWithIt
+    '150': BSURage
