@@ -60,7 +60,7 @@ if (command) {
         
         parsed.query_filtered = query.trim();
     } else {
-        parsed.query_filtered = null;
+        parsed.query_filtered = '';
     }
 }
 
