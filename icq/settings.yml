@@ -34,11 +34,17 @@ groups:
     delta: 'ваш уровень AYAYAшности: {value} ({delta}) {emote}'
   emotes:
   - popCat
+  - loliTriggered
   - PunOko
+  - TPcrunchyroll
+  - PinkMercy
+  - TPFufun
+  - OiMinna
   - VoHiYo
-  - TehePelo
   - TaBeRu
   - KonCha
+  - HungryPaimon
+  - TehePelo
   - AYAYA
   special:
     '69': RiasSenpai
