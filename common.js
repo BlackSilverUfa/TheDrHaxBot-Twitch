@@ -62,6 +62,22 @@ function rchoose(list) {
     return Array.isArray(choice) ? rchoose(choice) : choice;
 }
 
+function wchoose(list, weights) {
+    let total = 0;
+
+    const cumulative = weights.map((x) => {
+        const prev = total;
+        total += x;
+        return prev;
+    });
+
+    cumulative.push(total);
+
+    const x = Math.floor(Math.random() * total);
+    const y = Math.max(...cumulative.filter((weight) => weight < x));
+    return list[cumulative.indexOf(y)];
+}
+
 function smartJoin(list, sep, last_sep) {
     sep = sep || ', ';
     last_sep = last_sep || ' и ';
@@ -80,6 +96,7 @@ flow.set('func', {
     msToDate,
     choose,
     rchoose,
+    wchoose,
     smartJoin
 }, 'memory');
 

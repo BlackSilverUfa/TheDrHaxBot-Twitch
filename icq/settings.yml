@@ -1,0 +1,45 @@
+range:
+  min: 0
+  max: 150
+groups:
+- name: ICQ
+  weight: 100
+  templates:
+    simple: 'у вас {value} ICQ {emote}'
+    delta: 'у вас {value} ICQ ({delta}) {emote}'
+  emotes:
+  - SabaPing
+  - MonkaChiken
+  - SMOrc
+  - ANYA
+  - dead5What
+  - Pepega
+  - YEPP
+  - MmmHmm
+  - peepoThink
+  - PepoG
+  - ZZoomer
+  - BUFANerd
+  - OMEGABSU
+  - Sherlock
+  - Kojimaptyp
+  special:
+    '0': bigBossSalut bsu.us.to/348094949?at=12727
+    '69': BSUHey
+    '150': gachiOnFIRE
+- name: AYAYA
+  weight: 10
+  templates:
+    simple: 'ваш уровень AYAYAшности: {value} {emote}'
+    delta: 'ваш уровень AYAYAшности: {value} ({delta}) {emote}'
+  emotes:
+  - popCat
+  - PunOko
+  - VoHiYo
+  - TehePelo
+  - TaBeRu
+  - KonCha
+  - AYAYA
+  special:
+    '69': RiasSenpai
+    '150': AYAYA AYAYA AYAYA
