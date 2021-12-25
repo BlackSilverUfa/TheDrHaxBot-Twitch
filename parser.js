@@ -1,8 +1,9 @@
 const MENTION = /@([a-z0-9_]{4,25})/ig;
 const COMMAND = /^!([a-zа-яё0-9]{3,})[, ]?(.*)/i;
 
-function groups(str, regex) {
-    return [...str.matchAll(regex)].map(x => x[1]);
+function groups(str, regex, group) {
+    group = group == null ? 1 : group;
+    return [...str.matchAll(regex)].map(x => x[group]);
 }
 
 if (msg.payload.self) {

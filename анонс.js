@@ -1,6 +1,10 @@
 const stream = flow.get('stream_status', 'file');
 const { TZ, msToDate } = flow.get('func', 'memory');
 
+const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
+const channel = msg.payload.channel.substring(1);
+const CHANNEL_LINK = new RegExp(`https?://twitch\.tv/${channel}.*`, 'i');
+
 const now = +new Date();
 const lag = TZ - 6*60*60*1000; // reset date at 6:00
 
@@ -57,12 +61,18 @@ if (msg.parsed.level <= 1) { // mods and up
 }
 
 if (stream.announcement.date == msToDate(now + lag)) {
-    const text = stream.announcement.text
-        .replace(/\n/g, ' ')
-        .replace(/\s*<.*?>.*?<\/.*?>\s*/ig, ' ')
-        .trim();
+    let text = stream.announcement.text.replace(/\n/g, ' ');
+    const links = [...text.matchAll(LINK)];
 
-    msg.reply = `сегодняшний ${msg.parsed.command}: ${text}`;
+    links.forEach(([html, link]) => {
+        if (link.match(CHANNEL_LINK)) {
+            text = text.replace(html, ' ');
+        } else {
+            text = text.replace(html, ` ${link} `);
+        }
+    });
+
+    msg.reply = `сегодняшний ${msg.parsed.command}: ${text.trim()}`;
 } else {
     msg.reply = `сегодня не было ${msg.parsed.command}а peepoSHAKE`;
 }
