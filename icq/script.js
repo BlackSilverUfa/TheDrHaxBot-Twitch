@@ -5,33 +5,33 @@ function rand(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
 }
 
-let db = flow.get('blackufa_icq', 'file') || {};
-let user = msg.payload.userstate.username;
+let icq, delta;
 
-if (Object.keys(db).indexOf(user) === -1) {
-    let icq = rand(MIN_ICQ, MAX_ICQ);
-
-    db[user] = icq;
-    flow.set('blackufa_icq', db, 'file');
-
-    msg.icq = icq;
-    msg.delta = 0;
+if (!msg.icq) {
+    icq = rand(MIN_ICQ, MAX_ICQ);
+    delta = 0;
 } else {
-    let icq = db[user];
-    
+    icq = msg.icq.value;
+
     if (msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
-        msg.icq = icq;
-        msg.delta = 0;
-        return msg;
+        delta = 0;
+    } else {
+        const new_icq = rand(MIN_ICQ, MAX_ICQ);
+        delta = new_icq - icq;
+        icq = new_icq;
     }
-
-    let new_icq = rand(MIN_ICQ, MAX_ICQ);
-
-    db[user] = new_icq;
-    flow.set('blackufa_icq', db, 'file');
-
-    msg.icq = new_icq;
-    msg.delta = new_icq - icq;
 }
 
-return msg;
+return [
+    { // reply
+        ...msg,
+        icq,
+        delta: 0
+    },
+    { // db
+        payload: {
+            _id: msg.payload.userstate.username,
+            value: icq
+        }
+    }
+];
