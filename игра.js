@@ -3,6 +3,23 @@ const rerun = flow.get('rerun_status', 'file');
 
 const query = msg.parsed.query_filtered;
 
+function updateGameHistory(game_history, name) {
+    if (!stream.active) return;
+
+    const lastGame = game_history[game_history.length - 1];
+    const now = new Date();
+    const age = +now - new Date(lastGame.date);
+
+    if (age < 5*60*1000) { // changed < 5m ago
+        lastGame.name = name;
+    } else {
+        game_history.push({
+            name,
+            date: now
+        });
+    }
+}
+
 if (msg.parsed.level <= 1) { // mods and up
     [cmd, ...args] = query.split(' ');
 
@@ -12,30 +29,14 @@ if (msg.parsed.level <= 1) { // mods and up
 
     if (cmd == 'set' && args.length > 0) {
         stream.game_forced = args.join(' ');
-
-        if (age < 5*60*1000) { // changed < 5m ago
-            prev_game.name = stream.game_forced;
-        } else {
-            stream.game_history.push({
-                name: stream.game_forced,
-                date: now
-            });
-        }
+        updateGameHistory(stream.game_history, stream.game_forced);
 
         flow.set('stream_status', stream, 'file');
         msg.reply = `игра изменена на ${stream.game_forced} SeemsGood`;
         return msg;
     } else if (cmd == 'reset') {
         stream.game_forced = null;
-
-        if (age < 5*60*1000) { // changed < 5m ago
-            prev_game.name = stream.game;
-        } else {
-            stream.game_history.push({
-                name: stream.game,
-                date: now
-            });
-        }
+        updateGameHistory(stream.game_history, stream.game);
 
         flow.set('stream_status', stream, 'file');
         msg.reply = `игра изменена на ${stream.game} SeemsGood`;
