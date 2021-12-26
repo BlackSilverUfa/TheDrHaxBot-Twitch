@@ -23,10 +23,6 @@ function updateGameHistory(game_history, name) {
 if (msg.parsed.level <= 1) { // mods and up
     [cmd, ...args] = query.split(' ');
 
-    const prev_game = stream.game_history[stream.game_history.length - 1];
-    const now = new Date();
-    const age = +now - new Date(prev_game.date);
-
     if (cmd == 'set' && args.length > 0) {
         stream.game_forced = args.join(' ');
         updateGameHistory(stream.game_history, stream.game_forced);
