@@ -76,7 +76,7 @@ return [
             _id: msg.payload.userstate.username,
             value,
             group,
-            checks: msg.icq.checks ? msg.icq.checks + 1 : 1,
+            checks: (msg.icq && msg.icq.checks) ? msg.icq.checks + 1 : 1,
             last_check: new Date().toISOString()
         }
     }
