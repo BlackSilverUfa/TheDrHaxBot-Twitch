@@ -8,6 +8,14 @@ Patterns.MENTION = /@([a-z0-9_]{4,25})/ig;
 
 const TZ = 3 * 60 * 60 * 1000; // GMT+3
 
+function tokenize(string) {
+    string = string.toLowerCase().replace(/ё/g, 'е').trim();
+    return string.split(' ').map((word) => {
+        const match = word.match(/[a-zа-я0-9]+/g);
+        return match ? match.join('') : null;
+    }).filter((x) => x != null);
+}
+
 function agreeWithNum(num, words) {
     if (num >= 20) {
         num = num % 10;
@@ -96,6 +104,7 @@ function smartJoin(list, sep, last_sep) {
 flow.set('func', {
     Patterns,
     TZ,
+    tokenize,
     agreeWithNum,
     msToDelta,
     msToTime,

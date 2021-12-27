@@ -1,10 +1,4 @@
-function tokenize(string) {
-    string = string.toLowerCase().replace(/ё/g, 'е').trim();
-    return string.split(' ').map((word) => {
-        const match = word.match(/[a-zа-я0-9]+/g);
-        return match ? match.join('') : null;
-    }).filter((x) => x != null);
-}
+const { tokenize } = flow.get('func', 'memory');
 
 function strip(string) {
     return tokenize(string).join(' ');
