@@ -39,7 +39,7 @@ if (!msg.icq) {
     group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
 } else {
     value = msg.icq.value;
-    group = msg.icq.group || groups[0];
+    group = msg.icq.group || Object.keys(groups)[0];
 
     if (msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
         delta = 0;
