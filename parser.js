@@ -1,5 +1,4 @@
-const MENTION = /@([a-z0-9_]{4,25})/ig;
-const COMMAND = /^!([a-zа-яё0-9]{3,})[, ]?(.*)/i;
+const { Patterns: { MENTION, COMMAND } } = flow.get('func', 'memory');
 
 function groups(str, regex, group) {
     group = group == null ? 1 : group;
