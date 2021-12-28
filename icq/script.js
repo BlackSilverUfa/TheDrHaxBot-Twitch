@@ -15,6 +15,17 @@ if (msg.init) {
     return;
 }
 
+const AF = global.get('actionflows');
+
+async function mongo(action, payload) {
+    const reply = await AF.invoke('mongo icq_results', { action, payload });
+    if (reply.error) {
+        node.error(reply.error);
+        return null;
+    }
+    return reply.payload;
+}
+
 const { choose, wchoose } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
@@ -31,53 +42,56 @@ function renderTemplate(str, vars) {
     return str;
 }
 
-let value, delta, group;
+async function main() {
+    const _id = msg.payload.userstate.username;
+    let icq = (await mongo('find', { _id }))[0];
 
-if (!msg.icq) {
-    value = rand(settings.range.min, settings.range.max);
-    delta = 0;
-    group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
-} else {
-    value = msg.icq.value;
-    group = msg.icq.group || Object.keys(groups)[0];
+    let value, delta, group;
 
-    if (msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
+    if (!icq) {
+        icq = { _id };
+        value = rand(settings.range.min, settings.range.max);
         delta = 0;
-    } else {
-        const new_icq = rand(settings.range.min, settings.range.max);
-        delta = new_icq - value;
-        value = new_icq;
         group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
+    } else {
+        value = icq.value;
+        group = icq.group || Object.keys(groups)[0];
+        
+        if (msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
+            delta = 0;
+        } else {
+            const new_icq = rand(settings.range.min, settings.range.max);
+            delta = new_icq - value;
+            value = new_icq;
+            group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
+        }
     }
-}
 
-const groupData = settings.groups[group];
-const template = groupData.templates[delta !== 0 ? 'delta' : 'simple'];
+    await mongo('save', {
+        ...icq,
+        value,
+        group
+    });
 
-let emote;
+    const groupData = settings.groups[group];
+    const template = groupData.templates[delta !== 0 ? 'delta' : 'simple'];
 
-if (Object.keys(groupData.special).indexOf(`${value}`) !== -1) {
-    emote = groupData.special[`${value}`];
-} else {
-    emote = groupData.emotes[Math.floor(value / groupData.step)];
-}
+    let emote;
 
-return [
-    { // reply
+    if (Object.keys(groupData.special).indexOf(`${value}`) !== -1) {
+        emote = groupData.special[`${value}`];
+    } else {
+        emote = groupData.emotes[Math.floor(value / groupData.step)];
+    }
+
+    return {
         ...msg,
         reply: renderTemplate(template, {
             value,
             delta: delta > 0 ? `+${delta}` : delta,
             emote
         })
-    },
-    { // db
-        payload: {
-            _id: msg.payload.userstate.username,
-            value,
-            group,
-            checks: (msg.icq && msg.icq.checks) ? msg.icq.checks + 1 : 1,
-            last_check: new Date().toISOString()
-        }
-    }
-];
+    };
+}
+
+return main();
