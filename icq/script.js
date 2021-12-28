@@ -15,18 +15,8 @@ if (msg.init) {
     return;
 }
 
-const AF = global.get('actionflows');
-
-async function mongo(action, payload) {
-    const reply = await AF.invoke('mongo icq_results', { action, payload });
-    if (reply.error) {
-        node.error(reply.error);
-        return null;
-    }
-    return reply.payload;
-}
-
-const { choose, wchoose } = flow.get('func', 'memory');
+const DB = 'icq_results';
+const { mongo, choose, wchoose } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
 const groups = Object.keys(settings.groups);
@@ -44,7 +34,7 @@ function renderTemplate(str, vars) {
 
 async function main() {
     const _id = msg.payload.userstate.username;
-    let icq = (await mongo('find', { _id }))[0];
+    let icq = (await mongo(DB, 'find', { _id }))[0];
 
     let value, delta, group;
 
@@ -67,7 +57,7 @@ async function main() {
         }
     }
 
-    await mongo('save', {
+    await mongo(DB, 'save', {
         ...icq,
         value,
         group

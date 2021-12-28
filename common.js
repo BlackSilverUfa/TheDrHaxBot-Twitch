@@ -1,6 +1,17 @@
 // Code added here will be run once
 // whenever the node is started.
 
+const AF = global.get('actionflows');
+
+async function mongo(table, action, payload) {
+    const reply = await AF.invoke(`mongo ${table}`, { action, payload });
+    if (reply.error) {
+        node.error(reply.error);
+        return null;
+    }
+    return reply.payload;
+}
+
 const Patterns = {};
 Patterns.COMMAND_NAME = /[a-zа-яё0-9]{3,}/i;
 Patterns.COMMAND = new RegExp(`^!(${Patterns.COMMAND_NAME.source}),?\\s*(.*)`, 'i');
@@ -102,6 +113,7 @@ function smartJoin(list, sep, last_sep) {
 }
 
 flow.set('func', {
+    mongo,
     Patterns,
     TZ,
     tokenize,
