@@ -16,7 +16,7 @@ if (msg.init) {
 }
 
 const DB = 'icq_results';
-const { mongo, choose, wchoose } = flow.get('func', 'memory');
+const { mongo4: mongo, choose, wchoose } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
 const groups = Object.keys(settings.groups);
@@ -34,7 +34,7 @@ function renderTemplate(str, vars) {
 
 async function main() {
     const _id = msg.payload.userstate.username;
-    let icq = (await mongo(DB, 'find', { _id }))[0];
+    let icq = await mongo(DB, 'findOne', { _id });
 
     let value, delta, group;
 
@@ -56,7 +56,7 @@ async function main() {
             group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
         }
     }
-
+    
     await mongo(DB, 'save', {
         ...icq,
         value,
