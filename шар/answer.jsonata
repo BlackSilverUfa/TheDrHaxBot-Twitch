@@ -204,9 +204,10 @@ $continue := function($text) {(
 $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
 
 (parsed.query ~> $length = 0) ? (
-    $vowels := (parsed.command ~> $match(/ш+([ао]+)р+/i)).groups[0];
+    $vowelsmatch := payload.message ~> $match(/^!ш+([ао]+)р+/i);
+    $vowels := $vowelsmatch ? $vowelsmatch.groups[0] : 'а';
     $choose([
-        'чт' & $translate($vowels, 'АаОо', 'ОоАа') & '? Jebaited',
+        'чт' & $translate($vowels, 'АаОоУу', 'ОоАаОо') & '? Jebaited',
         $vowels & '? Jebaited'
     ])
 ) :

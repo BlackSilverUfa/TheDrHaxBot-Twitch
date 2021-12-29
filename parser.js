@@ -46,6 +46,7 @@ const command = msg.payload.message.match(COMMAND);
 
 if (command) {
     parsed.command = command[1];
+    parsed.icommand = command[1].toLowerCase();
 
     let query = command[2];
     parsed.query = query;
