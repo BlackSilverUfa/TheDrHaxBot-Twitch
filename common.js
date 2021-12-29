@@ -3,16 +3,7 @@
 
 const AF = global.get('actionflows');
 
-async function mongo(table, action, payload) {
-    const reply = await AF.invoke(`mongo_${table}`, { action, payload });
-    if (reply.error) {
-        node.error(reply.error);
-        return null;
-    }
-    return reply.payload;
-}
-
-async function mongo4(collection, operation, payload) {
+async function mongo(collection, operation, payload) {
     if (!Array.isArray(payload)) {
         if (operation == 'save') {
             if (payload._id) {
@@ -27,7 +18,7 @@ async function mongo4(collection, operation, payload) {
         }
     }
 
-    const reply = await AF.invoke('mongo4', { collection, operation, payload });
+    const reply = await AF.invoke('mongo', { collection, operation, payload });
     if (reply.error) {
         node.error(reply.error);
         return null;
@@ -137,7 +128,6 @@ function smartJoin(list, sep, last_sep) {
 
 flow.set('func', {
     mongo,
-    mongo4,
     Patterns,
     TZ,
     tokenize,

@@ -16,7 +16,7 @@ if (msg.init) {
 }
 
 const DB = 'icq_results';
-const { mongo4: mongo, choose, wchoose } = flow.get('func', 'memory');
+const { mongo, choose, wchoose } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
 const groups = Object.keys(settings.groups);
