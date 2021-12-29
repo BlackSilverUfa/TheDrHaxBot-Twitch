@@ -1,5 +1,5 @@
 const stream = flow.get('stream_status', 'file');
-const { TZ, msToDate } = flow.get('func', 'memory');
+const { TZ, msToDate, Patterns: { COMMAND } } = flow.get('func', 'memory');
 
 const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
 const channel = msg.payload.channel.substring(1);
@@ -9,6 +9,7 @@ const now = +new Date();
 const lag = TZ - 6*60*60*1000; // reset date at 6:00
 
 const query = msg.parsed.query_filtered;
+const command = msg.payload.message.match(COMMAND)[1];
 
 if (msg.parsed.level <= 1) { // mods and up
     [cmd, ...args] = query.split(' ');
@@ -72,9 +73,9 @@ if (stream.announcement.date == msToDate(now + lag)) {
         }
     });
 
-    msg.reply = `сегодняшний ${msg.parsed.command}: ${text.trim()}`;
+    msg.reply = `сегодняшний ${command}: ${text.trim()}`;
 } else {
-    msg.reply = `сегодня не было ${msg.parsed.command}а peepoSHAKE`;
+    msg.reply = `сегодня не было ${command}а peepoSHAKE`;
 }
 
 return [msg, null];
