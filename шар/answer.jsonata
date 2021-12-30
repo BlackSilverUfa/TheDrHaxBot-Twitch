@@ -208,7 +208,7 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
     $vowels := $vowelsmatch ? $vowelsmatch.groups[0] : 'а';
     $choose([
         'чт' & $translate($vowels, 'АаОоУу', 'ОоАаОо') & '? Jebaited',
-        $vowels & '? Jebaited'
+        $translate($vowels, 'Оо', 'Аа') & '? Jebaited'
     ])
 ) :
 (parsed.query ~> $match(/ (или|or) /)) ? (
