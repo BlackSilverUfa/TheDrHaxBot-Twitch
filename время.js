@@ -1,28 +1,29 @@
 const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
 const rerun = flow.get('rerun_status', 'file');
-const { dateDistance, msToTime } = flow.get('func', 'memory');
+const { dateDistance } = flow.get('func', 'memory');
+
+const DATE_DIST_OPTS = {
+    timestamp: true
+};
 
 if (stream.active) {
-    let total = msToTime(+new Date() - new Date(stream.date));
+    const total = dateDistance(new Date(stream.date), null, DATE_DIST_OPTS);
 
     if (stream.game_history.length <= 1) {
         msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК), категория пока не менялась YEPPERS`;
     } else {
-        let lastCategory = stream.game_history[stream.game_history.length - 1];
-        let catAge = msToTime(+new Date() - new Date(lastCategory.date));
+        const lastCategory = stream.game_history[stream.game_history.length - 1];
+        const catAge = dateDistance(new Date(lastCategory.date), null, DATE_DIST_OPTS);
 
         msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК), а эта игра - ${catAge} YEPPERS`;
     }
 } else if (rerun.active) {
-    let total = msToTime(+new Date() - new Date(rerun.date));
+    const total = dateDistance(new Date(rerun.date), null, DATE_DIST_OPTS);
 
     msg.reply = `повтор идёт уже ${total} YEPPERS`;
 } else {
-    let total = msToTime(+new Date(stream.date_end) - new Date(stream.date));
-    // let when = msToDelta(+new Date() - new Date(stream.date_end));
-    let when = dateDistance(new Date(stream.date_end), null, {
-        short: true,
-    });
+    const total = dateDistance(new Date(stream.date), new Date(stream.date_end), DATE_DIST_OPTS);
+    const when = dateDistance(new Date(stream.date_end), null, { short: true, });
 
     msg.reply = `стрим шёл ${total} и закончился ${when} назад peepoSHAKE`;
 }
