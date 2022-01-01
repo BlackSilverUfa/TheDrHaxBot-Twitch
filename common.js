@@ -26,6 +26,15 @@ async function mongo(collection, operation, payload) {
     return reply.payload;
 }
 
+async function twitch(namespace, method, call, payload) {
+    const reply = await AF.invoke('twitch', { namespace, method, call, payload });
+    if (reply.payload.error) {
+        node.error(reply.payload.error);
+        return null;
+    }
+    return reply.payload.data;
+}
+
 const Patterns = {};
 Patterns.COMMAND_NAME = /[a-zа-яё0-9]{3,}/i;
 Patterns.COMMAND = new RegExp(`^!(${Patterns.COMMAND_NAME.source}),?\\s*(.*)`, 'i');
