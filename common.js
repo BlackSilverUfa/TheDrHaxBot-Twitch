@@ -1,6 +1,34 @@
 // Code added here will be run once
 // whenever the node is started.
 
+const {
+    intervalToDuration
+} = dateFns; // = require('date-fns');
+
+function dateDistance(start, end, options) {
+    let { parts, accusative, short } = options || {};
+
+    const locale = {
+        years: ['год', 'года', 'лет'],
+        months: ['месяц', 'месяца', 'месяцев'],
+        days: ['день', 'дня', 'дней'],
+        hours: ['час', 'часа', 'часов'],
+        minutes: [accusative ? 'минуту' : 'минута', 'минуты', 'минут'],
+        seconds: [accusative ? 'секунду' : 'секунд', 'секунды', 'секунд'],
+    };
+
+    parts = parts || Object.keys(locale);
+    end = end || new Date();
+
+    const duration = intervalToDuration({ start, end });
+
+    return smartJoin(parts
+        .filter(p => duration[p] > 0)
+        .filter((p, i) => !short || i === 0)
+        .map((p) => duration[p] + ' ' + agreeWithNum(duration[p], locale[p]))
+        .filter(p => p != null));
+}
+
 const AF = global.get('actionflows');
 
 async function mongo(collection, operation, payload) {
@@ -152,6 +180,7 @@ flow.set('func', {
     TZ,
     tokenize,
     agreeWithNum,
+    dateDistance,
     msToDelta,
     msToTime,
     msToDate,
