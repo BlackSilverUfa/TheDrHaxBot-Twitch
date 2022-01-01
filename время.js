@@ -1,6 +1,6 @@
 const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
 const rerun = flow.get('rerun_status', 'file');
-const { msToDelta, msToTime } = flow.get('func', 'memory');
+const { dateDistance, msToTime } = flow.get('func', 'memory');
 
 if (stream.active) {
     let total = msToTime(+new Date() - new Date(stream.date));
@@ -19,7 +19,10 @@ if (stream.active) {
     msg.reply = `повтор идёт уже ${total} YEPPERS`;
 } else {
     let total = msToTime(+new Date(stream.date_end) - new Date(stream.date));
-    let when = msToDelta(+new Date() - new Date(stream.date_end));
+    // let when = msToDelta(+new Date() - new Date(stream.date_end));
+    let when = dateDistance(new Date(stream.date_end), null, {
+        short: true,
+    });
 
     msg.reply = `стрим шёл ${total} и закончился ${when} назад peepoSHAKE`;
 }

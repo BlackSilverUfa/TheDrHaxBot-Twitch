@@ -17,10 +17,33 @@ function dateDistance(start, end, options) {
         seconds: [accusative ? 'секунду' : 'секунд', 'секунды', 'секунд'],
     };
 
+    const multipliers = [12, 30, 24, 60, 60, 1000];
+
     parts = parts || Object.keys(locale);
     end = end || new Date();
 
     const duration = intervalToDuration({ start, end });
+
+    if (short) {
+        const mainPart = parts.filter(p => duration[p] > 0)[0] || parts[parts.length - 1];
+        const mainPartIndex = Object.keys(locale).indexOf(mainPart);
+
+        const value = Object.keys(locale).reduce((a, k, i) => {
+            if (duration[k] === 0) return a;
+
+            let multiplier = 1;
+
+            if (i < mainPartIndex) {
+                multiplier *= multipliers.slice(i, mainPartIndex).reduce((a, v) => a * v);
+            } else if (i > mainPartIndex) {
+                multiplier /= multipliers.slice(mainPartIndex, i).reduce((a, v) => a * v);
+            }
+
+            return a + duration[k] * multiplier;
+        }, 0).toFixed(1);
+
+        return value + ' ' + agreeWithNum(value, locale[mainPart]);
+    }
 
     return smartJoin(parts
         .filter(p => duration[p] > 0 || zero)
