@@ -65,7 +65,7 @@ function agreeWithNum(num, words) {
 }
 
 // https://stackoverflow.com/a/32180863
-function msToDelta(ms) {
+function msToDelta(ms, accusative) {
     let seconds = (ms / 1000).toFixed(1),
         minutes = (ms / (1000 * 60)).toFixed(1),
         hours = (ms / (1000 * 60 * 60)).toFixed(1),
@@ -73,15 +73,25 @@ function msToDelta(ms) {
         weeks = (ms / (1000 * 60 * 60 * 24 * 7)).toFixed(1);
 
     if (seconds < 60)
-        return seconds + ' ' + agreeWithNum(seconds, ['секунда', 'секунды', 'секунд']);
+        return seconds + ' ' + agreeWithNum(seconds, [
+            accusative ? 'секунду' : 'секунда', 'секунды', 'секунд'
+        ]);
     else if (minutes < 60)
-        return minutes + ' ' + agreeWithNum(minutes, ['минута', 'минуты', 'минут']);
+        return minutes + ' ' + agreeWithNum(minutes, [
+            accusative ? 'минуту' : 'минута', 'минуты', 'минут'
+        ]);
     else if (hours < 24)
-        return hours + ' ' + agreeWithNum(hours, ['час', 'часа', 'часов']);
+        return hours + ' ' + agreeWithNum(hours, [
+            'час', 'часа', 'часов'
+        ]);
     else if (days < 7)
-        return days + ' ' + agreeWithNum(days, ['день', 'дня', 'дней']);
+        return days + ' ' + agreeWithNum(days, [
+            'день', 'дня', 'дней'
+        ]);
     else
-        return weeks + ' ' + agreeWithNum(weeks, ['неделя', 'недели', 'недель']);
+        return weeks + ' ' + agreeWithNum(weeks, [
+            accusative ? 'неделю' : 'неделя', 'недели', 'недель'
+        ]);
 }
 
 // https://stackoverflow.com/a/19700358
@@ -137,6 +147,7 @@ function smartJoin(list, sep, last_sep) {
 
 flow.set('func', {
     mongo,
+    twitch,
     Patterns,
     TZ,
     tokenize,
