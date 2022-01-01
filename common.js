@@ -6,7 +6,7 @@ const {
 } = dateFns; // = require('date-fns');
 
 function dateDistance(start, end, options) {
-    let { parts, accusative, short } = options || {};
+    let { parts, accusative, short, zero } = options || {};
 
     const locale = {
         years: ['год', 'года', 'лет'],
@@ -23,7 +23,7 @@ function dateDistance(start, end, options) {
     const duration = intervalToDuration({ start, end });
 
     return smartJoin(parts
-        .filter(p => duration[p] > 0)
+        .filter(p => duration[p] > 0 || zero)
         .filter((p, i) => !short || i === 0)
         .map((p) => duration[p] + ' ' + agreeWithNum(duration[p], locale[p]))
         .filter(p => p != null));
