@@ -43,6 +43,12 @@ async function main() {
         value = rand(settings.range.min, settings.range.max);
         delta = 0;
         group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
+
+        await mongo(DB, 'insertOne', {
+            ...icq,
+            value,
+            group
+        });
     } else {
         value = icq.value;
         group = icq.group || Object.keys(groups)[0];
@@ -55,13 +61,13 @@ async function main() {
             value = new_icq;
             group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
         }
+
+        await mongo(DB, 'save', {
+            ...icq,
+            value,
+            group
+        });
     }
-    
-    await mongo(DB, 'save', {
-        ...icq,
-        value,
-        group
-    });
 
     const groupData = settings.groups[group];
     const template = groupData.templates[delta !== 0 ? 'delta' : 'simple'];
