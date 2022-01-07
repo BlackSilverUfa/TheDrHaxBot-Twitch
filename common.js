@@ -161,6 +161,24 @@ function smartJoin(list, sep, last_sep) {
     return list.slice(0, list.length - 1).join(sep) + last_sep + list[list.length - 1];
 }
 
+function renderTemplate(str, vars) {
+    str.match(/\{.*?\}/g).forEach((key) => {
+        key = key.substring(1, key.length - 1);
+        let value;
+
+        if (key.indexOf('#') !== -1) {
+            const [valKey, args] = key.split('#');
+            value = agreeWithNum(vars[valKey], args.split(','));
+        } else {
+            value = vars[key];
+        }
+
+        str = str.replace(`{${key}}`, value);
+    });
+
+    return str;
+}
+
 flow.set('func', {
     mongo,
     twitch,
@@ -173,7 +191,8 @@ flow.set('func', {
     choose,
     rchoose,
     wchoose,
-    smartJoin
+    smartJoin,
+    renderTemplate
 }, 'memory');
 
 node.status('Ready');

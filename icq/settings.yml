@@ -66,3 +66,12 @@ groups:
     '0': NoWay
     '69': DealWithIt
     '150': BSURage
+- name: popCat
+  weight: 1
+  templates:
+    simple: 'у вас {value} пополз{value#ень,ня,ней} {emote}'
+    delta: 'у вас {value} пополз{value#ень,ня,ней} ({delta}) {emote}'
+  emotes:
+  - popCat
+  - popCat SoSnowy
+  special: {}

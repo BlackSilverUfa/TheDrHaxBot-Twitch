@@ -16,20 +16,13 @@ if (msg.init) {
 }
 
 const DB = 'icq_results';
-const { mongo, choose, wchoose } = flow.get('func', 'memory');
+const { mongo, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
 const groups = Object.keys(settings.groups);
 
 function rand(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
-}
-
-function renderTemplate(str, vars) {
-    Object.entries(vars).forEach(([key, value]) => {
-        str = str.split(`{${key}}`).join(value);
-    });
-    return str;
 }
 
 async function main() {
