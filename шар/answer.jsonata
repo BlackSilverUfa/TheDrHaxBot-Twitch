@@ -64,6 +64,7 @@ $continuations := [
     'боря CatCrying',
     'борода popCat',
     'блюй пей dead5What MedTime',
+    'бежать некуда ariW',
     
     'вертуфайзен bUrself',
     'вы продоёте рыбов? ANYA',
@@ -133,7 +134,9 @@ $continuations := [
     'хубики ANYA',
     
     'эбби pepeSmack',
-    'энвайронментал сторителлинг ANYA'
+    'энвайронментал сторителлинг ANYA',
+    
+    'я охотник Pepega'
 ];
 
 $choose := function ($l) {(
