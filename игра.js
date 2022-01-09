@@ -15,7 +15,7 @@ function updateGameHistory(game_history, name) {
     } else {
         game_history.push({
             name,
-            date: now
+            date: now.toISOString()
         });
     }
 }
