@@ -1,5 +1,5 @@
 const stream = flow.get('stream_status', 'file');
-const { TZ, msToDate, Patterns: { COMMAND } } = flow.get('func', 'memory');
+const { TZ, msToDate, Patterns: { COMMAND }, updateText } = flow.get('func', 'memory');
 
 const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
 const channel = msg.payload.channel.substring(1);
@@ -25,6 +25,29 @@ if (msg.parsed.level <= 1) { // mods and up
                     twitch: msg.payload.userstate.username,
                 },
             };
+
+            flow.set('stream_status', stream, 'file');
+
+            msg.reply = 'анонс обновлён SeemsGood';
+            return [msg, null];
+
+        case 'update':
+            try {
+                stream.announcement.text = updateText(
+                    stream.announcement.text,
+                    ...args.join(' ').split(/\s?\/\/\/\s?/)
+                );
+            } catch (e) {
+                msg.reply = e;
+                return [msg, null];
+            }
+
+            stream.announcement.source = Object.assign({},
+                stream.announcement.source || {},
+                {
+                    twitch: msg.payload.userstate.username
+                }
+            );
 
             flow.set('stream_status', stream, 'file');
 
@@ -57,6 +80,10 @@ if (msg.parsed.level <= 1) { // mods and up
             flow.set('stream_status', stream, 'file');
 
             msg.reply = 'анонс удалён bigBossSalut';
+            return [msg, null];
+        
+        case 'help':
+            msg.reply = 'доступные команды: set, update, tweet, reuse, reset';
             return [msg, null];
     }
 }

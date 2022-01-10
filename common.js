@@ -161,6 +161,22 @@ function smartJoin(list, sep, last_sep) {
     return list.slice(0, list.length - 1).join(sep) + last_sep + list[list.length - 1];
 }
 
+function updateText(text, original, replacement) {
+    if (replacement == null) return original;
+
+    let regex;
+
+    try {
+        regex = new RegExp(original, 'g');
+    } catch (e) {
+        throw 'не удалось скомпилировать регулярное выражение';
+    }
+
+    if (!text.match(regex)) throw 'нечего менять';
+
+    return text.replace(regex, replacement).trim();
+}
+
 function renderTemplate(str, vars) {
     str.match(/\{.*?\}/g).forEach((key) => {
         key = key.substring(1, key.length - 1);
@@ -192,6 +208,7 @@ flow.set('func', {
     rchoose,
     wchoose,
     smartJoin,
+    updateText,
     renderTemplate
 }, 'memory');
 
