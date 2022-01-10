@@ -16,38 +16,22 @@ if (msg.parsed.level <= 1) { // mods and up
 
     switch (cmd) {
         case 'set':
-            if (args.length == 0) break;
-
-            stream.announcement = {
-                text: args.join(' '),
-                date: msToDate(now + TZ),
-                source: {
-                    twitch: msg.payload.userstate.username,
-                },
-            };
-
-            flow.set('stream_status', stream, 'file');
-
-            msg.reply = 'анонс обновлён SeemsGood';
-            return [msg, null];
-
         case 'update':
             try {
-                stream.announcement.text = updateText(
-                    stream.announcement.text,
-                    ...args.join(' ').split(/\s?\/\/\/\s?/)
-                );
+                stream.announcement = {
+                    text: updateText(
+                        stream.announcement.text,
+                        ...args.join(' ').split(/\s?\/\/\/\s?/)
+                    ),
+                    date: msToDate(now + TZ),
+                    source: {
+                        twitch: msg.payload.userstate.username,
+                    },
+                };
             } catch (e) {
                 msg.reply = e;
                 return [msg, null];
             }
-
-            stream.announcement.source = Object.assign({},
-                stream.announcement.source || {},
-                {
-                    twitch: msg.payload.userstate.username
-                }
-            );
 
             flow.set('stream_status', stream, 'file');
 
@@ -83,7 +67,7 @@ if (msg.parsed.level <= 1) { // mods and up
             return [msg, null];
         
         case 'help':
-            msg.reply = 'доступные команды: set, update, tweet, reuse, reset';
+            msg.reply = 'доступные команды: update, tweet, reuse, reset';
             return [msg, null];
     }
 }

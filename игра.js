@@ -23,20 +23,31 @@ function updateGameHistory(game_history, name) {
 if (msg.parsed.level <= 1) { // mods and up
     [cmd, ...args] = query.split(' ');
 
-    if (cmd == 'set' && args.length > 0) {
-        stream.game_forced = args.join(' ');
-        updateGameHistory(stream.game_history, stream.game_forced);
+    switch (cmd) {
+        case 'set':
+            if (args.length == 0) {
+                msg.reply = 'укажите название игры';
+                return;
+            }
 
-        flow.set('stream_status', stream, 'file');
-        msg.reply = `игра изменена на ${stream.game_forced} SeemsGood`;
-        return msg;
-    } else if (cmd == 'reset') {
-        stream.game_forced = null;
-        updateGameHistory(stream.game_history, stream.game);
+            stream.game_forced = args.join(' ');
+            updateGameHistory(stream.game_history, stream.game_forced);
 
-        flow.set('stream_status', stream, 'file');
-        msg.reply = `игра изменена на ${stream.game} SeemsGood`;
-        return msg;
+            flow.set('stream_status', stream, 'file');
+            msg.reply = `игра изменена на ${stream.game_forced} SeemsGood`;
+            return msg;
+
+        case 'reset':
+            stream.game_forced = null;
+            updateGameHistory(stream.game_history, stream.game);
+
+            flow.set('stream_status', stream, 'file');
+            msg.reply = `игра изменена на ${stream.game} SeemsGood`;
+            return msg;
+        
+        case 'help':
+            msg.reply = 'доступные команды: set, reset';
+            return msg;
     }
 }
 
