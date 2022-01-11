@@ -178,7 +178,7 @@ function updateText(text, original, replacement) {
 }
 
 function renderTemplate(str, vars) {
-    str.match(/\{.*?\}/g).forEach((key) => {
+    (str.match(/\{.*?\}/g) || []).forEach((key) => {
         key = key.substring(1, key.length - 1);
         let value;
 
