@@ -3,7 +3,7 @@ if (msg.init) {
 
     data.words = Object.assign({},
         ...data.words.map(w => ({
-            [w.forms.nomn]: w
+            [w.forms.nomn.toLowerCase()]: w
         }))
     );
 
