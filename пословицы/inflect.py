@@ -23,13 +23,11 @@ if not word:
 if not word:
     return None
 
-forms = dict()
-
-import sys
-
 def inflect(word, tags):
     new_word = word.inflect(tags)
     return new_word.word if new_word else word.word
+
+forms = dict()
 
 for case in CASES:
     forms[case] = inflect(word, {case})
