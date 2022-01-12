@@ -30,7 +30,7 @@ def inflect(word, tags):
 forms = dict()
 
 for case in CASES:
-    forms[case] = inflect(word, {case})
+    forms[case] = inflect(word, {case, 'sing'})
     forms[f'{case}_plur'] = inflect(word, {case, 'plur'})
 
 return forms
