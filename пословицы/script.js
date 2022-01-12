@@ -23,6 +23,11 @@ switch (args[0]) {
     case 'про':
         const newWord = args[1];
 
+        if (!args[1]) {
+            msg.reply = 'про что? SMOrc';
+            return msg;
+        }
+
         const { payload: forms } = await AF.invoke('pymorphy inflect', {
             payload: newWord
         });
