@@ -28,13 +28,17 @@ switch (args[0]) {
             return msg;
         }
 
-        const { payload: forms } = await AF.invoke('pymorphy inflect', {
+        let { payload: forms } = await AF.invoke('pymorphy inflect', {
             payload: newWord
         });
 
         if (!forms || typeof(forms) != 'object') {
-            msg.reply = 'я не знаю такого слова SMOrc';
-            return msg;
+            forms = Object.assign({},
+                ...['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct'].map(form => ({
+                    [form]: args[1],
+                    [`${form}_plur`]: args[1]
+                }))
+            );
         }
 
         word = { forms, specials: [] };
