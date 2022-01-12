@@ -23,15 +23,15 @@ if not word:
 if not word:
     return None
 
-def inflect(word, tags):
+def inflect(word, tags, fallback=None):
     new_word = word.inflect(tags)
-    return new_word.word if new_word else word.word
+    return (new_word or fallback or word).word
 
 forms = dict()
 
 for case in CASES:
     forms[case] = inflect(word, {case, 'sing'})
-    forms[f'{case}_plur'] = inflect(word, {case, 'plur'})
+    forms[f'{case}_plur'] = inflect(word, {case, 'plur'}, forms[case])
 
 return forms
 

@@ -33,12 +33,14 @@ switch (args[0]) {
         });
 
         if (!forms || typeof(forms) != 'object') {
-            forms = Object.assign({},
-                ...['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct'].map(form => ({
-                    [form]: args[1],
-                    [`${form}_plur`]: args[1]
-                }))
-            );
+            msg.reply = 'я не знаю такого слова SMOrc';
+            return msg;
+            // forms = Object.assign({},
+            //     ...['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct'].map(form => ({
+            //         [form]: args[1],
+            //         [`${form}_plur`]: args[1]
+            //     }))
+            // );
         }
 
         word = { forms, specials: [] };
