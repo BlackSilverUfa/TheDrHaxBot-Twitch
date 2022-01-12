@@ -4,7 +4,7 @@ morph = MorphAnalyzer(lang='ru')
 CASES = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct']
 
 def select(words, tags):
-    matches = list(filter(lambda w: all(tag in w.tag for tag in tags), words))
+    matches = list(filter(lambda w: tags in w.tag, words))
     if len(matches) > 0:
         return matches[0]
     else:
