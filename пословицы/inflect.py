@@ -25,7 +25,12 @@ if not word:
 
 def inflect(word, tags, fallback=None):
     new_word = word.inflect(tags)
-    return (new_word or fallback or word).word
+    if new_word:
+        return new_word.word
+    elif fallback:
+        return fallback
+    else:
+        return word.word
 
 forms = dict()
 

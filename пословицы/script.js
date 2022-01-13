@@ -22,26 +22,18 @@ let word;
 
 switch (args[0]) {
     case 'про':
-        const newWord = args[1];
-
-        if (!args[1]) {
+        if (args.length == 1) {
             msg.reply = 'про что? SMOrc';
             return msg;
         }
 
         let { payload: forms } = await AF.invoke('pymorphy inflect', {
-            payload: newWord
+            payload: args.slice(1)[0]
         });
 
         if (!forms || typeof(forms) != 'object') {
-            msg.reply = 'я не знаю такого слова SMOrc';
-            return msg;
-            // forms = Object.assign({},
-            //     ...['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct'].map(form => ({
-            //         [form]: args[1],
-            //         [`${form}_plur`]: args[1]
-            //     }))
-            // );
+            // msg.reply = 'я не знаю такого слова SMOrc';
+            return null;
         }
 
         word = { forms, specials: [] };
