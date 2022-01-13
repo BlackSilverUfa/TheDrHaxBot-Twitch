@@ -116,12 +116,14 @@ function fts(query, items, lambda) {
     return items.map((item) => {
         let words = tokenize(lambda(item));
 
-        let rank = query.map((query_word) => {
-          return words.filter((word) => word.startsWith(query_word)).length > 0;
-        }).reduce((a, b) => a + b);
+        let rank = query.map((query_word) => (
+            words.filter((word) => (
+                word.startsWith(query_word)
+            )).length > 0
+        )).reduce((a, b) => a + b);
 
         if (rank > max_rank) {
-          max_rank = rank;
+            max_rank = rank;
         }
 
         return { item, rank };
