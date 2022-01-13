@@ -193,7 +193,7 @@ $continue := function($text) {(
         ~> $lowercase
         ~> $translate('a', 'а')
         ~> $distinctStr
-        ~> $replace(/\.*$/, '');
+        ~> $replace(/[.…]*$/, '');
 
     $length($text) = 0 ? null :
 

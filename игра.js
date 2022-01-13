@@ -149,9 +149,10 @@ if (stream.active) {
     } else {
         const start = Sugar.Date.short(Sugar.Date.create(lastVod.date_original));
         const currentGame = last(rerun.game_history.filter(game => +new Date(game.date) < now));
+        const at = Math.floor((+new Date() - new Date(lastVod.date)) / 1000);
 
         msg.reply = `сейчас повторяется ${currentGame.name} со стрима ${start}.`;
-        msg.reply += ` Запись можно посмотреть здесь: bsu.us.to/${lastVod.id} YEPPERS`;
+        msg.reply += ` Запись можно посмотреть здесь: bsu.us.to/${lastVod.id}?at=${at} YEPPERS`;
     }
 } else {
     msg.reply = 'сейчас нет активной трансляции peepoSHAKE';
