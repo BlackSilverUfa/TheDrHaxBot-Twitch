@@ -1,5 +1,6 @@
 const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
 const rerun = flow.get('rerun_status', 'file');
+
 const { dateDistance } = flow.get('func', 'memory');
 
 const DATE_DIST_OPTS = {
@@ -18,9 +19,16 @@ if (stream.active) {
         msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК), а эта игра - ${catAge} YEPPERS`;
     }
 } else if (rerun.active) {
-    const total = dateDistance(new Date(rerun.date), null, DATE_DIST_OPTS);
+    const timeSinceStart = dateDistance(new Date(rerun.date), null, DATE_DIST_OPTS);
 
-    msg.reply = `повтор идёт уже ${total} YEPPERS`;
+    msg.reply = `повтор идёт уже ${timeSinceStart}`;
+
+    if (rerun.vod) {
+        const timeUntilEnd = dateDistance(new Date(), new Date(rerun.date_end), DATE_DIST_OPTS);
+        msg.reply += ` (осталось ${timeUntilEnd})`;
+    }
+
+    msg.reply += ' YEPPERS';
 } else {
     const total = dateDistance(new Date(stream.date), new Date(stream.date_end), DATE_DIST_OPTS);
     const when = dateDistance(new Date(stream.date_end), null, { short: true, });

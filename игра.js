@@ -26,6 +26,14 @@ if (msg.parsed.level <= 1) { // mods and up
 
     switch (cmd) {
         case 'set':
+            if (rerun.active) {
+                msg.reply = 'прошлое не изменить NOPERS';
+                return msg;
+            } else if (!stream.active) {
+                msg.reply = 'сейчас нет активной трансляции';
+                return msg;
+            }
+
             if (args.length == 0) {
                 msg.reply = 'укажите название игры';
                 return;
