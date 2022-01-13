@@ -108,6 +108,28 @@ function tokenize(string) {
     }).filter((x) => x != null);
 }
 
+function fts(query, items, lambda) {
+    query = tokenize(query);
+
+    let max_rank = 0;
+
+    return items.map((item) => {
+        let words = tokenize(lambda(item));
+
+        let rank = query.map((query_word) => {
+          return words.filter((word) => word.startsWith(query_word)).length > 0;
+        }).reduce((a, b) => a + b);
+
+        if (rank > max_rank) {
+          max_rank = rank;
+        }
+
+        return { item, rank };
+    })
+    .filter((item) => item.rank == max_rank && item.rank > 0)
+    .map((item) => item.item);
+}
+
 function agreeWithNum(num, words) {
     if (num >= 20) {
         num = num % 10;
@@ -205,6 +227,7 @@ flow.set('func', {
     Patterns,
     TZ,
     tokenize,
+    fts,
     agreeWithNum,
     dateDistance,
     msToDate,
