@@ -132,7 +132,7 @@ function findByName(query) {
     if (games.length > MAX_RESULTS) {
         msg.reply = renderTemplate(
             'найден{count#а,о,о} {count} игр{count#а,ы,}. Список можно ' +
-            'увидеть тут: blackufa-beta.thedrhax.pw/?mode=games&q={query}',
+            'увидеть тут: bsu.us.to/?mode=games&q={query}',
             {
                 count: games.length,
                 query: encodeURIComponent(query)
