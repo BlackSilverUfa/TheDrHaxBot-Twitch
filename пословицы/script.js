@@ -28,7 +28,7 @@ switch (args[0]) {
         }
 
         let { payload: forms } = await AF.invoke('pymorphy inflect', {
-            payload: args.slice(1)[0]
+            payload: args.slice(1).join(' ')
         });
 
         if (!forms || typeof(forms) != 'object') {

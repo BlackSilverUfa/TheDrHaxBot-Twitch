@@ -1,30 +1,25 @@
 from pymorphy2 import MorphAnalyzer
 morph = MorphAnalyzer(lang='ru')
 
+
 CASES = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct']
 
-def select(words, tags):
-    matches = list(filter(lambda w: tags in w.tag, words))
-    if len(matches) > 0:
-        return matches[0]
-    else:
-        return None
 
-words = morph.parse(payload)
+def parse(word, hints=[]):
+    parsed = morph.parse(word)
 
-word = select(words, {'NOUN', 'accs'})
+    for hint in hints:
+        candidates = [w for w in parsed if hint in w.tag]
 
-if not word:
-    word = select(words, {'NOUN', 'gent'})
+        if len(candidates) > 0:
+            return candidates[0]
 
-if not word:
-    word = select(words, {'NOUN', 'nomn'})
+    return parsed[0]
 
-if not word:
-    return None
 
 def inflect(word, tags, fallback=None):
     new_word = word.inflect(tags)
+
     if new_word:
         return new_word.word
     elif fallback:
@@ -32,11 +27,15 @@ def inflect(word, tags, fallback=None):
     else:
         return word.word
 
+
 forms = dict()
+hints = [{'accs'}]
+words = [parse(word, hints) for word in payload.split(' ')]
+
 
 for case in CASES:
-    forms[case] = inflect(word, {case, 'sing'})
-    forms[f'{case}_plur'] = inflect(word, {case, 'plur'}, forms[case])
+    forms[case] = ' '.join([inflect(word, {case}) for word in words])
+    forms[f'{case}_plur'] = ' '.join([inflect(word, {case, 'plur'}) for word in words])
 
 return forms
 
