@@ -23,8 +23,10 @@ if (stream.active) {
 
     msg.reply = `повтор идёт уже ${timeSinceStart}`;
 
-    if (rerun.vod) {
-        const timeUntilEnd = dateDistance(new Date(), new Date(rerun.date_end), DATE_DIST_OPTS);
+    const lastVod = rerun.vod_history[rerun.vod_history.length - 1];
+
+    if (lastVod && new Date() < new Date(lastVod.date_end)) {
+        const timeUntilEnd = dateDistance(new Date(), new Date(lastVod.date_end), DATE_DIST_OPTS);
         msg.reply += ` (осталось ${timeUntilEnd})`;
     }
 

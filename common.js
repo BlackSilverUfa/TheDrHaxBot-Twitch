@@ -195,6 +195,10 @@ function renderTemplate(str, vars) {
     return str;
 }
 
+function last(array) { // yes
+    return array[array.length - 1];
+}
+
 flow.set('func', {
     mongo,
     twitch,
@@ -209,7 +213,8 @@ flow.set('func', {
     wchoose,
     smartJoin,
     updateText,
-    renderTemplate
+    renderTemplate,
+    last
 }, 'memory');
 
 node.status('Ready');

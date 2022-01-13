@@ -85,17 +85,36 @@ if (msg.parsed.level <= 1) { // mods and up
                 });
             }).sort((a, b) => a[0] > b[0] ? 1 : -1);
 
-            const rerunDate = +new Date(rerun.date);
-            const endDate = new Date(rerunDate + duration * 1000);
+            let rerunDate;
+
+            const prevVod = rerun.vod_history[rerun.vod_history.length - 1];
+            const vodExpired = prevVod && new Date() > new Date(prevVod.date_end);
+            if (vodExpired) {
+                rerunDate = new Date(prevVod.date_end);
+            } else {
+                rerunDate = new Date(rerun.date);
+            }
+
+            const endDate = new Date(+rerunDate + duration * 1000);
             const timeline = games.map(([start, name]) => ({
                 name,
                 date: new Date(rerunDate + start * 1000).toISOString()
             }));
 
-            rerun.vod = vod;
-            rerun.game_history = timeline;
-            rerun.date_original = segment.date;
-            rerun.date_end = endDate.toISOString();
+            const vod_item = {
+                id: vod,
+                date_original: segment.date,
+                date: rerunDate.toISOString(),
+                date_end: endDate.toISOString()
+            };
+            
+            rerun.game_history = [].concat(rerun.game_history, timeline);
+            
+            if (vodExpired) {
+                rerun.vod_history.push(vod_item);
+            } else {
+                rerun.vod_history[rerun.vod_history.length - 1] = vod_item;
+            }
 
             flow.set('rerun_status', rerun, 'file');
             msg.reply = `текущий повтор привязан к стриму ${vod} SeemsGood`;
@@ -117,22 +136,22 @@ if (msg.parsed.level <= 1) { // mods and up
     }
 }
 
-const { smartJoin } = flow.get('func', 'memory');
+const { smartJoin, last } = flow.get('func', 'memory');
 const now = +new Date();
 
 if (stream.active) {
     let game = stream.game_forced || stream.game;
     msg.reply = `сейчас транслируется ${game} YEPPERS`;
 } else if (rerun.active) {
-    if (!rerun.vod || now > +new Date(rerun.date_end)) {
+    const lastVod = last(rerun.vod_history);
+    if (!lastVod || now > +new Date(lastVod.date_end)) {
         msg.reply = 'сейчас идёт повтор, но какого стрима - я не знаю peepoThink';
     } else {
-        const start = Sugar.Date.short(Sugar.Date.create(rerun.date_original));
-        const pastGames = rerun.game_history.filter(game => +new Date(game.date) < now);
-        const currentGame = pastGames[pastGames.length - 1];
+        const start = Sugar.Date.short(Sugar.Date.create(lastVod.date_original));
+        const currentGame = last(rerun.game_history.filter(game => +new Date(game.date) < now));
 
         msg.reply = `сейчас повторяется ${currentGame.name} со стрима ${start}.`;
-        msg.reply += ` Запись можно посмотреть здесь: bsu.us.to/${rerun.vod} YEPPERS`;
+        msg.reply += ` Запись можно посмотреть здесь: bsu.us.to/${lastVod.id} YEPPERS`;
     }
 } else {
     msg.reply = 'сейчас нет активной трансляции peepoSHAKE';
