@@ -98,7 +98,7 @@ function findByID(query) {
 function findByDate(query) {
     let date = Sugar.Date.create(query, { past: true });
 
-    if (date == 'Invalid Date') {
+    if (date == 'Invalid Date' || date.getFullYear() < 2005) {
         return false;
     }
 
