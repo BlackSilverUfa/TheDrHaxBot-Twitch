@@ -2,6 +2,8 @@ const stream = flow.get('stream_status', 'file')
 const rerun = flow.get('rerun_status', 'file');
 const db = flow.get('blackufa_db', 'memory');
 
+const { smartJoin, last } = flow.get('func', 'memory');
+
 const query = msg.parsed.query_filtered;
 
 function updateGameHistory(game_history, name) {
@@ -77,6 +79,7 @@ if (msg.parsed.level <= 1) { // mods and up
                         segment.streams.indexOf(ref.segment) !== -1
                     )).map(ref => {
                         (ref.subrefs || [ref]).map(subref => {
+                            node.error(subref);
                             const start = segment.abs_start + (subref.start || 0);
                             const name = game.type == 'list' ? subref.name : game.name;
                             games.push([start, name]);
@@ -87,7 +90,7 @@ if (msg.parsed.level <= 1) { // mods and up
 
             let rerunDate;
 
-            const prevVod = rerun.vod_history[rerun.vod_history.length - 1];
+            const prevVod = last(rerun.vod_history);
             const vodExpired = prevVod && new Date() > new Date(prevVod.date_end);
             if (vodExpired) {
                 rerunDate = new Date(prevVod.date_end);
@@ -98,7 +101,7 @@ if (msg.parsed.level <= 1) { // mods and up
             const endDate = new Date(+rerunDate + duration * 1000);
             const timeline = games.map(([start, name]) => ({
                 name,
-                date: new Date(rerunDate + start * 1000).toISOString()
+                date: new Date(+rerunDate + start * 1000).toISOString()
             }));
 
             const vod_item = {
@@ -110,7 +113,7 @@ if (msg.parsed.level <= 1) { // mods and up
             
             rerun.game_history = [].concat(rerun.game_history, timeline);
             
-            if (vodExpired) {
+            if (!prevVod || vodExpired) {
                 rerun.vod_history.push(vod_item);
             } else {
                 rerun.vod_history[rerun.vod_history.length - 1] = vod_item;
@@ -136,7 +139,6 @@ if (msg.parsed.level <= 1) { // mods and up
     }
 }
 
-const { smartJoin, last } = flow.get('func', 'memory');
 const now = +new Date();
 
 if (stream.active) {

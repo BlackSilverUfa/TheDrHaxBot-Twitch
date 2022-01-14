@@ -34,7 +34,7 @@ function timeline(stream, history) {
 
 if (stream.active) {
     msg.reply = 'сегодня были: ' + timeline(stream);
-} else if (rerun.active && rerun.vod) {
+} else if (rerun.active && rerun.vod_history.length > 0) {
     const past = timeline(rerun, rerun.game_history.filter(game => now > +new Date(game.date)));
     const future = timeline(rerun, rerun.game_history.filter(game => now < +new Date(game.date)));
     
