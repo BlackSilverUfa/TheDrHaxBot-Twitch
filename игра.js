@@ -23,6 +23,32 @@ function updateGameHistory(game_history, name) {
     }
 }
 
+function streamTimeline(id) {
+    const games = [];
+
+    db.segments.find({ streams: { $contains: id } }).map(segment => {
+        segment.games.map(id => db.games.findOne({ id })).map(game => {
+            game.streams.filter(ref => (
+                segment.streams.indexOf(ref.segment) !== -1
+            )).map(ref => {
+                (ref.subrefs || [ref]).map(subref => {
+                    const start = segment.abs_start + (subref.start || 0);
+                    const name = game.type == 'list' ? subref.name : game.name;
+                    games.push([start, name]);
+                });
+            });
+        });
+    });
+
+    return games.sort((a, b) => a[0] > b[0] ? 1 : -1);
+}
+
+function streamDuration(id) {
+    return db.segments.find({ streams: { $contains: id } })
+        .map(s => s.abs_end - s.abs_start)
+        .reduce((a, b) => a + b);
+}
+
 if (msg.parsed.level <= 1) { // mods and up
     [cmd, ...args] = query.split(' ');
 
@@ -60,64 +86,37 @@ if (msg.parsed.level <= 1) { // mods and up
             }
 
             const vod = args[0];
-            const query = { streams: { $contains: vod } };
-
-            const segment = db.segments.findOne(query);
+            
+            const segment = db.segments.findOne({ streams: { $contains: vod } });
 
             if (!segment) {
                 msg.reply = 'стрим не найден';
                 return msg;
             }
 
-            const games = [];
-            let duration = 0;
-
-            db.segments.find(query).map(segment => {
-                duration += segment.abs_end - segment.abs_start;
-                segment.games.map(id => db.games.findOne({ id })).map(game => {
-                    game.streams.filter(ref => (
-                        segment.streams.indexOf(ref.segment) !== -1
-                    )).map(ref => {
-                        (ref.subrefs || [ref]).map(subref => {
-                            node.error(subref);
-                            const start = segment.abs_start + (subref.start || 0);
-                            const name = game.type == 'list' ? subref.name : game.name;
-                            games.push([start, name]);
-                        });
-                    });
-                });
-            }).sort((a, b) => a[0] > b[0] ? 1 : -1);
-
-            let rerunDate;
-
             const prevVod = last(rerun.vod_history);
             const vodExpired = prevVod && new Date() > new Date(prevVod.date_end);
-            if (vodExpired) {
-                rerunDate = new Date(prevVod.date_end);
-            } else {
-                rerunDate = new Date(rerun.date);
-            }
-
-            const endDate = new Date(+rerunDate + duration * 1000);
-            const timeline = games.map(([start, name]) => ({
-                name,
-                date: new Date(+rerunDate + start * 1000).toISOString()
+            const startDate = new Date(vodExpired ? prevVod.date_end : rerun.date);
+            const endDate = new Date(+startDate + streamDuration(vod) * 1000);
+            const timeline = streamTimeline(vod).map(([start, name]) => ({
+                name, date: new Date(+startDate + start * 1000).toISOString()
             }));
 
             const vod_item = {
                 id: vod,
                 date_original: segment.date,
-                date: rerunDate.toISOString(),
-                date_end: endDate.toISOString()
+                date: startDate.toISOString(),
+                date_end: endDate.toISOString(),
+                timeline
             };
-            
-            rerun.game_history = [].concat(rerun.game_history, timeline);
-            
+
             if (!prevVod || vodExpired) {
                 rerun.vod_history.push(vod_item);
             } else {
                 rerun.vod_history[rerun.vod_history.length - 1] = vod_item;
             }
+
+            rerun.game_history = [].concat(...rerun.vod_history.map(v => v.timeline));
 
             flow.set('rerun_status', rerun, 'file');
             msg.reply = `текущий повтор привязан к стриму ${vod} SeemsGood`;
@@ -125,8 +124,10 @@ if (msg.parsed.level <= 1) { // mods and up
 
         case 'reset':
             stream.game_forced = null;
-            rerun.vod = null;
             updateGameHistory(stream.game_history, stream.game);
+
+            rerun.vod_history = [];
+            rerun.game_history = [];
 
             flow.set('stream_status', stream, 'file');
             flow.set('rerun_status', rerun, 'file');
