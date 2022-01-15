@@ -133,6 +133,10 @@ function fts(query, items, lambda) {
 }
 
 function agreeWithNum(num, words) {
+    if (num < 0) {
+        num = Math.abs(num);
+    }
+
     if (num >= 20) {
         num = num % 10;
     }

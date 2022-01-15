@@ -24,7 +24,7 @@ function updateGameHistory(game_history, name) {
 }
 
 function streamTimeline(id) {
-    const games = [];
+    let games = [];
 
     db.segments.find({ streams: { $contains: id } })
         .filter(s => s.games.length > 0)
@@ -43,20 +43,31 @@ function streamTimeline(id) {
                     .filter(ref => (segment.segment == ref.segment))
                     .map(ref => {
                         (ref.subrefs || [ref]).map(subref => {
-                            const start = abs_start + (subref.start || 0);
+                            const start = (subref.start || 0) - abs_start;
                             const name = game.type == 'list' ? subref.name : game.name;
 
-                            games.push([start - abs_start, name]);
+                            if (start < abs_end)
+                                games.push([start, name]);
                         });
                     });
             });
         });
 
-    return games.sort((a, b) => a[0] > b[0] ? 1 : -1);
+    games.sort((a, b) => a[0] > b[0] ? 1 : -1);
+
+    const prevGames = games.filter(([s]) => s < 0);
+    games = games.filter(([s]) => s >= 0);
+
+    if ((games.length == 0 || games[0][0] > 0) && prevGames.length > 0) {
+        games.unshift([0, last(prevGames)[1]]);
+    }
+
+    return games;
 }
 
 function streamDuration(id) {
     return db.segments.find({ streams: { $contains: id } })
+        .filter(s => s.streams.length == 1)
         .map(s => s.abs_end - s.abs_start)
         .reduce((a, b) => a + b);
 }
@@ -107,8 +118,7 @@ if (msg.parsed.level <= 1) { // mods and up
             }
 
             const prevVod = last(rerun.vod_history);
-            const vodExpired = prevVod && new Date() > new Date(prevVod.date_end);
-            const startDate = new Date(vodExpired ? prevVod.date_end : rerun.date);
+            const startDate = new Date(prevVod ? prevVod.date_end : rerun.date);
             const endDate = new Date(+startDate + streamDuration(vod) * 1000);
             const timeline = streamTimeline(vod).map(([start, name]) => ({
                 name, date: new Date(+startDate + start * 1000).toISOString()
@@ -122,16 +132,17 @@ if (msg.parsed.level <= 1) { // mods and up
                 timeline
             };
 
-            if (!prevVod || vodExpired) {
-                rerun.vod_history.push(vod_item);
-            } else {
-                rerun.vod_history[rerun.vod_history.length - 1] = vod_item;
-            }
-
+            rerun.vod_history.push(vod_item);
             rerun.game_history = [].concat(...rerun.vod_history.map(v => v.timeline));
 
             flow.set('rerun_status', rerun, 'file');
-            msg.reply = `текущий повтор привязан к стриму ${vod} SeemsGood`;
+
+            if (rerun.vod_history.length > 1) {
+                msg.reply = `стрим ${vod} добавлен в очередь повторов SeemsGood`;
+            } else {
+                msg.reply = `повтор привязан к стриму ${vod} SeemsGood`;
+            }
+
             return msg;
 
         case 'reset':
