@@ -173,12 +173,13 @@ if (stream.active) {
     if (!lastVod || now > +new Date(lastVod.date_end)) {
         msg.reply = 'сейчас идёт повтор, но какого стрима - я не знаю peepoThink';
     } else {
-        const start = Sugar.Date.short(Sugar.Date.create(lastVod.date_original));
+        const currentVod = last(rerun.vod_history.filter(({ date }) => +new Date(date) < now));
+        const start = Sugar.Date.short(Sugar.Date.create(currentVod.date_original));
         const currentGame = last(rerun.game_history.filter(game => +new Date(game.date) < now));
-        const at = Math.floor((+new Date() - new Date(lastVod.date)) / 1000);
+        const at = Math.floor((+new Date() - new Date(currentVod.date)) / 1000);
 
         msg.reply = `сейчас повторяется ${currentGame.name} со стрима ${start}.`;
-        msg.reply += ` Запись можно посмотреть здесь: bsu.my.to/${lastVod.id}?at=${at} YEPPERS`;
+        msg.reply += ` Запись можно посмотреть здесь: bsu.my.to/${currentVod.id}?at=${at} YEPPERS`;
     }
 } else {
     msg.reply = 'сейчас нет активной трансляции peepoSHAKE';
