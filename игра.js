@@ -26,19 +26,31 @@ function updateGameHistory(game_history, name) {
 function streamTimeline(id) {
     const games = [];
 
-    db.segments.find({ streams: { $contains: id } }).map(segment => {
-        segment.games.map(id => db.games.findOne({ id })).map(game => {
-            game.streams.filter(ref => (
-                segment.streams.indexOf(ref.segment) !== -1
-            )).map(ref => {
-                (ref.subrefs || [ref]).map(subref => {
-                    const start = segment.abs_start + (subref.start || 0);
-                    const name = game.type == 'list' ? subref.name : game.name;
-                    games.push([start, name]);
-                });
+    db.segments.find({ streams: { $contains: id } })
+        .filter(s => s.games.length > 0)
+        .map(segment => {
+            let abs_start = segment.abs_start;
+            let abs_end = segment.abs_end;
+
+            if (segment.offsets) {
+                const index = segment.streams.indexOf(id);
+                abs_start = segment.offsets[index];
+                abs_end = segment.offsets[index + 1] || abs_end;
+            }
+
+            segment.games.map(id => db.games.findOne({ id })).map(game => {
+                game.streams
+                    .filter(ref => (segment.segment == ref.segment))
+                    .map(ref => {
+                        (ref.subrefs || [ref]).map(subref => {
+                            const start = abs_start + (subref.start || 0);
+                            const name = game.type == 'list' ? subref.name : game.name;
+
+                            games.push([start - abs_start, name]);
+                        });
+                    });
             });
         });
-    });
 
     return games.sort((a, b) => a[0] > b[0] ? 1 : -1);
 }
