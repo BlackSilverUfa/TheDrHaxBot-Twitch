@@ -34,7 +34,7 @@ words = [parse(word, hints) for word in payload.split(' ')]
 
 
 for case in CASES:
-    forms[case] = ' '.join([inflect(word, {case}) for word in words])
+    forms[case] = ' '.join([inflect(word, {case, 'sing'}) for word in words])
     forms[f'{case}_plur'] = ' '.join([inflect(word, {case, 'plur'}) for word in words])
 
 return forms
