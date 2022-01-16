@@ -179,7 +179,7 @@ if (stream.active) {
         const at = Math.floor((+new Date() - new Date(currentVod.date)) / 1000);
 
         msg.reply = `сейчас повторяется ${currentGame.name} со стрима ${start}.`;
-        msg.reply += ` Запись можно посмотреть здесь: bsu.my.to/${currentVod.id}?at=${at} YEPPERS`;
+        msg.reply += ` Запись можно посмотреть здесь: drhx.ru/b/${currentVod.id}?at=${at} YEPPERS`;
     }
 } else {
     msg.reply = 'сейчас нет активной трансляции peepoSHAKE';

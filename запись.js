@@ -21,7 +21,7 @@ function segmentLink(segment) {
         }
     }
 
-    return `bsu.my.to/${id}`;
+    return `drhx.ru/b/${id}`;
 }
 
 function gameLink(game) {
@@ -36,7 +36,7 @@ function gameLink(game) {
             link += `?at=${game.start}`;
         }
     } else { // game
-        link = `bsu.my.to/${game.id}`;
+        link = `drhx.ru/b/${game.id}`;
     }
 
     return link;
@@ -132,7 +132,7 @@ function findByName(query) {
     if (games.length > MAX_RESULTS) {
         msg.reply = renderTemplate(
             'найден{count#а,о,о} {count} игр{count#а,ы,}. Список можно ' +
-            'увидеть тут: bsu.my.to/?mode=games&q={query}',
+            'увидеть тут: drhx.ru/b/?mode=games&q={query}',
             {
                 count: games.length,
                 query: encodeURIComponent(query)
