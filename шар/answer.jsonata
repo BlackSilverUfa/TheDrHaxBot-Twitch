@@ -268,6 +268,7 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
         'нет, ты потрясающий! keanU'
     ])
 ):
+(parsed.query ~> $match(/^omae\swa\smou\sshindeiru/i)) ? 'NANI?! BSURage' :
 (parsed.query ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ', '👁 👄 👁']) :
 (parsed.query ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
     'PETTHEPEEPO',
