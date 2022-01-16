@@ -21,23 +21,23 @@ const args = msg.parsed.query_filtered.split(' ');
 let word;
 
 switch (args[0]) {
-    case 'про':
-        if (args.length == 1) {
-            msg.reply = 'про что? SMOrc';
-            return msg;
-        }
+    // case 'про':
+    //     if (args.length == 1) {
+    //         msg.reply = 'про что? SMOrc';
+    //         return msg;
+    //     }
 
-        let { payload: forms } = await AF.invoke('pymorphy inflect', {
-            payload: args.slice(1).join(' ')
-        });
+    //     let { payload: forms } = await AF.invoke('pymorphy inflect', {
+    //         payload: args.slice(1).join(' ')
+    //     });
 
-        if (!forms || typeof(forms) != 'object') {
-            // msg.reply = 'я не знаю такого слова SMOrc';
-            return null;
-        }
+    //     if (!forms || typeof(forms) != 'object') {
+    //         // msg.reply = 'я не знаю такого слова SMOrc';
+    //         return null;
+    //     }
 
-        word = { forms, specials: [] };
-        break;
+    //     word = { forms, specials: [] };
+    //     break;
 
     default:
         word = words[msg.parsed.icommand] || choose(Object.values(words));
