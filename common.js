@@ -138,7 +138,7 @@ function agreeWithNum(num, words) {
     }
 
     if (num >= 20) {
-        num = num % 10;
+        num = num % 20;
     }
 
     if (num == 1) {
