@@ -28,7 +28,7 @@ groups:
     '69': BSUHey
     '150': gachiOnFIRE
 - name: AYAYA
-  weight: 10
+  weight: 5
   templates:
     simple: 'ваш уровень AYAYAшности: {value} {emote}'
     delta: 'ваш уровень AYAYAшности: {value} ({delta}) {emote}'
