@@ -29,8 +29,8 @@ def inflect(word, tags, fallback=None):
 
 
 forms = dict()
-hints = [{'accs'}]
-words = [parse(word, hints) for word in payload.split(' ')]
+hints = [set(payload.get('hints') or {'accs'})]
+words = [parse(word, hints) for word in payload.get('text').split(' ')]
 
 
 for case in CASES:
