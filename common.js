@@ -100,36 +100,41 @@ Patterns.MENTION = /@([a-z0-9_]{4,25})/ig;
 
 const TZ = 3 * 60 * 60 * 1000; // GMT+3
 
-function tokenize(string) {
-    string = string.toLowerCase().replace(/ё/g, 'е').trim();
-    return string.split(' ').map((word) => {
-        const match = word.match(/[a-zа-я0-9]+/g);
-        return match ? match.join('') : null;
-    }).filter((x) => x != null);
+function tokenize(text) {
+    return (text || '').trim().split(' ').map((word) => {
+        const match = word.toLowerCase().match(/[a-zа-я0-9]+/g);
+        return match ? match.join('') : '';
+    }).filter((w) => w);
 }
 
-function fts(query, items, lambda) {
-    query = tokenize(query);
+function fts(query, items, lambda = (x) => x) {
+    const tokens = tokenize(query);
+    if (tokens.length === 0) return [];
 
-    let max_rank = 0;
+    const pattern = new RegExp(`(${tokens.join('|')})`, 'ig');
+    const onlyNumbers = tokens.filter((s) => Number.isNaN(Number(s))).length === 0;
 
-    return items.map((item) => {
-        let words = tokenize(lambda(item));
+    let maxRank = 0;
 
-        let rank = query.map((query_word) => (
-            words.filter((word) => (
-                word.startsWith(query_word)
-            )).length > 0
-        )).reduce((a, b) => a + b);
+    return items
+        .map((item) => {
+            const match = lambda(item).match(pattern) || [];
 
-        if (rank > max_rank) {
-            max_rank = rank;
-        }
+            const fullRank = match.length;
+            let rank = match.filter((w) => Number.isNaN(Number(w))).length;
 
-        return { item, rank };
-    })
-    .filter((item) => item.rank == max_rank && item.rank > 0)
-    .map((item) => item.item);
+            if (rank > 0 || onlyNumbers) {
+                rank = fullRank;
+            }
+
+            if (rank > maxRank) {
+                maxRank = rank;
+            }
+
+            return { item, rank };
+        })
+        .filter((item) => item.rank === maxRank && item.rank > 0)
+        .map((item) => item.item);
 }
 
 function agreeWithNum(num, words) {
