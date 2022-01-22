@@ -141,9 +141,13 @@ function agreeWithNum(num, words) {
     if (num < 0) {
         num = Math.abs(num);
     }
+    
+    if (num >= 100) {
+        num %= 100;
+    }
 
     if (num >= 20) {
-        num = num % 20;
+        num %= 10;
     }
 
     if (num == 1) {
