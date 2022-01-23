@@ -5,6 +5,8 @@ const {
     intervalToDuration
 } = dateFns; // = require('date-fns');
 
+const { uniq } = lodash; // = require('lodash');
+
 function dateDistance(start, end, options) {
     let { parts, accusative, short, zero, timestamp } = options || {};
 
@@ -111,14 +113,21 @@ function fts(query, items, lambda = (x) => x) {
     const tokens = tokenize(query);
     if (tokens.length === 0) return [];
 
-    const pattern = new RegExp(`(${tokens.join('|')})`, 'ig');
+    const pattern = new RegExp(`(\\s+|^)(${tokens.join('|')})`, 'ig');
     const onlyNumbers = tokens.filter((s) => Number.isNaN(Number(s))).length === 0;
 
     let maxRank = 0;
 
     return items
         .map((item) => {
-            const match = lambda(item).match(pattern) || [];
+            const match = uniq(
+                (
+                    tokenize(lambda(item))
+                        .join(' ')
+                        .match(pattern)
+                    || []
+                ).map((m) => m.trim()),
+            );
 
             const fullRank = match.length;
             let rank = match.filter((w) => Number.isNaN(Number(w))).length;
