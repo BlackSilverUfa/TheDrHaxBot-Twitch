@@ -44,7 +44,7 @@ if (msg.parsed.command == 'куст') {
 if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     msg.reply += ' за мучное NomNom';
 } else if (mentions.length == 1 && mentions[0] == 'myasnoe_file') {
-    msg.reply += ` за филе MEGALUL`;
+    msg.reply += ` за филе popCat`;
 } else {
     msg.reply += ` за ${rchoose(targets)}`;
 }
