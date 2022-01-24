@@ -71,6 +71,8 @@ $continuations := [
 
     'гивасасай monkaChrist',
 
+    'если не мы, то кто? KKomrade',
+
     'ооо, элден ринг KOgasm',
     'оп оп PepoG',
     'оп па Pepega',
@@ -116,6 +118,7 @@ $continuations := [
     'ты кто? Jebaited',
     
     'кб ANYA',
+    'кто, если не мы? KKomrade',
     'кукинг стрим завтра Agakakskagesh',
     'куля-буля ANYA',
     'куляля ANYA',
@@ -251,17 +254,17 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
 (parsed.query_filtered in $emotes) ? (
     parsed.query_filtered
 ) :
-(parsed.query_filtered ~> $continue) ? (
-    '...' & $continue(parsed.query_filtered)
-) :
-(parsed.query_filtered ~> $match(/^пинг/i)) ? (
-    "понг Pepega"
-) :
 (parsed.query_filtered ~> $match(/^(ты кто|кто ты)/)) ? (
     $choose([
         'а ты кто? Jebaited',
         'конь в пальто Jebaited'
     ])
+) :
+(parsed.query_filtered ~> $continue) ? (
+    '...' & $continue(parsed.query_filtered)
+) :
+(parsed.query_filtered ~> $match(/^пинг/i)) ? (
+    "понг Pepega"
 ) :
 (parsed.query ~> $match(/^может чайку/)) ? 'а может тебя?! Jebaited' :
 (parsed.query ~> $match(/^ты потрясающий/)) ? (
