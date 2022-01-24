@@ -103,7 +103,7 @@ Patterns.MENTION = /@([a-z0-9_]{4,25})/ig;
 const TZ = 3 * 60 * 60 * 1000; // GMT+3
 
 function tokenize(text) {
-    return (text || '').trim().split(' ').map((word) => {
+    return (text || '').toLowerCase().trim().replace(/ё/g, 'е').split(' ').map((word) => {
         const match = word.toLowerCase().match(/[a-zа-я0-9]+/g);
         return match ? match.join('') : '';
     }).filter((w) => w);
