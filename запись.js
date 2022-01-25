@@ -28,7 +28,7 @@ function gameLink(game) {
     let link;
 
     if (game.segments.length == 1) { // segment
-        const segment = db.segments.findOne({ segment: game.segment });
+        const segment = game.segments[0];
 
         link = segmentLink(segment);
 
@@ -36,7 +36,7 @@ function gameLink(game) {
             link += `?at=${game.start}`;
         }
     } else { // game
-        link = `drhx.ru/b/${game.id}`;
+        link = `drhx.ru/b/${game.original.id}`;
     }
 
     return link;
@@ -61,7 +61,7 @@ function formatGames(games) {
                 { count: game.segments.length }
             );
         } else {
-            const segment = db.segments.findOne({ segment: game.segments[0].segment });
+            const segment = game.segments[0];
             result += ` [${segment.date.getFullYear()}]`;
         }
 
