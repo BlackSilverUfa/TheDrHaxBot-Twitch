@@ -98,6 +98,21 @@ words:
   specials:
   - если не мы, то кто?
 
+- forms:
+    nomn: Глуховский
+    nomn_plur: Глуховские
+    gent: Глуховского
+    gent_plur: Глуховских
+    accs: Глуховского
+    accs_plur: Глуховских
+    datv: Глуховскому
+    datv_plur: Глуховским
+    ablt: Глуховским
+    ablt_plur: Глуховскими
+    loct: Глуховском
+    loct_plur: Глуховских
+  specials: []
+
 proverbs:
 - '{ablt_plur} после драки не машут'
 - '{ablt} игру не испортишь'
