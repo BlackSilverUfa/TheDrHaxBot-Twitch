@@ -282,6 +282,10 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
     'PETTHEEVAN',
     'PETTHEMOD'
 ]) :
+(parsed.query ~> $match(/^(а\s+)?будет\s+кукинг/)) ? $choose([
+    'конечно будет, уже завтра Agakakskagesh',
+    'кукинг стрим завтра! Если завтра уже наступило, прочитайте это сообщение ещё раз Agakakskagesh'
+]) :
 (
     $choose([
         $choose($positive),
