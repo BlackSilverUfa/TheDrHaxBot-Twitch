@@ -17,6 +17,7 @@ const AF = global.get('actionflows');
 const { choose, renderTemplate } = flow.get('func', 'memory');
 const { words, proverbs } = context.get('data', 'memory');
 
+const cmd = msg.parsed.ialias || msg.parsed.icommand;
 const args = msg.parsed.query_filtered.split(' ');
 let word;
 
@@ -45,12 +46,12 @@ switch (args[0]) {
     //     break;
 
     default:
-        word = words[msg.parsed.icommand] || choose(Object.values(words));
+        word = words[cmd] || choose(Object.values(words));
 }
 
 msg.reply = renderTemplate(choose([...proverbs, ...word.specials]), word.forms);
 
-if (msg.parsed.icommand == 'поползень') {
+if (cmd == 'поползень') {
     msg.reply += ' popCat';
 } else {
     msg.reply += ' ' + choose([
