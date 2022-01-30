@@ -257,7 +257,8 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
 (parsed.query_filtered ~> $match(/^(ты кто|кто ты)/)) ? (
     $choose([
         'а ты кто? Jebaited',
-        'конь в пальто Jebaited'
+        'конь в пальто Jebaited',
+        'нет, ты кто? Jebaited'
     ])
 ) :
 (parsed.query_filtered ~> $continue) ? (
