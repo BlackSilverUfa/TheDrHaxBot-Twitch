@@ -113,6 +113,51 @@ words:
     loct_plur: Глуховских
   specials: []
 
+- forms:
+    nomn: Хакон
+    nomn_plur: Хаконы
+    gent: Хакона
+    gent_plur: Хаконов
+    accs: Хакона
+    accs_plur: Хаконов
+    datv: Хакону
+    datv_plur: Хаконам
+    ablt: Хаконом
+    ablt_plur: Хаконами
+    loct: Хаконе
+    loct_plur: Хаконах
+  specials: []
+
+- forms:
+    nomn: Хамон
+    nomn_plur: Хамоны
+    gent: Хамона
+    gent_plur: Хамонов
+    accs: Хакона
+    accs_plur: Хамонов
+    datv: Хамону
+    datv_plur: Хамонам
+    ablt: Хамоном
+    ablt_plur: Хамонами
+    loct: Хамоне
+    loct_plur: Хамонах
+  specials: []
+
+- forms:
+    nomn: зомби
+    nomn_plur: зомби
+    gent: зомби
+    gent_plur: зомби
+    accs: зомби
+    accs_plur: зомби
+    datv: зомби
+    datv_plur: зомби
+    ablt: зомби
+    ablt_plur: зомби
+    loct: зомби
+    loct_plur: зомби
+  specials: []
+
 proverbs:
 - '{ablt_plur} после драки не машут'
 - '{ablt} игру не испортишь'
