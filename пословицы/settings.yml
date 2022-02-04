@@ -144,6 +144,21 @@ words:
   specials: []
 
 - forms:
+    nomn: ингибитор
+    nomn_plur: ингибиторы
+    gent: ингибитора
+    gent_plur: ингибиторов
+    accs: ингибитор
+    accs_plur: ингибиторы
+    datv: ингибитору
+    datv_plur: ингибиторам
+    ablt: ингибитором
+    ablt_plur: ингибиторами
+    loct: ингибиторе
+    loct_plur: ингибиторах
+  specials: []
+
+- forms:
     nomn: зомби
     nomn_plur: зомби
     gent: зомби
