@@ -7,35 +7,37 @@ CASES = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct']
 
 def parse(word, hints=[]):
     parsed = morph.parse(word)
-
-    for hint in hints:
-        candidates = [w for w in parsed if hint in w.tag]
-
-        if len(candidates) > 0:
-            return candidates[0]
-
-    return parsed[0]
+    hints = set(hints)
+    candidates = [w for w in parsed if hints in w.tag]
+    return candidates[0] if len(candidates) > 0 else parsed[0]
 
 
-def inflect(word, tags, fallback=None):
+def inflect(word, tags, fallback=None, title=False):
     new_word = word.inflect(tags)
+    result = word.word
 
     if new_word:
-        return new_word.word
+        result = new_word.word
     elif fallback:
-        return fallback
-    else:
-        return word.word
+        result = fallback
+
+    return result.title() if title else result
 
 
 forms = dict()
-hints = [set(payload.get('hints') or {'accs'})]
-words = [parse(word, hints) for word in payload.get('text').split(' ')]
-
+hints = payload.get('hints') or []
+words = [(parse(word, hints), word.istitle())
+         for word in payload.get('text').split(' ')]
 
 for case in CASES:
-    forms[case] = ' '.join([inflect(word, {case, 'sing'}) for word in words])
-    forms[f'{case}_plur'] = ' '.join([inflect(word, {case, 'plur'}) for word in words])
+    forms[case] = ' '.join([
+        inflect(word, {case, 'sing'}, title=title)
+        for word, title in words
+    ])
+
+    forms[f'{case}_plur'] = ' '.join([
+        inflect(word, {case, 'plur'}, title=title)
+        for word, title in words
+    ])
 
 return forms
-
