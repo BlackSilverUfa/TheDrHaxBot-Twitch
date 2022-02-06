@@ -1,5 +1,6 @@
 hints_override:
   'и': [['CONJ']]
+  'виледор': [['masc']]
 
 static_proverbs:
   'поползень':
