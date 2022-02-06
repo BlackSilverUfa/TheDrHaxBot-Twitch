@@ -1,27 +1,114 @@
 if (msg.init) {
     const data = {...msg.payload};
-
-    data.words = Object.assign({},
-        ...data.words.map(w => ({
-            [w.forms.nomn.toLowerCase()]: w
-        }))
-    );
-
     context.set('data', data, 'memory');
     node.status('Ready');
     return;
 }
 
-const AF = global.get('actionflows');
+// const Az = require('az');
+const { intersection, concat, find } = lodash; // = require('lodash');
 const { choose, renderTemplate } = flow.get('func', 'memory');
-const { words, proverbs } = context.get('data', 'memory');
+const { static_proverbs, hints_override, proverbs } = context.get('data', 'memory');
 
-const cmd = msg.parsed.ialias || msg.parsed.icommand;
-const word = words[cmd] || choose(Object.values(words));
+const CASES = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct'];
 
-msg.reply = renderTemplate(choose([...proverbs, ...word.specials]), word.forms);
+function isTitle(word) {
+    return word[0] === word[0].toUpperCase();
+}
 
-if (cmd == 'поползень') {
+function title(word) {
+    return word[0].toUpperCase() + word.substring(1);
+}
+
+function parse(word, hints = []) {
+    const parsed = Az.Morph(word, {
+        forceParse: true,
+    });
+
+    hints = hints_override[word.toLowerCase()] || hints;
+
+    const filtered = hints.map((tags) => (
+        find(parsed, (w) => (
+            intersection(concat(w.tag.stat, w.tag.flex), tags).length === tags.length
+        ))
+    )).filter(Boolean).sort((a, b) => b.score - a.score);
+
+    const result = filtered[0] || parsed[0];
+    result.title = isTitle(word);
+
+    return result;
+}
+
+function inflectAll(words, tags) {
+    return words.map((word) => {
+        const newWord = word.inflect(tags);
+        const res = newWord ? newWord.word : word.word;
+        return word.title ? title(res) : res;
+    }).join(' ');
+}
+
+function getAllForms(text, hints = []) {
+    const words = text.split(' ').map((w) => parse(w, hints));
+    const forms = {};
+
+    CASES.map((CAse) => {
+        forms[CAse] = inflectAll(words, [CAse, 'sing']);
+        forms[`${CAse}_plur`] = inflectAll(words, [CAse, 'plur']);
+    });
+
+    return forms;
+}
+
+const args = msg.parsed.query_filtered.split(' ');
+let word;
+
+switch (args[0]) {
+    case 'enable':
+    case 'disable':
+        if (msg.parsed.level > 1) return;
+
+        const disabled = args[0] === 'disable';
+        context.set('disabled', disabled, 'file');
+
+        if (!disabled) {
+            msg.reply = 'динамические пословицы включены SeemsGood';
+        } else {
+            msg.reply = 'динамические пословицы отключены SeemsGood';
+        }
+
+        return msg;
+
+    case 'про':
+    case 'о':
+    case 'об':
+    case 'обо':
+        if (context.get('disabled', 'file')) {
+            if (msg.parsed.level > 1 && !msg.parsed.function) {
+                return;
+            }
+        }
+
+        if (args.length == 1) {
+            msg.reply = 'про что? SMOrc';
+            return msg;
+        }
+
+        let forms = getAllForms(
+            args.slice(1).join(' '),
+            args[0] === 'про' ? [['accs'], ['gent']] : [['loct']],
+        );
+
+        word = { forms };
+        break;
+
+    default:
+        word = { forms: getAllForms(choose(Object.keys(static_proverbs)), [['nomn']]) };
+}
+
+const allProverbs = concat(proverbs, static_proverbs[word.forms.nomn] || []);
+msg.reply = renderTemplate(choose(allProverbs), word.forms);
+
+if (word.forms.nomn === 'поползень') {
     msg.reply += ' popCat';
 } else {
     msg.reply += ' ' + choose([
