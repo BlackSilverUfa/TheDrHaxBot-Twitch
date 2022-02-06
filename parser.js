@@ -19,6 +19,7 @@ const badges = Object.keys(msg.payload.userstate.badges || {});
 
 parsed.level = (
     msg.payload.userstate.username == 'thedrhax' ? -1 :
+    msg.payload.userstate.username == 'thedrhaxbot' ? 4 :
     badges.indexOf('broadcaster') !== -1 ? 0 :
     badges.indexOf('moderator') !== -1 ? 1 :
     badges.indexOf('vip') !== -1 ? 2 :
