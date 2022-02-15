@@ -41,6 +41,10 @@ function parse(word, hints = []) {
 
 function inflectAll(words, tags) {
     return words.map((word) => {
+        if (word.tag.NUMR) {
+            tags = tags.filter(tag => tag !== 'sing' && tag !== 'plur');
+        }
+
         const newWord = word.inflect(tags);
         const res = newWord ? newWord.word : word.word;
         return word.title ? title(res) : res;
