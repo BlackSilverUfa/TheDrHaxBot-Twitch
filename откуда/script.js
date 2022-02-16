@@ -1,4 +1,4 @@
-const { tokenize } = flow.get('func', 'memory');
+const { tokenize, renderTemplate } = flow.get('func', 'memory');
 
 function strip(string) {
     return tokenize(string).join(' ');
@@ -92,10 +92,14 @@ if (results.length === 0) {
     if (typeof(answer) == 'object') {
         if (answer.items) {
             msg.key = null;
-            msg.reply = answer.prefix + choose(answer.items);
-            
+            let choice = choose(answer.items);
+            msg.reply = answer.prefix + choice;
+
             if (answer.suffix) {
-                msg.reply += answer.suffix;
+                msg.reply += renderTemplate(answer.suffix, {
+                    index: answer.items.indexOf(choice) + 1,
+                    total: answer.items.length,
+                });
             }
         } else if (answer.answer) {
             msg.key = key;
