@@ -270,7 +270,7 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
     "понг Pepega"
 ) :
 (parsed.query ~> $match(/^может чайку/)) ? 'а может тебя?! Jebaited' :
-(parsed.query ~> $match(/^ты потрясающий/)) ? (
+(parsed.query ~> $match(/^(нет,? )?ты потрясающий/)) ? (
     $choose([
         'да, я такой Kappa',
         'нет, ты потрясающий! keanU'

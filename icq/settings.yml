@@ -28,7 +28,7 @@ groups:
     '69': BSUHey
     '150': gachiOnFIRE
 - name: AYAYA
-  weight: 5
+  weight: 10
   templates:
     simple: 'ваш уровень AYAYAшности: {value} {emote}'
     delta: 'ваш уровень AYAYAшности: {value} ({delta}) {emote}'
@@ -50,7 +50,7 @@ groups:
     '69': RiasSenpai
     '150': AYAYA AYAYA AYAYA
 - name: ANYA
-  weight: 5
+  weight: 10
   templates:
     simple: 'вы состоите на {value}% из борща {emote}'
     delta: 'вы состоите на {value}% из борща ({delta}) {emote}'
@@ -67,7 +67,7 @@ groups:
     '69': DealWithIt
     '150': BSURage
 - name: popCat
-  weight: 5
+  weight: 10
   templates:
     simple: 'у вас {value} пополз{value#ень,ня,ней} {emote}'
     delta: 'у вас {value} пополз{value#ень,ня,ней} ({delta}) {emote}'
