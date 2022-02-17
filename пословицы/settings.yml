@@ -4,6 +4,9 @@ hints_override:
   'кукусик': [['anim', 'sing']]
   'кукусики': [['anim', 'plur']]
 
+blacklist:
+- 'элой'
+
 static_proverbs:
   'поползень':
   - 'один в попе не поползень'

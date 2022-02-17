@@ -8,7 +8,7 @@ if (msg.init) {
 // const Az = require('az');
 const { intersection, concat, find } = lodash; // = require('lodash');
 const { choose, renderTemplate } = flow.get('func', 'memory');
-const { static_proverbs, hints_override, proverbs } = context.get('data', 'memory');
+const { static_proverbs, blacklist, hints_override, proverbs } = context.get('data', 'memory');
 
 const CASES = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct'];
 
@@ -21,6 +21,20 @@ function title(word) {
 }
 
 function parse(word, hints = []) {
+    if (blacklist.indexOf(word.toLowerCase()) !== -1) {
+        const parsed = {
+            word,
+            tag: {
+                stat: [],
+                flex: [],
+            },
+            title: isTitle(word),
+        };
+        
+        parsed.inflect = (() => parsed).bind(parsed);
+        return parsed;
+    }
+    
     const parsed = Az.Morph(word, {
         forceParse: true,
     });
@@ -114,6 +128,8 @@ msg.reply = renderTemplate(choose(allProverbs), word.forms);
 
 if (word.forms.nomn === 'поползень') {
     msg.reply += ' popCat';
+} else if (word.forms.nomn === 'Элой') {
+    msg.reply += ' AloyHaHaa';
 } else {
     msg.reply += ' ' + choose([
         'BUFANerd',
