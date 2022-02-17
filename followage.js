@@ -19,7 +19,14 @@ async function findUserID(login) {
         }
 
         user._id = user.id;
-        await mongo(DB, 'insert', [user]);
+        if ((await mongo(DB, 'findOne', { _id: user.id })).length === 0) {
+            await mongo(DB, 'insert', [user]);
+        } else {
+            await mongo(DB, 'replaceOne', [
+                { _id: user.id },
+                user,
+            ]);
+        }
     }
 
     return user.id;
