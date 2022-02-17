@@ -59,6 +59,8 @@ function inflectAll(words, tags) {
             tags = tags.filter(tag => tag !== 'sing' && tag !== 'plur');
         }
 
+        if (word.tag.GNdr) tags.push(word.tag.GNdr);
+
         const newWord = word.inflect(tags);
         const res = newWord ? newWord.word : word.word;
         return word.title ? title(res) : res;
