@@ -11,7 +11,7 @@ if (stream.active) {
     const total = dateDistance(new Date(stream.date), null, DATE_DIST_OPTS);
 
     if (stream.game_history.length <= 1) {
-        msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК), категория пока не менялась YEPPERS`;
+        msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК YEPPERS`;
     } else {
         const lastCategory = stream.game_history[stream.game_history.length - 1];
         const catAge = dateDistance(new Date(lastCategory.date), null, DATE_DIST_OPTS);
