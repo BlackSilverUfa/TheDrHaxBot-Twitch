@@ -130,8 +130,6 @@ msg.reply = renderTemplate(choose(allProverbs), word.forms);
 
 if (word.forms.nomn === 'поползень') {
     msg.reply += ' popCat';
-} else if (word.forms.nomn === 'Элой') {
-    msg.reply += ' AloyHaHaa';
 } else {
     msg.reply += ' ' + choose([
         'BUFANerd',
