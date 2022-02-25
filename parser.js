@@ -67,6 +67,31 @@ if (command) {
 }
 
 /**
+ * Parse emotes
+ */
+
+const emotes = flow.get('emotes', 'file') || {};
+let emotesOnly = true;
+const found = [];
+
+(command ? parsed.query : msg.payload.message).split(' ').reduce((acc, curr) => {
+    if (emotes[curr]) {
+        found.push({
+            emote: emotes[curr],
+            start: acc.length,
+            length: curr.length
+        })
+    } else if (curr.length > 0) {
+        emotesOnly = false;
+    }
+
+    return `${acc} ${curr}`;
+}, '');
+
+parsed.emotes = found;
+parsed.emotesOnly = emotesOnly && found.length > 0;
+
+/**
  * Deploy message
  */
 

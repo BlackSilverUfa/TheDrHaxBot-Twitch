@@ -251,7 +251,7 @@ $continue := function($text) {(
     $x < $range[0] ? 'думаю, что меньше ' & $range[0] & ' NOPERS' :
     $choice($round($x))
 ) :
-(parsed.query_filtered ~> $match(emotes_only)) ? (
+(parsed.emotesOnly and $count(parsed.emotes) <= 3) ? (
     parsed.query_filtered
 ) :
 (parsed.query_filtered ~> $match(/^(ты кто|кто ты)/)) ? (
