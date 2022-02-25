@@ -3,6 +3,7 @@ hints_override:
   'виледор': [['masc']]
   'кукусик': [['anim', 'sing']]
   'кукусики': [['anim', 'plur']]
+  'корованы': [['accs', 'masc', 'plur']]
 
 blacklist:
 - 'элой'
