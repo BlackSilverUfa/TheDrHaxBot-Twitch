@@ -209,8 +209,6 @@ $continue := function($text) {(
     }) ~> $filter(function($x) { $x }) ~> $choose
 )};
 
-$emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
-
 (parsed.query ~> $length = 0) ? (
     $vowelsmatch := payload.message ~> $match(/^!ш+([ао]+)р+/i);
     $vowels := $vowelsmatch ? $vowelsmatch.groups[0] : 'а';
@@ -253,7 +251,7 @@ $emotes := emotes ~> $keys ~> $map(function ($k) { $lookup(emotes, $k) });
     $x < $range[0] ? 'думаю, что меньше ' & $range[0] & ' NOPERS' :
     $choice($round($x))
 ) :
-(parsed.query_filtered in $emotes) ? (
+(parsed.query_filtered ~> $match(emotes_only)) ? (
     parsed.query_filtered
 ) :
 (parsed.query_filtered ~> $match(/^(ты кто|кто ты)/)) ? (
