@@ -4,6 +4,8 @@ hints_override:
   'кукусик': [['anim', 'sing']]
   'кукусики': [['anim', 'plur']]
   'корованы': [['accs', 'masc', 'plur']]
+  'аду': [['femn', 'accs', 'NOUN']]
+  'аде': [['femn', 'loct', 'NOUN']]
 
 blacklist:
 - 'элой'
