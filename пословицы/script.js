@@ -8,7 +8,7 @@ if (msg.init) {
 // const Az = require('az');
 const { intersection, concat, find } = lodash; // = require('lodash');
 const { choose, renderTemplate } = flow.get('func', 'memory');
-const { static_proverbs, blacklist, hints_override, proverbs } = context.get('data', 'memory');
+const { static_proverbs, blacklist, suffixes, hints_override, proverbs } = context.get('data', 'memory');
 
 const CASES = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct'];
 
@@ -128,8 +128,10 @@ switch (args[0]) {
 const allProverbs = concat(proverbs, static_proverbs[word.forms.nomn] || []);
 msg.reply = renderTemplate(choose(allProverbs), word.forms);
 
-if (word.forms.nomn === 'поползень') {
-    msg.reply += ' popCat';
+const suffix = suffixes[word.forms.nomn];
+
+if (suffix) {
+    msg.reply += suffix;
 } else {
     msg.reply += ' ' + choose([
         'BUFANerd',
@@ -139,5 +141,19 @@ if (word.forms.nomn === 'поползень') {
         'PepoG'
     ]);
 }
+
+// if (word.forms.nomn === 'поползень') {
+//     msg.reply += ' popCat';
+// } else if (word.forms.nomn === 'волк') {
+//     msg.reply += ', ауф 🐺';
+// } else {
+//     msg.reply += ' ' + choose([
+//         'BUFANerd',
+//         'SeemsGood',
+//         'CoolStoryBob',
+//         'YEPPERS',
+//         'PepoG'
+//     ]);
+// }
 
 return msg;
