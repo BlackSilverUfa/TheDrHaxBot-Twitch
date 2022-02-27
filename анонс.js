@@ -3,7 +3,7 @@ const { TZ, msToDate, Patterns: { COMMAND }, updateText } = flow.get('func', 'me
 
 const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
 const channel = msg.payload.channel.substring(1);
-const CHANNEL_LINK = new RegExp(`(https?://)?twitch\.tv/${channel}.*`, 'i');
+const CHANNEL_LINK = new RegExp(`(https?://)?twitch\.tv/${channel}[^\\s]*`, 'i');
 
 const now = +new Date();
 const lag = TZ - 6*60*60*1000; // reset date at 6:00
@@ -87,16 +87,10 @@ if (msg.parsed.level <= 1) { // mods and up
 }
 
 if (stream.announcement.date == msToDate(now + lag)) {
-    let text = stream.announcement.text.replace(/\n/g, ' ');
-    const links = [...text.matchAll(LINK)];
-
-    links.forEach(([html, link]) => {
-        if (link.match(CHANNEL_LINK)) {
-            text = text.replace(html, ' ');
-        } else {
-            text = text.replace(html, ` ${link} `);
-        }
-    });
+    let text = stream.announcement.text
+        .replace(/\n/g, ' ')
+        .replace(LINK, (a, b) => b)
+        .replace(CHANNEL_LINK, ' ');
 
     msg.reply = `сегодняшний ${command}: ${text.trim()}`;
 } else {
