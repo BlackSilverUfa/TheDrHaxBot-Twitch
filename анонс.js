@@ -3,7 +3,7 @@ const { TZ, msToDate, Patterns: { COMMAND }, updateText } = flow.get('func', 'me
 
 const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
 const channel = msg.payload.channel.substring(1);
-const CHANNEL_LINK = new RegExp(`https?://twitch\.tv/${channel}.*`, 'i');
+const CHANNEL_LINK = new RegExp(`(https?://)?twitch\.tv/${channel}.*`, 'i');
 
 const now = +new Date();
 const lag = TZ - 6*60*60*1000; // reset date at 6:00
@@ -51,6 +51,20 @@ if (msg.parsed.level <= 1) { // mods and up
             msg.payload = { id };
 
             return [null, msg];
+
+        case 'vk':
+            const postId = args[0];
+
+            if (postId && isNaN(postId)) {
+                msg.reply = 'ID поста должен состоять только из цифр BUFANerd';
+                return msg;
+            }
+
+            msg.message = msg.payload;
+            msg.date = msToDate(now + TZ);
+            msg.payload = { id: postId };
+
+            return [null, null, msg];
 
         case 'reuse':
             stream.announcement.date = msToDate(now + lag);
