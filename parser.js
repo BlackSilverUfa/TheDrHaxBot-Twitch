@@ -31,12 +31,7 @@ parsed.level = (
  * Streamer is ignored to avoid distraction
  */
 
-parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION)
-    .filter(x => (x != msg.payload.channel.substring(1) || parsed.level <= 2));
-
-parsed.mentions = parsed.mentions_list
-    .map(x => `@${x}`)
-    .join(', ');
+parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION);
 
 /**
  * Parse command and query
@@ -64,6 +59,17 @@ if (command) {
         parsed.query_filtered = '';
     }
 }
+
+/**
+ * Format mentions
+ */
+
+parsed.mentions_list = parsed.mentions_list
+    .filter(x => (x != msg.payload.channel.substring(1) || parsed.level <= 2));
+
+parsed.mentions = parsed.mentions_list
+    .map(x => `@${x}`)
+    .join(', ');
 
 /**
  * Parse emotes
