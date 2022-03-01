@@ -9,6 +9,7 @@ groups:
     delta: 'у вас {value} ICQ ({delta}) {emote}'
   emotes:
   - SabaPing
+  - SlowPoke
   - MonkaChiken
   - SMOrc
   - ANYA
