@@ -9,6 +9,7 @@ hints_override:
 
 blacklist:
 - 'элой'
+- 'миядзаки'
 
 suffixes:
   'поползень': ' popCat'
