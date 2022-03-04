@@ -14,6 +14,8 @@ function timeline(stream, history) {
 
     return history
         .map((game, i, arr) => {
+            const name = game.name.replace(/\s\(.*?\)/, '');
+
             const end = arr[i+1] ?
                 new Date(arr[i+1].date) :
                 stream.active ?
@@ -24,10 +26,10 @@ function timeline(stream, history) {
 
             if (start > now) {
                 const delta = dateDistance(now, start, DATE_DIST_OPTS);
-                return `${game.name} (через ${delta})`;
+                return `${name} (+${delta})`;
             } else {
                 const delta = dateDistance(start, end, DATE_DIST_OPTS);
-                return `${game.name} (${delta})`;
+                return `${name} (${delta})`;
             }
         }).join(', ');
 }

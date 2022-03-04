@@ -11,12 +11,12 @@ function dateDistance(start, end, options) {
     let { parts, accusative, short, zero, timestamp } = options || {};
 
     const locale = {
-        years: ['год', 'года', 'лет'],
-        months: ['месяц', 'месяца', 'месяцев'],
-        days: ['день', 'дня', 'дней'],
-        hours: ['час', 'часа', 'часов'],
-        minutes: [accusative ? 'минуту' : 'минута', 'минуты', 'минут'],
-        seconds: [accusative ? 'секунду' : 'секунд', 'секунды', 'секунд'],
+        years: ['год', 'года', 'лет', 'г.'],
+        months: ['месяц', 'месяца', 'месяцев', 'мес.'],
+        days: ['день', 'дня', 'дней', 'дн.'],
+        hours: ['час', 'часа', 'часов', 'ч.'],
+        minutes: [accusative ? 'минуту' : 'минута', 'минуты', 'минут', 'м.'],
+        seconds: [accusative ? 'секунду' : 'секунд', 'секунды', 'секунд', 'сек.'],
     };
 
     const multipliers = [12, 30, 24, 60, 60, 1000];
@@ -51,7 +51,7 @@ function dateDistance(start, end, options) {
             return a + duration[k] * multiplier;
         }, 0).toFixed(1);
 
-        return value + ' ' + agreeWithNum(value, locale[mainPart]);
+        return value + ' ' + locale[mainPart][3];
     }
 
     return smartJoin(parts
