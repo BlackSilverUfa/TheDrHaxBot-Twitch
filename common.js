@@ -51,7 +51,7 @@ function dateDistance(start, end, options) {
             return a + duration[k] * multiplier;
         }, 0).toFixed(1);
 
-        return value + ' ' + locale[mainPart][3];
+        return value + ' ' + agreeWithNum(value, locale[mainPart]);
     }
 
     return smartJoin(parts

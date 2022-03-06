@@ -26,7 +26,7 @@ function timeline(stream, history) {
 
             if (start > now) {
                 const delta = dateDistance(now, start, DATE_DIST_OPTS);
-                return `${name} (+${delta})`;
+                return `${name} (через ${delta})`;
             } else {
                 const delta = dateDistance(start, end, DATE_DIST_OPTS);
                 return `${name} (${delta})`;
