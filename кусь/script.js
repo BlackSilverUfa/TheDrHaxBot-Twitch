@@ -45,6 +45,8 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     msg.reply += ' за мучное NomNom';
 } else if (mentions.length == 1 && mentions[0] == 'myasnoe_file') {
     msg.reply += ` за филе popCat`;
+} else if (mentions.length == 1 && mentions[0] == 'i_pipa') {
+    msg.reply += ` за пипу PETTHEPEEPO`;
 } else {
     msg.reply += ` за ${rchoose(targets)}`;
 }
