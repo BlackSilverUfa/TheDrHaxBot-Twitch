@@ -1,5 +1,5 @@
 const DB = 'twitch_users';
-const { mongo, twitch, smartJoin, dateDistance } = flow.get('func', 'memory');
+const { amongo, twitch, smartJoin, dateDistance } = flow.get('func', 'memory');
 
 const channel = msg.payload.channel.substring(1);
 const username = msg.payload.userstate.username;
@@ -9,7 +9,7 @@ function reply(text) {
 }
 
 async function findUserID(login) {
-    let user = await mongo(DB, 'findOne', { login });
+    let [user] = await amongo(DB, 'find', { login });
 
     if (!user) {
         [user] = await twitch('helix', 'GET', 'users', { login });
@@ -19,14 +19,7 @@ async function findUserID(login) {
         }
 
         user._id = user.id;
-        if (await mongo(DB, 'findOne', [{ _id: user.id }])) {
-            await mongo(DB, 'replaceOne', [
-                { _id: user.id },
-                user,
-            ]);
-        } else {
-            await mongo(DB, 'insert', [user]);
-        }
+        await amongo(DB, 'update', { _id: user.id }, user);
     }
 
     return user.id;

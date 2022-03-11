@@ -86,6 +86,20 @@ async function mongo(collection, operation, payload) {
     return reply.payload;
 }
 
+async function amongo(collection, operation, query, payload) {
+    if (operation !== 'update') {
+        payload = query;
+        query = null;
+    }
+
+    const reply = await AF.invoke('amongo', { collection, operation, query, payload });
+    if (reply.error) {
+        node.error(reply.error);
+        return null;
+    }
+    return reply.payload;
+}
+
 async function twitch(namespace, method, call, payload) {
     const reply = await AF.invoke('twitch', { namespace, method, call, payload });
     if (reply.payload.error) {
@@ -247,6 +261,7 @@ function last(array) { // yes
 
 flow.set('func', {
     mongo,
+    amongo,
     twitch,
     Patterns,
     TZ,
