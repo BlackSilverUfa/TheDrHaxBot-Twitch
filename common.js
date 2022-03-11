@@ -63,29 +63,6 @@ function dateDistance(start, end, options) {
 
 const AF = global.get('actionflows');
 
-async function mongo(collection, operation, payload) {
-    if (!Array.isArray(payload)) {
-        if (operation == 'save') {
-            if (payload._id) {
-                operation = 'replaceOne';
-                payload = [{ _id: payload._id }, payload];
-            } else {
-                operation = 'insert';
-                payload = [payload];
-            }
-        } else {
-            payload = [payload];
-        }
-    }
-
-    const reply = await AF.invoke('mongo', { collection, operation, payload });
-    if (reply.error) {
-        node.error(reply.error);
-        return null;
-    }
-    return reply.payload;
-}
-
 async function amongo(collection, operation, query, payload) {
     if (operation !== 'update') {
         payload = query;
@@ -260,7 +237,6 @@ function last(array) { // yes
 }
 
 flow.set('func', {
-    mongo,
     amongo,
     twitch,
     Patterns,

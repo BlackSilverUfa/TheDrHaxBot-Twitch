@@ -16,7 +16,7 @@ if (msg.init) {
 }
 
 const DB = 'icq_results';
-const { mongo, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
+const { amongo, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
 const groups = Object.keys(settings.groups);
@@ -27,7 +27,7 @@ function rand(min, max) {
 
 async function main() {
     const _id = msg.payload.userstate.username;
-    let icq = await mongo(DB, 'findOne', { _id });
+    let [icq] = await amongo(DB, 'find', { _id });
 
     let value, delta, group;
 
@@ -37,7 +37,7 @@ async function main() {
         delta = 0;
         group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
 
-        await mongo(DB, 'insertOne', {
+        await amongo(DB, 'save', {
             ...icq,
             value,
             group
@@ -55,7 +55,7 @@ async function main() {
             group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
         }
 
-        await mongo(DB, 'save', {
+        await amongo(DB, 'save', {
             ...icq,
             value,
             group
