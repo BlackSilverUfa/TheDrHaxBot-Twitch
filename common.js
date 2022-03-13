@@ -256,3 +256,5 @@ flow.set('func', {
 }, 'memory');
 
 node.status('Ready');
+
+node.send({ init: true });
