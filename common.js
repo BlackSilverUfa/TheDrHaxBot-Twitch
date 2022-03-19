@@ -71,7 +71,7 @@ async function amongo(collection, operation, query, payload) {
 
     const reply = await AF.invoke('amongo', { collection, operation, query, payload });
     if (reply.error) {
-        node.error(reply.error);
+        node.error(reply.error, { collection, operation, query, payload });
         return null;
     }
     return reply.payload;
