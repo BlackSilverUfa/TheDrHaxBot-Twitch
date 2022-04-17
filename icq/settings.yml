@@ -74,5 +74,4 @@ groups:
     delta: 'у вас {value} пополз{value#ень,ня,ней} ({delta}) {emote}'
   emotes:
   - popCat
-  - popCat SoSnowy
   special: {}
