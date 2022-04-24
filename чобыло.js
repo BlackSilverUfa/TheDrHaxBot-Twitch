@@ -34,19 +34,26 @@ function timeline(stream, history) {
         }).join(', ');
 }
 
-if (stream.active) {
-    msg.reply = 'сегодня были: ' + timeline(stream);
-} else if (rerun.active && rerun.vod_history.length > 0) {
-    const past = timeline(rerun, rerun.game_history.filter(game => now > +new Date(game.date)));
-    const future = timeline(rerun, rerun.game_history.filter(game => now < +new Date(game.date)));
-    
-    msg.reply = 'на этом повторе были: ' + past;
-    
-    if (future) {
-        msg.reply += ' и будут: ' + future;
+if (msg.parsed.icommand == 'чобудет') {
+    if (rerun.active) {
+        if (rerun.vod_history.length > 0) {
+            const future = timeline(rerun, rerun.game_history.filter(game => now < +new Date(game.date)));
+            msg.reply = 'на этом повторе будут: ' + future;
+        } else {
+            msg.reply = 'эта часть повтора ещё не размечена peepoThink';
+        }
+    } else {
+        return [null, msg];
     }
-} else {
-    msg.reply = 'на предыдущем стриме были: ' + timeline(stream);
+} else if (msg.parsed.icommand == 'чобыло') {
+    if (stream.active) {
+        msg.reply = 'сегодня были: ' + timeline(stream);
+    } else if (rerun.active && rerun.vod_history.length > 0) {
+        const past = timeline(rerun, rerun.game_history.filter(game => now > +new Date(game.date)));
+        msg.reply = 'на этом повторе были: ' + past;
+    } else {
+        msg.reply = 'на предыдущем стриме были: ' + timeline(stream);
+    }
 }
 
-return msg;
+return [msg, null];
