@@ -38,7 +38,11 @@ if (msg.parsed.icommand == 'чобудет') {
     if (rerun.active) {
         if (rerun.vod_history.length > 0) {
             const future = timeline(rerun, rerun.game_history.filter(game => now < +new Date(game.date)));
-            msg.reply = 'на этом повторе будут: ' + future;
+            if (future.length === 0) {
+                msg.reply = 'на этом повторе больше игр не ожидается peepoThink';
+            } else {
+                msg.reply = 'на этом повторе будут: ' + future;
+            }
         } else {
             msg.reply = 'эта часть повтора ещё не размечена peepoThink';
         }
