@@ -38,20 +38,6 @@ if (msg.parsed.level <= 1) { // mods and up
             msg.reply = 'анонс обновлён SeemsGood';
             return [msg, null];
 
-        case 'tweet':
-            const id = args[0];
-
-            if (id && isNaN(id)) {
-                msg.reply = 'ID твита должен состоять только из цифр BUFANerd';
-                return msg;
-            }
-
-            msg.message = msg.payload;
-            msg.date = msToDate(now + TZ);
-            msg.payload = { id };
-
-            return [null, msg];
-
         case 'vk':
             const postId = args[0];
 
@@ -64,7 +50,7 @@ if (msg.parsed.level <= 1) { // mods and up
             msg.date = msToDate(now + TZ);
             msg.payload = { id: postId };
 
-            return [null, null, msg];
+            return [null, msg];
 
         case 'reuse':
             stream.announcement.date = msToDate(now + lag);
@@ -81,7 +67,7 @@ if (msg.parsed.level <= 1) { // mods and up
             return [msg, null];
         
         case 'help':
-            msg.reply = 'доступные команды: update, tweet, reuse, reset';
+            msg.reply = 'доступные команды: update, vk, reuse, reset';
             return [msg, null];
     }
 }
