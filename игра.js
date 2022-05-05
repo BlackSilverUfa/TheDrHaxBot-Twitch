@@ -199,7 +199,7 @@ if (msg.parsed.level <= 1) { // mods and up
             return msg;
 
         case 'help':
-            msg.reply = 'доступные команды: set, rerun, reset';
+            msg.reply = 'доступные команды: set, split, replace, delete, rerun, reset';
             return msg;
     }
 }
