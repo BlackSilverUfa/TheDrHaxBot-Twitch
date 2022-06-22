@@ -1,6 +1,6 @@
 const stream = flow.get('stream_status', 'file');
 const rerun = flow.get('rerun_status', 'file');
-const db = flow.get('blackufa_db', 'memory');
+const db = flow.get('blackufa_db', 'memory')();
 
 const { smartJoin, last, renderTemplate } = flow.get('func', 'memory');
 const { zip } = lodash;

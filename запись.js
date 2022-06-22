@@ -1,6 +1,6 @@
 const { renderTemplate, choose, fts, last } = flow.get('func', 'memory');
 
-const db = flow.get('blackufa_db', 'memory');
+const db = flow.get('blackufa_db', 'memory')();
 const stream = flow.get('stream_status', 'file');
 
 const MAX_RESULTS = 3;
