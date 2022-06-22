@@ -219,7 +219,12 @@ if (stream.active) {
         const currentGame = last(rerun.game_history.filter(game => +new Date(game.date) < now));
         const at = Math.floor((+new Date() - new Date(currentVod.date)) / 1000);
 
-        msg.reply = `сейчас повторяется ${currentGame.name} со стрима ${start}.`;
+        if (!currentGame) {
+            msg.reply = 'на этом повторе игры ещё не начались BSUWait';
+        } else {
+            msg.reply = `сейчас повторяется ${currentGame.name} со стрима ${start}.`;
+        }
+
         msg.reply += ` Ссылка на этот момент в архиве: drhx.ru/b/${currentVod.id}?at=${at} YEPPERS`;
     }
 } else {

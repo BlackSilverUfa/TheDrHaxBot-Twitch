@@ -1,7 +1,7 @@
 const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
 const rerun = flow.get('rerun_status', 'file');
 
-const { dateDistance } = flow.get('func', 'memory');
+const { last, dateDistance } = flow.get('func', 'memory');
 
 const DATE_DIST_OPTS = {
     timestamp: true
@@ -28,6 +28,22 @@ if (stream.active) {
     if (lastVod && new Date() < new Date(lastVod.date_end)) {
         const timeUntilEnd = dateDistance(new Date(), new Date(lastVod.date_end), DATE_DIST_OPTS);
         msg.reply += ` (осталось ${timeUntilEnd})`;
+    }
+
+    const now = +new Date();
+    const currentGame = last(rerun.game_history.filter(game => +new Date(game.date) < now));
+
+    if (currentGame) {
+        const timeSinceGameStart = dateDistance(new Date(currentGame.date), null, DATE_DIST_OPTS);
+
+        msg.reply += `, а эта игра идёт уже ${timeSinceGameStart}`;
+
+        const nextGame = rerun.game_history[rerun.game_history.indexOf(currentGame) + 1];
+
+        if (nextGame) {
+            const timeUntilNextGame = dateDistance(new Date(), new Date(nextGame.date), DATE_DIST_OPTS);
+            msg.reply += ` (осталось ${timeUntilNextGame})`
+        }
     }
 
     msg.reply += ' YEPPERS';
