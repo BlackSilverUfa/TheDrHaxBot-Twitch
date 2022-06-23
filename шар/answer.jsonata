@@ -276,7 +276,9 @@ $continue := function($text) {(
 (parsed.query ~> $match(/^(нет,? )?ты потрясающий/)) ? (
     $choose([
         'да, я такой Kappa',
-        'нет, ты потрясающий! keanU'
+        'нет, ты потрясающий! keanU',
+        'я знаю Kappa',
+        'нет, ты keanU'
     ])
 ):
 (parsed.query ~> $match(/^omae\swa\smou\sshindeiru/i)) ? 'nani?! BSURage' :
