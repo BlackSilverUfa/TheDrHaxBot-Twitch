@@ -142,18 +142,4 @@ if (suffix) {
     ]);
 }
 
-// if (word.forms.nomn === 'поползень') {
-//     msg.reply += ' popCat';
-// } else if (word.forms.nomn === 'волк') {
-//     msg.reply += ', ауф 🐺';
-// } else {
-//     msg.reply += ' ' + choose([
-//         'BUFANerd',
-//         'SeemsGood',
-//         'CoolStoryBob',
-//         'YEPPERS',
-//         'PepoG'
-//     ]);
-// }
-
 return msg;
