@@ -45,7 +45,7 @@ function gameLink(game) {
 function formatSegments(segments) {
     return segments.map(segment => {
         let result = segment.name;
-        result += ` [${segment.date.getFullYear()}] `;
+        result += ` [${Sugar.Date.format(segment.date, '%d.%m.%Y')}] `;
         result += segmentLink(segment);
         return result;
     }).join(' | ');
@@ -62,7 +62,7 @@ function formatGames(games) {
             );
         } else {
             const segment = game.segments[0];
-            result += ` [${segment.date.getFullYear()}]`;
+            result += ` [${Sugar.Date.format(segment.date, '%d.%m.%Y')}]`;
         }
 
         result += ' ' + gameLink(game);
