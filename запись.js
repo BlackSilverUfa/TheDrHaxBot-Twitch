@@ -149,9 +149,13 @@ function findByName(query) {
 if (query.length == 0) {
     if (!db.segments.findOne({ segment: stream.vod })) {
         msg.reply = stream.active ? 'этот' : 'предыдущий';
-        msg.reply += ' стрим ещё не появился в архиве.';
-        msg.reply += ' Пока что VOD можно посмотреть здесь:';
-        msg.reply += ` twitch.tv/videos/${stream.vod}`;
+        msg.reply += ' стрим ещё не появился в архиве';
+
+        if (stream.vod) {
+            msg.reply += '. Пока что VOD можно посмотреть здесь:';
+            msg.reply += ` twitch.tv/videos/${stream.vod}`;
+        }
+
         return msg;
     } else {
         query = stream.vod;
