@@ -285,6 +285,8 @@ $continue := function($text) {(
 (parsed.query ~> $match(/^(h?e(he)+|х?и(хи)+)(\s|$)/i)) ? (
     $split(parsed.query, ' ')[0] & ' tte nandayo?! loliTriggered'
 ) :
+(parsed.query ~> $match(/я\sкалендарь\sпереверну/)) ? 'и снова 3-е Сентября MmmHmm' :
+(parsed.query ~> $match(/я\sкалендарь/)) ? 'переверну, и снова 3-е Сентября MmmHmm' :
 (parsed.query ~> $match(/я\s(шепну|прошепчу)\sтебе\sна\sушко/)) ? 'аннигиляторная пушка! PepegaAim' :
 (parsed.query ~> $match(/^[UO][wωv][UO]$/i)) ? $choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ', '👁 👄 👁']) :
 (parsed.query ~> $match(/^(PETTHE|(не )?пип(ай|ни|\ |$))/)) ? 'пип ' & $choose([
