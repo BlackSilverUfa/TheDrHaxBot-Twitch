@@ -24,7 +24,7 @@ function timeline(stream, history) {
 
             const start = new Date(game.date);
 
-            if (start > now) {
+            if (+start > now) {
                 const delta = dateDistance(now, start, DATE_DIST_OPTS);
                 return `${name} (через ${delta})`;
             } else {
@@ -34,34 +34,35 @@ function timeline(stream, history) {
         }).join(', ');
 }
 
-if (msg.parsed.icommand == 'чобудет') {
-    if (rerun.active) {
-        if (rerun.vod_history.length > 0) {
-            const future = timeline(rerun, rerun.game_history.filter(game => now < +new Date(game.date)));
-            if (future.length === 0) {
-                msg.reply = 'на этом повторе больше игр не ожидается peepoThink';
-            } else {
-                msg.reply = 'на этом повторе будут: ' + future;
-            }
-        } else {
-            msg.reply = 'эта часть повтора ещё не размечена peepoThink';
-        }
+// if (msg.parsed.icommand == 'чобудет') {
+//     if (rerun.active) {
+//         if (rerun.vod_history.length > 0) {
+//             const future = timeline(rerun, rerun.game_history.filter(game => now < +new Date(game.date)));
+//             if (future.length === 0) {
+//                 msg.reply = 'на этом повторе больше игр не ожидается peepoThink';
+//             } else {
+//                 msg.reply = 'на этом повторе будут: ' + future;
+//             }
+//         } else {
+//             msg.reply = 'эта часть повтора ещё не размечена peepoThink';
+//         }
+//     } else {
+//         return [null, msg];
+//     }
+// } else if (msg.parsed.icommand == 'чобыло') {
+// }
+
+if (stream.active) {
+    msg.reply = 'сегодня были: ' + timeline(stream);
+} else if (rerun.active && rerun.vod_history.length > 0) {
+    const past = timeline(rerun, rerun.game_history.filter(game => now > +new Date(game.date)));
+    if (past.length === 0) {
+        msg.reply = 'на этом повторе пока ещё ничего не было peepoBlanket';
     } else {
-        return [null, msg];
+        msg.reply = 'на этом повторе были: ' + past;
     }
-} else if (msg.parsed.icommand == 'чобыло') {
-    if (stream.active) {
-        msg.reply = 'сегодня были: ' + timeline(stream);
-    } else if (rerun.active && rerun.vod_history.length > 0) {
-        const past = timeline(rerun, rerun.game_history.filter(game => now > +new Date(game.date)));
-        if (past.length === 0) {
-            msg.reply = 'на этом повторе пока ещё ничего не было peepoBlanket';
-        } else {
-            msg.reply = 'на этом повторе были: ' + past;
-        }
-    } else {
-        msg.reply = 'на предыдущем стриме были: ' + timeline(stream);
-    }
+} else {
+    msg.reply = 'на предыдущем стриме были: ' + timeline(stream);
 }
 
-return [msg, null];
+return msg;
