@@ -49,6 +49,12 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     } else {
         msg.reply += ` за пюрешку Tastge`;
     }
+} else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
+    if (Math.random() <= 0.3) {
+        msg.reply += ` за хурму Tastge`;
+    } else {
+        msg.reply += ` за овощ Tastge`;
+    }
 } else if (mentions.length == 1 && mentions[0] == 'myasnoe_file') {
     msg.reply += ` за филе popCat`;
 } else if (mentions.length == 1 && mentions[0] == 'i_pipa') {
