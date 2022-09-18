@@ -276,6 +276,14 @@ $continue := function($text) {(
     "понг Pepega"
 ) :
 (parsed.query ~> $match(/^может чайку/)) ? 'а может тебя?! Jebaited' :
+(parsed.query ~> $match(/^баллон с чем/)) ? (
+    $choose([
+        'с пропаааном! Pepega',
+        'с воздухом BSUHee',
+        'с ворванью! Pepega',
+        'со сжиженным вакуумом ANYA'
+    ])
+) :
 (parsed.query ~> $match(/^(нет,? )?ты потрясающий/)) ? (
     $choose([
         'да, я такой Kappa',
