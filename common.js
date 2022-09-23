@@ -5,7 +5,7 @@ const {
     intervalToDuration
 } = dateFns; // = require('date-fns');
 
-const { uniq } = lodash; // = require('lodash');
+const { uniq, sum, reverse, padStart, range } = lodash; // = require('lodash');
 
 function dateDistance(start, end, options) {
     let { parts, accusative, short, zero, timestamp } = options || {};
@@ -236,6 +236,18 @@ function last(array) { // yes
     return array[array.length - 1];
 }
 
+const ptime = (t) => (
+    sum(reverse(t.split(':')).map((x, i) => x * 60 ** i))
+);
+
+const ftime = (t) => (
+    range(2, -1, -1).map((i) => {
+        const res = Math.floor(t / 60 ** i);
+        t %= 60 ** i;
+        return padStart(res, 2, '0');
+    }).join(':')
+);
+
 flow.set('func', {
     amongo,
     twitch,
@@ -252,7 +264,9 @@ flow.set('func', {
     smartJoin,
     updateText,
     renderTemplate,
-    last
+    last,
+    ptime,
+    ftime,
 }, 'memory');
 
 node.status('Ready');
