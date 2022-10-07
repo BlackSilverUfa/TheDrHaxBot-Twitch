@@ -79,7 +79,13 @@ function getAllForms(text, hints = []) {
     return forms;
 }
 
-const args = msg.parsed.query_filtered.split(' ');
+let args = msg.parsed.query_filtered.split(' ');
+
+// ¯\_(ツ)_/¯
+if (msg.payload.userstate.username === 'diecon') {
+    args = args.filter((w) => w !== 'член');
+}
+
 let word;
 
 switch (args[0]) {
