@@ -83,7 +83,9 @@ let args = msg.parsed.query_filtered.split(' ');
 
 // ¯\_(ツ)_/¯
 if (msg.payload.userstate.username === 'diecon') {
-    args = args.filter((w) => w !== 'член');
+    if (args.indexOf('член') !== -1) {
+        args = [];
+    }
 }
 
 let word;
