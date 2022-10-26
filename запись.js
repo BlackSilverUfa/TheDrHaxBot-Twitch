@@ -1,9 +1,9 @@
-const { renderTemplate, choose, fts, last } = flow.get('func', 'memory');
+const { renderTemplate, choose, last } = flow.get('func', 'memory');
 
 const db = flow.get('blackufa_db', 'memory')();
 const stream = flow.get('stream_status', 'file');
 
-const MAX_RESULTS = 3;
+const MAX_RESULTS = 5;
 
 let query = msg.parsed.query_filtered;
 
@@ -119,11 +119,11 @@ function findByDate(query) {
 }
 
 function findByName(query) {
-    const games = fts(
-        query,
-        db.index.find({ 'category.search': { $ne: false } }),
-        (game) => game.name
-    );
+    const games = db.index
+        .chain()
+        .find({ 'category.search': { $ne: false } })
+        .search(query)
+        .data();
 
     if (games.length == 0) {
         return false;
