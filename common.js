@@ -49,7 +49,7 @@ function dateDistance(start, end, options) {
             }
 
             return a + duration[k] * multiplier;
-        }, 0).toFixed(1);
+        }, 0).toFixed(1).replace(/\.0$/, '');
 
         return value + ' ' + agreeWithNum(value, locale[mainPart]);
     }
