@@ -1,5 +1,5 @@
 const { amongo, renderTemplate } = flow.get('func', 'memory');
-const { uniq } = lodash; // = require('lodash');
+const { uniq, range } = lodash; // = require('lodash');
 
 const DB = 'twitch_commands';
 
@@ -36,20 +36,20 @@ if (commands.length === 0) {
 const command = commands[0];
 msg.command = command;
 
-switch (command.type) {
-    case 'helper':
-        return [msg, null, null, null];
-    
-    case 'counter':
-        return [null, msg, null, null];
-    
-    case 'function':
-        return [null, null, msg, null];
-    
-    case 'native':
-        return [null, null, null, msg];
+const index = [
+    'helper',
+    'counter',
+    'function',
+    'native',
+    'countup'
+].indexOf(command.type);
 
-    default:
-        node.error('Unknown command type: ' + command.type, msg);
+if (index < 0) {
+    node.error(`Unknown command type: ${command.type}`, msg);
+} else {
+    node.send(
+        range(index + 1)
+            .map((i) => (i == index ? msg : null))
+    );
 }
 

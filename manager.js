@@ -173,6 +173,11 @@ async function cmdAdd(channel, args) {
 
             break;
 
+        case 'countup':
+            params.text = text.join(' ');
+            params.value = +new Date();
+            break;
+
         case 'function':
             params.text = text.join(' ');
 
@@ -241,6 +246,7 @@ async function cmdUpdate(channel, args) {
         case 'helper':
         case 'counter':
         case 'function':
+        case 'countup':
             try {
                 command.text = updateText(
                     command.text,
@@ -404,7 +410,7 @@ async function main() {
             return cmdRemove(channel, args);
 
         default:
-            reply('доступные команды: list, add, update, rename, enable, disable, convert, remove');
+            reply('доступные команды: list, add, update, rename, enable, disable, remove');
     }
 }
 
