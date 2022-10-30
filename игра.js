@@ -1,8 +1,7 @@
 const stream = flow.get('stream_status', 'file');
-const rerun = flow.get('rerun_status', 'file');
 const db = flow.get('blackufa_db', 'memory')();
 
-const { smartJoin, last, renderTemplate } = flow.get('func', 'memory');
+const { smartJoin, last, renderTemplate, getStreamInfo } = flow.get('func', 'memory');
 const { zip } = lodash;
 
 const query = msg.parsed.query_filtered;
@@ -12,7 +11,7 @@ function updateGameHistory(name, replace) {
     const lastGame = stream.game_history[stream.game_history.length - 1];
 
     if (replace == null) {
-        const age = +now - new Date(lastGame.date);
+        const age = +now - +new Date(lastGame.date);
         replace = age < 5 * 60 * 1000; // changed < 5m ago
     }
 
@@ -75,40 +74,14 @@ function streamDuration(id) {
         .reduce((a, b) => a + b);
 }
 
-function rerunPush(vod, segment) {
-    const prevVod = last(rerun.vod_history);
-    const startDate = new Date(prevVod ? prevVod.date_end : rerun.date);
-    const endDate = new Date(+startDate + streamDuration(vod) * 1000);
-    const timeline = streamTimeline(vod).map(([start, name]) => ({
-        name,
-        date: new Date(+startDate + start * 1000).toISOString(),
-    }));
-
-    const vod_item = {
-        id: vod,
-        date_original: segment.date,
-        date: startDate.toISOString(),
-        date_end: endDate.toISOString(),
-        timeline
-    };
-
-    rerun.vod_history.push(vod_item);
-    rerun.game_history = [].concat(...rerun.vod_history.map(v => v.timeline));
-
-    flow.set('rerun_status', rerun, 'file');
-}
-
 if (msg.parsed.level <= 1) { // mods and up
-    [cmd, ...args] = query.split(' ');
+    let [cmd, ...args] = query.split(' ');
 
     switch (cmd) {
         case 'set':
         case 'split':
         case 'replace':
-            if (rerun.active) {
-                msg.reply = 'прошлое не изменить NOPERS';
-                return msg;
-            } else if (!stream.active) {
+            if (!stream.active) {
                 msg.reply = 'сейчас нет активной трансляции peepoThink';
                 return msg;
             }
@@ -150,31 +123,6 @@ if (msg.parsed.level <= 1) { // mods and up
             msg.reply = `игра ${game.name} удалена из истории monkaGunshake`;
             return msg;
 
-        case 'rerun':
-            if (!rerun.active) {
-                msg.reply = 'сейчас нет активного повтора peepoThink';
-                return msg;
-            }
-
-            if (args.length === 0) {
-                msg.reply = 'укажите один или несколько ID стримов из архива PepoG';
-                return msg;
-            }
-
-            const segments = args.map((vod) => db.segments.findOne({
-                streams: { $contains: vod }
-            }));
-
-            if (segments.indexOf(null) !== -1) {
-                msg.reply = `стрим ${args[segments.indexOf(null)]} не найден KEKWait`;
-                return msg;
-            }
-
-            zip(args, segments).forEach(([vod, segment]) => rerunPush(vod, segment));
-
-            msg.reply = 'повтор обновлён SeemsGood';
-            return msg;
-
         case 'reset':
             stream.game_forced = null;
 
@@ -184,14 +132,8 @@ if (msg.parsed.level <= 1) { // mods and up
 
             flow.set('stream_status', stream, 'file');
 
-            rerun.vod_history = [];
-            rerun.game_history = [];
-            flow.set('rerun_status', rerun, 'file');
-
             if (stream.active) {
                 msg.reply = `игра изменена на ${stream.game} SeemsGood`;
-            } else if (rerun.active) {
-                msg.reply = 'очередь повторов очищена SeemsGood';
             } else {
                 msg.reply = 'установленная вручную игра сброшена SeemsGood';
             }
@@ -199,7 +141,7 @@ if (msg.parsed.level <= 1) { // mods and up
             return msg;
 
         case 'help':
-            msg.reply = 'доступные команды: set, split, replace, delete, rerun, reset';
+            msg.reply = 'доступные команды: set, split, replace, delete, reset';
             return msg;
     }
 }
@@ -209,24 +151,6 @@ const now = +new Date();
 if (stream.active) {
     let game = stream.game_forced || stream.game;
     msg.reply = `сейчас транслируется ${game} YEPPERS`;
-} else if (rerun.active) {
-    const lastVod = last(rerun.vod_history);
-    if (!lastVod || now > +new Date(lastVod.date_end)) {
-        msg.reply = 'сейчас идёт повтор, но какого стрима - я не знаю peepoThink';
-    } else {
-        const currentVod = last(rerun.vod_history.filter(({ date }) => +new Date(date) < now));
-        const start = Sugar.Date.short(Sugar.Date.create(currentVod.date_original));
-        const currentGame = last(rerun.game_history.filter(game => +new Date(game.date) < now));
-        const at = Math.floor((+new Date() - new Date(currentVod.date)) / 1000);
-
-        if (!currentGame) {
-            msg.reply = 'на этом повторе игры ещё не начались BSUWait';
-        } else {
-            msg.reply = `сейчас повторяется ${currentGame.name} со стрима ${start}.`;
-        }
-
-        msg.reply += ` Ссылка на этот момент в архиве: drhx.ru/b/${currentVod.id}?at=${at} YEPPERS`;
-    }
 } else {
     msg.reply = 'сейчас нет активной трансляции peepoSHAKE';
 }

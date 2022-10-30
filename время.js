@@ -1,7 +1,11 @@
-const stream = flow.get('stream_status', 'file'); // https://red.thedrhax.pw/blackufa/twitch
-const rerun = flow.get('rerun_status', 'file');
+const { last, dateDistance, getStreamInfo } = flow.get('func', 'memory');
 
-const { last, dateDistance } = flow.get('func', 'memory');
+const stream = getStreamInfo(msg.payload.channel);
+
+if (!stream || !stream.date) {
+    msg.reply = 'недостаточно информации о состоянии канала 🤔';
+    return msg;
+}
 
 const DATE_DIST_OPTS = {
     timestamp: true
@@ -18,35 +22,6 @@ if (stream.active) {
 
         msg.reply = `стрим идёт уже ${total} (c ${stream.time} МСК), а эта игра - ${catAge} YEPPERS`;
     }
-} else if (rerun.active) {
-    const timeSinceStart = dateDistance(new Date(rerun.date), null, DATE_DIST_OPTS);
-
-    msg.reply = `повтор идёт уже ${timeSinceStart}`;
-
-    const lastVod = rerun.vod_history[rerun.vod_history.length - 1];
-
-    if (lastVod && new Date() < new Date(lastVod.date_end)) {
-        const timeUntilEnd = dateDistance(new Date(), new Date(lastVod.date_end), DATE_DIST_OPTS);
-        msg.reply += ` (осталось ${timeUntilEnd})`;
-    }
-
-    const now = +new Date();
-    const currentGame = last(rerun.game_history.filter(game => +new Date(game.date) < now));
-
-    if (currentGame) {
-        const timeSinceGameStart = dateDistance(new Date(currentGame.date), null, DATE_DIST_OPTS);
-
-        msg.reply += `, а эта игра идёт уже ${timeSinceGameStart}`;
-
-        const nextGame = rerun.game_history[rerun.game_history.indexOf(currentGame) + 1];
-
-        if (nextGame) {
-            const timeUntilNextGame = dateDistance(new Date(), new Date(nextGame.date), DATE_DIST_OPTS);
-            msg.reply += ` (осталось ${timeUntilNextGame})`
-        }
-    }
-
-    msg.reply += ' YEPPERS';
 } else {
     const total = dateDistance(new Date(stream.date), new Date(stream.date_end), DATE_DIST_OPTS);
     const when = dateDistance(new Date(stream.date_end), null, { short: true, });
