@@ -1,7 +1,7 @@
 const stream = flow.get('stream_status', 'file');
 const db = flow.get('blackufa_db', 'memory')();
 
-const { smartJoin, last, renderTemplate, getStreamInfo } = flow.get('func', 'memory');
+const { smartJoin, last, renderTemplate } = flow.get('func', 'memory');
 const { zip } = lodash;
 
 const query = msg.parsed.query_filtered;
