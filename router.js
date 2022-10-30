@@ -23,9 +23,15 @@ if (!pattern || !msg.parsed.command.match(pattern)) {
     return;
 }
 
+let channel = msg.payload.channel;
+
+if (channel === '#thedrhax') {
+    channel = '#blackufa';
+}
+
 const commands = await amongo(DB, 'find', {
     '$where': `'${msg.parsed.command}'.match(new RegExp('^(' + this.pattern + ')$', 'i'))`,
-    'channel': '#blackufa', // msg.payload.channel
+    'channel': channel,
     'enabled': true,
 });
 
