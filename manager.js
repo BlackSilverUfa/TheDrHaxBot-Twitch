@@ -385,8 +385,12 @@ async function cmdRemove(channel, args) {
 }
 
 async function main() {
-    // const channel = msg.payload.channel;
-    const channel = '#blackufa';
+    let channel = msg.payload.channel;
+
+    if (channel === '#thedrhax') {
+        channel = '#blackufa';
+    }
+
     const [cmd, ...args] = msg.parsed.query.split(' ');
 
     switch (cmd) {

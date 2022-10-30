@@ -211,6 +211,22 @@ const ftime = (t) => (
     }).join(':')
 );
 
+const getStreamInfo = (channel) => {
+    if (channel.startsWith('#')) {
+        channel = channel.slice(1);
+    }
+
+    if (channel === 'thedrhax') {
+        channel = 'blackufa';
+    }
+
+    if (channel === 'blackufa') {
+        return flow.get('stream_status', 'file');
+    } else {
+        return flow.get('twitch_channels', 'file')[channel];
+    }
+};
+
 flow.set('func', {
     amongo,
     twitch,
@@ -229,6 +245,7 @@ flow.set('func', {
     last,
     ptime,
     ftime,
+    getStreamInfo,
 }, 'memory');
 
 node.status('Ready');
