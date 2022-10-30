@@ -54,13 +54,13 @@ function timeline(stream, history) {
 
 if (stream.active) {
     msg.reply = 'сегодня были: ' + timeline(stream);
-} else if (rerun.active && rerun.vod_history.length > 0) {
-    const past = timeline(rerun, rerun.game_history.filter(game => now > +new Date(game.date)));
-    if (past.length === 0) {
-        msg.reply = 'на этом повторе пока ещё ничего не было peepoBlanket';
-    } else {
-        msg.reply = 'на этом повторе были: ' + past;
-    }
+// } else if (rerun.active && rerun.vod_history.length > 0) {
+//     const past = timeline(rerun, rerun.game_history.filter(game => now > +new Date(game.date)));
+//     if (past.length === 0) {
+//         msg.reply = 'на этом повторе пока ещё ничего не было peepoBlanket';
+//     } else {
+//         msg.reply = 'на этом повторе были: ' + past;
+//     }
 } else {
     msg.reply = 'на предыдущем стриме были: ' + timeline(stream);
 }
