@@ -12,7 +12,7 @@ const query = msg.parsed.query_filtered;
 const command = msg.payload.message.match(COMMAND)[1];
 
 if (msg.parsed.level <= 1) { // mods and up
-    [cmd, ...args] = query.split(' ');
+    const [cmd, ...args] = query.split(' ');
 
     switch (cmd) {
         case 'set':
@@ -23,6 +23,7 @@ if (msg.parsed.level <= 1) { // mods and up
                         stream.announcement.text,
                         ...args.join(' ').split(/\s?\/\/\/\s?/)
                     ),
+                    photo: stream.announcement.photo,
                     date: msToDate(now + TZ),
                     source: {
                         twitch: msg.payload.userstate.username,
