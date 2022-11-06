@@ -44,13 +44,17 @@ if (msg.parsed.command == 'куст') {
 if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     msg.reply += ' за мучное NomNom';
 } else if (mentions.length == 1 && mentions[0] == 'tomatepotato') {
-    if (Math.random() <= 0.3) {
+    const n = Math.random();
+    if (n <= 0.1) {
+        msg.reply += ` за батат Tastge`;
+    } else if (n <= 0.3) {
         msg.reply += ` за помидорку Tastge`;
     } else {
         msg.reply += ` за пюрешку Tastge`;
     }
 } else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
-    if (Math.random() <= 0.3) {
+    const n = Math.random();
+    if (n <= 0.3) {
         msg.reply += ` за хурму Tastge`;
     } else {
         msg.reply += ` за овощ Tastge`;
