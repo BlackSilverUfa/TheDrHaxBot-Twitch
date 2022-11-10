@@ -68,3 +68,4 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
 }
 
 return mentions.length > 0 ? [msg, null] : [null, msg];
+
