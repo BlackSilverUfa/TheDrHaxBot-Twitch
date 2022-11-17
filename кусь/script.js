@@ -45,9 +45,11 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     msg.reply += ' за мучное NomNom';
 } else if (mentions.length == 1 && mentions[0] == 'tomatepotato') {
     const n = Math.random();
-    if (n <= 0.1) {
+    if (n < 0.1) {
+        msg.reply += ` за потат Tastge`;
+    } else if (n <= 0.2) {
         msg.reply += ` за батат Tastge`;
-    } else if (n <= 0.3) {
+    } else if (n <= 0.4) {
         msg.reply += ` за помидорку Tastge`;
     } else {
         msg.reply += ` за пюрешку Tastge`;
