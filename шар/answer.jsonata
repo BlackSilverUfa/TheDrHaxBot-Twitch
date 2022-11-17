@@ -259,7 +259,12 @@ $continue := function($text) {(
 
     $x > $range[1] ? 'думаю, что больше ' & $range[1] & ' YEPPERS' :
     $x < $range[0] ? 'думаю, что меньше ' & $range[0] & ' NOPERS' :
-    $choice($round($x))
+    $choice($floor($x))
+) :
+(parsed.query ~> $match(/сколько .+ из [0-9]+/i)) ? (
+    $params := $match(parsed.query, /сколько .+ из ([0-9]+)/i).groups;
+    $x := $random() * ($number($params[0]) + 1);
+    $choice($floor($x) & ' из ' & $params[0])
 ) :
 (parsed.emotesOnly and $count(parsed.emotes) <= 3) ? (
     parsed.query_filtered
