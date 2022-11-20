@@ -45,15 +45,20 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     msg.reply += ' за мучное NomNom';
 } else if (mentions.length == 1 && mentions[0] == 'tomatepotato') {
     const n = Math.random();
-    if (n < 0.1) {
+    if (n < 0.05) {
+    } else if (n < 0.1) {
         msg.reply += ` за потат Tastge popCat`;
     } else if (n <= 0.2) {
         msg.reply += ` за батат Tastge`;
     } else if (n <= 0.4) {
         msg.reply += ` за помидорку Tastge`;
+    } else if (n <= 0.45) {
+        msg.reply += ` за Полину KEKYou`;
     } else {
         msg.reply += ` за пюрешку Tastge`;
     }
+} else if (mentions[0] == 'theanatoliygamer' && Math.random() <= 0.7) {
+    msg.reply += ` за Полину Peka1`;
 } else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
     const n = Math.random();
     if (n <= 0.3) {
