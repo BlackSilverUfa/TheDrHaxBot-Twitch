@@ -56,11 +56,11 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     } else {
         msg.reply += ` за пюрешку Tastge`;
     }
-// } else if (mentions[0] == 'theanatoliygamer' && Math.random() <= 0.7) {
-//     msg.reply += ` за Полину Peka1`;
 } else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
     const n = Math.random();
-    if (n <= 0.3) {
+    if (n <= 0.2) {
+        msg.reply += ` за пирожок Tastge`;
+    } else if (n <= 0.5) {
         msg.reply += ` за хурму Tastge`;
     } else {
         msg.reply += ` за овощ Tastge`;
