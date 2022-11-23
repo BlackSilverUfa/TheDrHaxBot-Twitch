@@ -176,6 +176,7 @@ async function cmdAdd(channel, args) {
         case 'countup':
             params.text = text.join(' ');
             params.value = +new Date();
+            params.count = 0;
             break;
 
         case 'function':
