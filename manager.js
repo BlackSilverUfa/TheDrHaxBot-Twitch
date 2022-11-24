@@ -202,7 +202,7 @@ async function cmdAdd(channel, args) {
             params.text = text.join(' ');
             params.value = 0;
             params.access = 1; // protected
-            params.internal_cooldown = 0;
+            params.cooldown.internal = 0;
 
             if (params.text.indexOf('{n}') === -1) {
                 reply('шаблон ответа должен содержать {n} для подстановки значения');
@@ -390,11 +390,11 @@ async function cmdToggle(channel, args, enabled) {
 
 async function cmdCooldown(channel, args) {
     if (args.length < 1) {
-        reply('пример: cooldown <имя> [канал] [польз.] [внутр.]');
+        reply('пример: cooldown <имя> [канал] [польз.]');
         return;
     }
 
-    const [name, cdChannel, cdUser, cdInternal] = args;
+    const [name, cdChannel, cdUser] = args;
 
     const [command] = await findCommand(channel, name);
 
@@ -411,10 +411,6 @@ async function cmdCooldown(channel, args) {
 
         if (cd.user) {
             res.push(`${cd.user} сек./пользователь`);
-        }
-
-        if (cd.internal) {
-            res.push(`${cd.internal} сек. (внутренний)`);
         }
 
         reply(`КД команды "${command.name}": ` + smartJoin(res));
@@ -435,7 +431,6 @@ async function cmdCooldown(channel, args) {
 
     validateAndAssign('channel', cdChannel);
     validateAndAssign('user', cdUser);
-    validateAndAssign('internal', cdInternal);
 
     await saveCommand(command);
     finish();
