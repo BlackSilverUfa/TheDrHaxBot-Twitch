@@ -180,6 +180,10 @@ async function cmdAdd(channel, args) {
 
     let params = {
         enabled: true,
+        cooldown: {
+            channel: 10,
+            user: 0,
+        }
     };
 
     let [command] = await findCommand(channel, name);
@@ -198,6 +202,7 @@ async function cmdAdd(channel, args) {
             params.text = text.join(' ');
             params.value = 0;
             params.access = 1; // protected
+            params.internal_cooldown = 0;
 
             if (params.text.indexOf('{n}') === -1) {
                 reply('шаблон ответа должен содержать {n} для подстановки значения');
@@ -219,6 +224,8 @@ async function cmdAdd(channel, args) {
                 reply('неправильный формат команды');
                 return;
             }
+
+            params.cooldown.channel = 0;
 
             break;
 
@@ -381,6 +388,59 @@ async function cmdToggle(channel, args, enabled) {
     }
 }
 
+async function cmdCooldown(channel, args) {
+    if (args.length < 1) {
+        reply('пример: cooldown <имя> [канал] [польз.] [внутр.]');
+        return;
+    }
+
+    const [name, cdChannel, cdUser, cdInternal] = args;
+
+    const [command] = await findCommand(channel, name);
+
+    if (!command) {
+        reply(`команда "${name}" не найдена`);
+        return;
+    }
+
+    const cd = command.cooldown || {};
+    command.cooldown = cd;
+
+    const finish = () => {
+        const res = [`${cd.channel || 0} сек.`];
+
+        if (cd.user) {
+            res.push(`${cd.user} сек./пользователь`);
+        }
+
+        if (cd.internal) {
+            res.push(`${cd.internal} сек. (внутренний)`);
+        }
+
+        reply(`КД команды "${command.name}": ` + smartJoin(res));
+    };
+
+    const validateAndAssign = (name, value) => {
+        value = Number(value);
+
+        if (!Number.isNaN(value) && value >= 0) {
+            cd[name] = value;
+        }
+    };
+
+    if (!cdChannel) {
+        finish();
+        return;
+    }
+
+    validateAndAssign('channel', cdChannel);
+    validateAndAssign('user', cdUser);
+    validateAndAssign('internal', cdInternal);
+
+    await saveCommand(command);
+    finish();
+}
+
 async function cmdRemove(channel, args) {
     if (args.length < 1) {
         reply('пример: remove <имя>');
@@ -447,11 +507,14 @@ async function main() {
         case 'enable':
             return cmdToggle(channel, args, cmd === 'enable');
 
+        case 'cooldown':
+            return cmdCooldown(channel, args);
+
         case 'remove':
             return cmdRemove(channel, args);
 
         default:
-            reply('доступные команды: show, list, add, update, rename, enable, disable, remove');
+            reply('доступные команды: show, list, add, update, rename, enable, disable, cooldown, remove');
     }
 }
 

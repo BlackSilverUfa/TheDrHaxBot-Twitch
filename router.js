@@ -29,18 +29,39 @@ if (channel === '#thedrhax') {
     channel = '#blackufa';
 }
 
-const commands = await amongo(DB, 'find', {
+const [command] = await amongo(DB, 'find', {
     '$where': `'${msg.parsed.command}'.match(new RegExp('^(' + this.pattern + ')$', 'i'))`,
     'channel': channel,
     'enabled': true,
 });
 
-if (commands.length === 0) {
+if (!command) {
     return;
 }
 
-const command = commands[0];
 msg.command = command;
+
+if (command.cooldown && msg.parsed.level > 1) {
+    const now = +new Date();
+    const cdMap = context.get('cooldown', 'memory') || {};
+    const cd = command.cooldown;
+
+    const channelKey = `${command._id}`;
+    const userKey = `${command._id}|${msg.payload.userstate.username}`;
+
+    Object.entries(cdMap)
+        .filter(([k]) => k.startsWith(command._id))
+        .filter(([k, v]) => v + Math.max(cd.channel, cd.user) < now)
+        .map(([key]) => delete cdMap[key])
+
+    if ((cdMap[channelKey] || 0) + cd.channel * 1000 > now) return;
+    if ((cdMap[userKey] || 0) + cd.user * 1000 > now) return;
+
+    cdMap[channelKey] = now;
+    cdMap[userKey] = now;
+
+    context.set('cooldown', cdMap, 'memory');
+}
 
 const index = [
     'helper',
