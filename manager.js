@@ -109,6 +109,39 @@ async function findCommand(channel, name) {
     return [null, null];
 }
 
+async function cmdShow(channel, [name]) {
+    if (!name) {
+        reply('пример: show <имя>');
+        return;
+    }
+
+    const [command] = await findCommand(channel, name);
+
+    if (!command) {
+        reply(`команда "${name}" не найдена`);
+        return;
+    }
+
+    switch (command.type) {
+        case 'helper':
+        case 'counter':
+        case 'countup':
+            reply(`шаблон ответа: "${command.text}"`);
+            break;
+
+        case 'function':
+            reply(`вызывает команду "${command.text}"`);
+            break;
+
+        case 'native':
+            reply(`вызывает нативную команду с ID "${command._id}"`);
+            break;
+
+        default:
+            reply(`невозможно отобразить команду типа ${command.type}`);
+    }
+}
+
 async function cmdList(channel, [name]) {
     if (name) {
         const [command] = await findCommand(channel, name);
@@ -395,6 +428,9 @@ async function main() {
     const [cmd, ...args] = msg.parsed.query.split(' ');
 
     switch (cmd) {
+        case 'show':
+            return cmdShow(channel, args);
+
         case 'list':
             return cmdList(channel, args);
 
@@ -415,7 +451,7 @@ async function main() {
             return cmdRemove(channel, args);
 
         default:
-            reply('доступные команды: list, add, update, rename, enable, disable, remove');
+            reply('доступные команды: show, list, add, update, rename, enable, disable, remove');
     }
 }
 
