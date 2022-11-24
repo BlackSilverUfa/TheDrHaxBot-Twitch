@@ -199,9 +199,16 @@ function last(array) { // yes
     return array[array.length - 1];
 }
 
-const ptime = (t) => (
-    sum(reverse(t.split(':')).map((x, i) => x * 60 ** i))
-);
+const ptime = (t) => {
+    let sign = 1;
+
+    if (t[0] === '-') {
+        sign = -1;
+        t = t.slice(1);
+    }
+
+    return sign * sum(reverse(t.split(':')).map((x, i) => x * 60 ** i))
+};
 
 const ftime = (t) => (
     range(2, -1, -1).map((i) => {
