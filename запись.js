@@ -1,4 +1,5 @@
-const { renderTemplate, choose, ptime, ftime, last } = flow.get('func', 'memory');
+const { find, flatMap } = _;
+const { renderTemplate, choose, ftime, last } = flow.get('func', 'memory');
 const { getBaseSegment, resolveSegment } = flow.get('blackufa_db_func', 'memory');
 
 const db = flow.get('blackufa_db', 'memory')();
@@ -20,6 +21,29 @@ function segmentLink(segment, at = 0) {
     return `drhx.ru/b/${id}${(at > 0) ? `?at=${at}` : ''}`;
 }
 
+function segmentName(segment, at) {
+    if (!at) {
+        return segment.name;
+    }
+
+    /*
+     * Find subref closest to the provided timestamp
+     */
+
+    const refs = segment.games
+        .map((gameId) => db.games.by('id', gameId))
+        .map((game) => (
+            find(game.streams, (ref) => ref.original === segment)
+        ));
+
+    const subrefs = flatMap(refs, (ref) => ref.subrefs)
+        .sort((r1, r2) => (r1.start || 0) - (r2.start || 0));
+
+    const lastSubref = last(subrefs.filter(({ start }) => start < at));
+
+    return (lastSubref || subrefs[0]).name;
+}
+
 function gameLink(game) {
     let link;
 
@@ -34,7 +58,7 @@ function gameLink(game) {
 }
 
 function formatSegment(segment, at = 0, t = 0) {
-    let result = segment.name;
+    let result = segmentName(segment, at);
 
     if (t > 0) {
         result += ` [${ftime(t)}] `;
