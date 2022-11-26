@@ -56,6 +56,8 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     } else {
         msg.reply += ` за пюрешку Tastge`;
     }
+} else if (mentions[0] == 'theanatoliygamer' && Math.random() < 50) {
+    msg.reply = ' за Чон Со Ён AYAYA';
 } else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
     const n = Math.random();
     if (n <= 0.2) {
