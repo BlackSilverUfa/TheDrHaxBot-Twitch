@@ -51,7 +51,7 @@ if (command.cooldown && msg.parsed.level > 1) {
 
     Object.entries(cdMap)
         .filter(([k]) => k.startsWith(command._id))
-        .filter(([k, v]) => v + Math.max(cd.channel, cd.user) < now)
+        .filter(([k, v]) => v + Math.max(cd.channel, cd.user) * 1000 < now)
         .map(([key]) => delete cdMap[key])
 
     if ((cdMap[channelKey] || 0) + cd.channel * 1000 > now) return;
