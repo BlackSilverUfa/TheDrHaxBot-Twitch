@@ -1,4 +1,5 @@
-const { renderTemplate, choose, last } = flow.get('func', 'memory');
+const { renderTemplate, choose, ptime, ftime, last } = flow.get('func', 'memory');
+const { getBaseSegment, resolveSegment } = flow.get('blackufa_db_func', 'memory');
 
 const db = flow.get('blackufa_db', 'memory')();
 const stream = flow.get('stream_status', 'file');
@@ -7,21 +8,16 @@ const MAX_RESULTS = 5;
 
 let query = msg.parsed.query_filtered;
 
-function segmentLink(segment) {
+function segmentLink(segment, at = 0) {
     let id = segment.segment;
 
     if (id.indexOf(',') !== -1) {
-        const candidates = id.split(',').filter(sid => {
-            const anotherSegment = db.segments.findOne({ segment: sid });
-            return !anotherSegment || anotherSegment.games.length == 0;
-        });
-
-        if (candidates.length > 0) {
-            id = candidates[0];
-        }
+        let base;
+        [base, at] = getBaseSegment(db.segments, segment, at);
+        id = base.segment;
     }
 
-    return `drhx.ru/b/${id}`;
+    return `drhx.ru/b/${id}${(at > 0) ? `?at=${at}` : ''}`;
 }
 
 function gameLink(game) {
@@ -29,12 +25,7 @@ function gameLink(game) {
 
     if (game.segments.length == 1) { // segment
         const segment = game.segments[0];
-
-        link = segmentLink(segment);
-
-        if (game.start > 0) {
-            link += `?at=${game.start}`;
-        }
+        link = segmentLink(segment, game.start);
     } else { // game
         link = `drhx.ru/b/${game.original.id}`;
     }
@@ -42,13 +33,22 @@ function gameLink(game) {
     return link;
 }
 
-function formatSegments(segments) {
-    return segments.map(segment => {
-        let result = segment.name;
+function formatSegment(segment, at = 0, t = 0) {
+    let result = segment.name;
+
+    if (t > 0) {
+        result += ` [${ftime(t)}] `;
+    } else {
         result += ` [${Sugar.Date.format(segment.date, '%d.%m.%Y')}] `;
-        result += segmentLink(segment);
-        return result;
-    }).join(' | ');
+    }
+
+    result += segmentLink(segment, at);
+
+    return result;
+}
+
+function formatSegments(segments) {
+    return segments.map(formatSegment).join(' | ');
 }
 
 function formatGames(games) {
@@ -71,20 +71,33 @@ function formatGames(games) {
 }
 
 function findByID(query) {
-    if (!query.match(/^[0-9.,]+$/)) return false;
+    const [id, ts] = query.split(/\s/);
+
+    if (!id.match(/^[0-9.,]+$/)) return false;
+
+    let at = Number(ts) || 0;
+
+    if (at > 0) {
+        let segment, t;
+        [segment, at, t] = resolveSegment(db.segments, id, at);
+
+        if (!segment) return false;
+        msg.reply = formatSegment(segment, at, t);
+        return true;
+    }
 
     let segments = [];
 
-    if (query.match(/^[0-9]+$/)) { // simple stream
+    if (id.match(/^[0-9]+$/)) { // simple stream
         segments = db.segments.chain()
-            .find({ streams: { $contains: query } })
+            .find({ streams: { $contains: id } })
             .where(({ games }) => games.length > 0)
             .data();
-    } else if (query.match(/^[0-9]+\.[0-9]+$/)) { // specific segment
-        segments = [db.segments.findOne({ segment: query })];
-    } else if (query.match(/^[0-9]+(,[0-9]+)+$/)) { // joined streams
+    } else if (id.match(/^[0-9]+\.[0-9]+$/)) { // specific segment
+        segments = [db.segments.findOne({ segment: id })];
+    } else if (id.match(/^[0-9]+(,[0-9]+)+$/)) { // joined streams
         segments = db.segments.chain()
-            .find({ streams: { $containsAny: query.split(',') } })
+            .find({ streams: { $containsAny: id.split(',') } })
             .where(({ games }) => games.length > 0)
             .data();
     }
@@ -92,6 +105,7 @@ function findByID(query) {
     if (segments.length == 0) return false;
 
     msg.reply = formatSegments(segments);
+
     return msg;
 }
 
