@@ -36,12 +36,21 @@ function segmentName(segment, at) {
             find(game.streams, (ref) => ref.original === segment)
         ));
 
-    const subrefs = flatMap(refs, (ref) => ref.subrefs)
-        .sort((r1, r2) => (r1.start || 0) - (r2.start || 0));
+    const names = flatMap(refs, (ref) => {
+        const game = ref.game;
+        const isList = game.type == 'list';
 
-    const lastSubref = last(subrefs.filter(({ start }) => start < at));
+        return ref.subrefs.map((subref) => isList ? {
+            name: subref.name, start: subref.start || 0
+        } : {
+            name: `${ref.game.name} - ${subref.name}`,
+            start: subref.start || 0
+        });
+    }).sort((n1, n2) => n1.start - n2.start);
 
-    return (lastSubref || subrefs[0]).name;
+    const lastSubref = last(names.filter(({ start }) => start < at));
+
+    return (lastSubref || names[0]).name;
 }
 
 function gameLink(game) {
