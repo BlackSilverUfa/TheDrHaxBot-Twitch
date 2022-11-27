@@ -178,11 +178,25 @@ function updateText(text, original, replacement) {
 }
 
 function renderTemplate(str, vars) {
+    const REGEX_FUNC = /^([a-z0-9]+)\((.*)\)$/i;
+
     (str.match(/\{.*?\}/g) || []).forEach((key) => {
         key = key.substring(1, key.length - 1);
         let value;
 
-        if (key.indexOf('#') !== -1) {
+        if (key.match(REGEX_FUNC)) {
+            let [_, func, args] = key.match(REGEX_FUNC);
+            args = args.split(/\s?,\s?/);
+
+            switch (func) {
+                case 'rand':
+                    value = choose(args) || '';
+                    break;
+
+                default:
+                    value = '';
+            }
+        } else if (key.indexOf('#') !== -1) {
             const [valKey, args] = key.split('#');
             value = agreeWithNum(vars[valKey], args.split(','));
         } else {

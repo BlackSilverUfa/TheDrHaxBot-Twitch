@@ -81,13 +81,6 @@ function getAllForms(text, hints = []) {
 
 let args = msg.parsed.query_filtered.split(' ');
 
-// ¯\_(ツ)_/¯
-if (msg.payload.userstate.username === 'diecon') {
-    if (args.indexOf('член') !== -1) {
-        args = [];
-    }
-}
-
 let word;
 
 switch (args[0]) {
