@@ -220,7 +220,7 @@ async function cmdAdd(channel, args) {
         case 'function':
             params.text = text.join(' ');
 
-            if (!params.text.match(COMMAND)) {
+            if (!params.text.startsWith('!')) {
                 reply('неправильный формат команды');
                 return;
             }
