@@ -265,94 +265,86 @@ const countDecimals = function (x) {
 
 // =====================================================
 
-const query = msg.parsed.query;
-let match;
+const main = () => {
+    const query = msg.parsed.query;
+    let match;
 
-if (query.length === 0) {
-    const [_, vowels] = msg.payload.message.match(/^!ш+([ао]+)р+/i) || ['а'];
-    msg.reply = choose([
-        `чт${translate(vowels, 'АаОоУу', 'ОоАаОо')}? Jebaited`,
-        `${translate(vowels, 'Оо', 'Аа')}? Jebaited`
-    ]);
-    return msg;
-}
-
-for (let key in FIXED_ANSWERS) {
-    if (match = msg.parsed.query_filtered.match(new RegExp(key, 'i'))) {
-        msg.reply = FIXED_ANSWERS[key](match);
-        return msg;
-    }
-}
-
-if (msg.parsed.emotesOnly && msg.parsed.emotes.length <= 3) {
-    msg.reply = msg.parsed.query_filtered;
-    return msg;
-}
-
-if (query.match(/\s(или|or)\s/)) {
-    let options = substringBefore(query, '?')
-        .replace(/\s(или|or)\s/, ', ')
-        .split(', ')
-        .map((x) => x.trim());
-
-    if (startsWithAny(options[0].toLowerCase(), [
-        'во что', 'что', 'как', 'где', 'куда', 'когда', 'кто'
-    ])) {
-        options.splice(0, 1);
+    if (query.length === 0) {
+        const [_, vowels] = msg.payload.message.match(/^!ш+([ао]+)р+/i) || ['а'];
+        return choose([
+            `чт${translate(vowels, 'АаОоУу', 'ОоАаОо')}? Jebaited`,
+            `${translate(vowels, 'Оо', 'Аа')}? Jebaited`
+        ]);
     }
 
-    if (options.length === 2) {
-        if (`не ${options[0]}` === options[1]) {
-            if (options[0] === 'будь') {
-                msg.reply = 'сделай же что-нибудь LetMeIn';
-                return msg;
-            }
-
-            msg.reply = 'вот в чём вопрос Kojimaptyp';
-            return msg;
-        } else if (`not ${options[0]}` === options[1]) {
-            msg.reply = 'that is the question Kojimaptyp';
-            return msg;
-        } else if (options[0] === options[1]) {
-            msg.reply = 'да YEPPERS';
-            return msg;
+    for (let key in FIXED_ANSWERS) {
+        if (match = msg.parsed.query_filtered.match(new RegExp(key, 'i'))) {
+            return FIXED_ANSWERS[key](match);
         }
     }
 
-    msg.reply = choice(choose(options));
-    return msg;
-}
-
-if (match = query.match(/от ([+-]?[0-9\.]+) до ([+-]?[0-9\.]+)/i)) {
-    let [_, a, b] = match;
-    [a, b] = [a, b].map((x) => Number(x)).sort((a, b) => a - b);
-
-    const x = Math.random() * (b - a) * 1.2 + a - (b - a) * 0.1;
-
-    if (x > b) {
-        msg.reply = `думаю, что больше ${b} YEPPERS`;
-    } else if (x < a) {
-        msg.reply = `думаю, что меньше ${a} NOPERS`;
-    } else {
-        const precision = Math.max(countDecimals(a), countDecimals(b));
-        msg.reply = choice(x.toFixed(precision));
+    if (msg.parsed.emotesOnly && msg.parsed.emotes.length <= 3) {
+        return msg.parsed.query_filtered;
     }
 
-    return msg;
+    if (query.match(/\s(или|or)\s/)) {
+        let options = substringBefore(query, '?')
+            .replace(/\s(или|or)\s/, ', ')
+            .split(', ')
+            .map((x) => x.trim());
+
+        if (startsWithAny(options[0].toLowerCase(), [
+            'во что', 'что', 'как', 'где', 'куда', 'когда', 'кто'
+        ])) {
+            options.splice(0, 1);
+        }
+
+        if (options.length === 2) {
+            if (`не ${options[0]}` === options[1]) {
+                if (options[0] === 'будь') {
+                    return 'сделай же что-нибудь LetMeIn';
+                }
+
+                return 'вот в чём вопрос Kojimaptyp';
+            } else if (`not ${options[0]}` === options[1]) {
+                return 'that is the question Kojimaptyp';
+            } else if (options[0] === options[1]) {
+                return 'да YEPPERS';
+            }
+        }
+
+        return choice(choose(options));
+    }
+
+    if (match = query.match(/от ([+-]?[0-9\.]+) до ([+-]?[0-9\.]+)/i)) {
+        let [_, a, b] = match;
+        [a, b] = [a, b].map((x) => Number(x)).sort((a, b) => a - b);
+
+        const x = Math.random() * (b - a) * 1.2 + a - (b - a) * 0.1;
+
+        if (x > b) {
+            return `думаю, что больше ${b} YEPPERS`;
+        } else if (x < a) {
+            return `думаю, что меньше ${a} NOPERS`;
+        } else {
+            const precision = Math.max(countDecimals(a), countDecimals(b));
+            return choice(x.toFixed(precision));
+        }
+    }
+
+    if (match = query.match(/сколько (.+) из ([0-9]+)/i)) {
+        const [_, term, range] = match;
+        const x = Math.floor(Math.random() * (Number(range) + 1));
+        return choice(`${x} из ${range}`);
+    }
+
+    if (match = continueStr(msg.parsed.query_filtered)) {
+        return `...${match}`;
+    }
+
+    return rchoose(Object.values(ANSWERS));
 }
 
-if (match = query.match(/сколько (.+) из ([0-9]+)/i)) {
-    const [_, term, range] = match;
-    const x = Math.floor(Math.random() * (Number(range) + 1));
-    msg.reply = choice(`${x} из ${range}`);
-    return msg;
-}
-
-if (match = continueStr(msg.parsed.query_filtered)) {
-    msg.reply = `...${match}`;
-    return msg;
-}
-
-msg.reply = rchoose(Object.values(ANSWERS));
+msg.reply = main();
 return msg;
 

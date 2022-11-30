@@ -4,7 +4,7 @@ if (msg.init) {
     return;
 }
 
-const { rchoose, smartJoin } = flow.get('func', 'memory');
+const { rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
 const { actions, targets } = context.get('answers', 'memory');
 
 const mentions = msg.parsed.mentions_list;
@@ -44,29 +44,21 @@ if (msg.parsed.command == 'куст') {
 if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     msg.reply += ' за мучное NomNom';
 } else if (mentions.length == 1 && mentions[0] == 'tomatepotato') {
-    const n = Math.random();
-    if (n < 0.1) {
-        msg.reply += ` за потат Tastge popCat`;
-    } else if (n <= 0.2) {
-        msg.reply += ` за батат Tastge`;
-    } else if (n <= 0.4) {
-        msg.reply += ` за помидорку Tastge`;
-    } else if (n <= 0.45) {
-        msg.reply += ` за Полину KEKYou`;
-    } else {
-        msg.reply += ` за пюрешку Tastge`;
-    }
+    msg.reply += wchoose([
+        ' за потат Tastge popCat',
+        ' за батат Tastge',
+        ' за томат Tastge',
+        ' за пюрешку Tastge',
+        ' за Полину KEKYou'
+    ], [10, 10, 20, 55, 5]);
 } else if (mentions.length == 1 && mentions[0] == 'theanatoliygamer' && Math.random() < 50) {
     msg.reply += ' за Чон Со Ён AYAYA';
 } else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
-    const n = Math.random();
-    if (n <= 0.2) {
-        msg.reply += ` за пирожок Tastge`;
-    } else if (n <= 0.5) {
-        msg.reply += ` за хурму Tastge`;
-    } else {
-        msg.reply += ` за овощ Tastge`;
-    }
+    msg.reply += wchoose([
+        ' за пирожок Tastge',
+        ' за хурму Tastge',
+        ' за овощ Tastge'
+    ], [20, 30, 50]);
 } else if (mentions.length == 1 && mentions[0] == 'myasnoe_file') {
     msg.reply += ` за филе popCat`;
 } else if (mentions.length == 1 && mentions[0] == 'i_pipa') {
