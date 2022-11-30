@@ -213,7 +213,8 @@ const FIXED_ANSWERS = {
 
 // =====================================================
 
-const { choose, rchoose, renderTemplate } = flow.get('func', 'memory');
+const { choose, rchoose, renderTemplate, agreeWithNum } = flow.get('func', 'memory');
+const { parse, inflect } = flow.get('inflector', 'memory');
 
 const choice = (x) => renderTemplate(choose(CHOICES), { x });
 
@@ -335,7 +336,20 @@ const main = () => {
     if (match = query.match(/сколько (.+) из ([0-9]+)/i)) {
         const [_, term, range] = match;
         const x = Math.floor(Math.random() * (Number(range) + 1));
-        return choice(`${x} из ${range}`);
+
+        const pluralizedTerm = term
+            .split(' ')
+            .map((word) => inflect(
+                parse(word, ['gent', 'plur']),
+                agreeWithNum(x, [
+                    ['nomn', 'sing'],
+                    ['gent', 'sing'],
+                    ['gent', 'plur']
+                ])
+            ))
+            .join(' ');
+
+        return choice(`${x} ${pluralizedTerm} из ${range}`);
     }
 
     if (match = continueStr(msg.parsed.query_filtered)) {
