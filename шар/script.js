@@ -45,7 +45,7 @@ const CONTINUATIONS = [
     'а всёёё BSUHee',
     'аня ANYA',
     'анлаки BSUHee',
-    'алло peepoPhone',
+    'алло peepoPhonexmas',
     'ада, я люблю тебя ANYA',
     'абсолютли YEPPERS',
     'аыаыа ANYA',
@@ -71,7 +71,7 @@ const CONTINUATIONS = [
 
     'гивасасай monkaChrist',
 
-    'джерри peepoPhone',
+    'джерри peepoPhonexmas',
 
     'если не мы, то кто? KKomrade',
 
