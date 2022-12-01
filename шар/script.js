@@ -317,7 +317,7 @@ const main = () => {
         return choice(choose(options));
     }
 
-    if (match = query.match(/от ([+-]?[0-9\.]+) до ([+-]?[0-9\.]+)/i)) {
+    if (match = query.match(/от ([+-]?[0-9\.e]+) до ([+-]?[0-9\.e]+)/i)) {
         let [_, a, b] = match;
         [a, b] = [a, b].map((x) => Number(x)).sort((a, b) => a - b);
 
