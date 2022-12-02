@@ -41,7 +41,7 @@ if (!command) {
 
 msg.command = command;
 
-if (command.cooldown && !msg.parsed.cooldown_bypass && msg.parsed.level > 1) {
+if (command.cooldown && !msg.parsed.cooldown_bypass) {
     const now = +new Date();
     const cdMap = context.get('cooldown', 'memory') || {};
     const cd = command.cooldown;
@@ -56,6 +56,7 @@ if (command.cooldown && !msg.parsed.cooldown_bypass && msg.parsed.level > 1) {
 
     let isCd = (cdMap[channelKey] || 0) + cd.channel * 1000 > now;
     isCd ||= (cdMap[userKey] || 0) + cd.user * 1000 > now;
+    isCd &&= msg.parsed.level > 1;
 
     if (isCd) {
         twitch('helix', 'DELETE', 'moderation/chat', {
