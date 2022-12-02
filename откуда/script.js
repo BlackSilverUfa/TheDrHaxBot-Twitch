@@ -6,7 +6,7 @@ if (msg.init) {
         searchOptions: {
             prefix: true,
             fuzzy: 0,
-            combineWith: 'AND',
+            // combineWith: 'AND',
         },
         tokenize,
     });
