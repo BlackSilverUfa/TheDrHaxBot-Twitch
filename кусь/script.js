@@ -13,7 +13,7 @@ const user = msg.payload.userstate.username;
 if (mentions.length == 0) {
     msg.reply = `/me ${rchoose(actions)}`;
 } else {
-    msg.reply = rchoose(actions);
+    msg.reply = `@${user} ${rchoose(actions)}`;
 }
 
 if (msg.parsed.command == 'куст') {
@@ -67,5 +67,5 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
     msg.reply += ` за ${rchoose(targets)}`;
 }
 
-return mentions.length > 0 ? [msg, null] : [null, msg];
+return msg;
 
