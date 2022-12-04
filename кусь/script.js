@@ -49,8 +49,9 @@ if (mentions.length == 1 && mentions[0] == 'my4hoe') {
         ' за батат Tastge',
         ' за томат Tastge',
         ' за пюрешку Tastge',
+        ' за попат slapSlap',
         ' за Полину KEKYou'
-    ], [10, 10, 20, 55, 5]);
+    ], [10, 10, 20, 50, 5, 5]);
 } else if (mentions.length == 1 && mentions[0] == 'theanatoliygamer' && Math.random() < 50) {
     msg.reply += ' за Чон Со Ён AYAYA';
 } else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
