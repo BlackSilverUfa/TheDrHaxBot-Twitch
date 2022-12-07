@@ -353,6 +353,25 @@ const main = () => {
         return choice(`${x} ${pluralizedTerm} из ${range}`);
     }
 
+    if (match = query.match(/оцени (.+) в (.+)/i)) {
+        const term = match[2];
+        const x = Math.floor(Math.random() * 11);
+
+        const pluralizedTerm = term
+            .split(' ')
+            .map((word) => inflect(
+                parse(word, ['loct', 'plur']),
+                agreeWithNum(x, [
+                    ['nomn', 'sing'],
+                    ['gent', 'sing'],
+                    ['gent', 'plur']
+                ])
+            ))
+            .join(' ');
+
+        return choice(`${x} ${pluralizedTerm} из 10`);
+    }
+
     if (match = continueStr(msg.parsed.query_filtered)) {
         return `...${match}`;
     }
