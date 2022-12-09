@@ -76,7 +76,7 @@ const CONTINUATIONS = [
 
     'если не мы, то кто? KKomrade',
 
-    'жесть ANYA',
+    'жесть Zhest',
 
     'ооо, элден ринг KOgasm',
     'оп оп PepoG',
