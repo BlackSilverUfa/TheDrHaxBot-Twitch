@@ -99,7 +99,6 @@ const CONTINUATIONS = [
     'сос мыслом ANYA',
     'сов падение BSUbl',
     'супер YEPPERS',
-
     'не еш, подумой CatCrying',
     'ничоси Pog',
 
