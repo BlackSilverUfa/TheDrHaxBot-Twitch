@@ -47,7 +47,7 @@ switch (args[0]) {
 
         let forms = getAllForms(
             args.slice(1).join(' '),
-            args[0] === 'про' ? [['accs'], ['gent']] : [['loct']],
+            args[0] === 'про' ? [['accs'], ['gent'], ['nomn']] : [['loct']],
         );
 
         word = { forms };
