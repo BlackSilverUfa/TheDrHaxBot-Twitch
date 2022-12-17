@@ -105,7 +105,7 @@ function formatGames(games) {
 function findByID(query) {
     const [id, ts] = query.split(/\s/);
 
-    if (!id.match(/^[0-9.,]+$/)) return false;
+    if (!id.match(/^[0-9,\.]+$/)) return false;
 
     let at = Number(ts) || 0;
 
