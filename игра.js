@@ -1,7 +1,7 @@
 const stream = flow.get('stream_status', 'file');
 const db = flow.get('blackufa_db', 'memory')();
 
-const { smartJoin, last, renderTemplate } = flow.get('func', 'memory');
+const { smartJoin, last, renderTemplate, ptime, ftime } = flow.get('func', 'memory');
 const { zip } = lodash;
 
 const query = msg.parsed.query_filtered;
@@ -78,6 +78,57 @@ if (msg.parsed.level <= 1) { // mods and up
     let [cmd, ...args] = query.split(' ');
 
     switch (cmd) {
+        case 'edit':
+            let id;
+
+            [id, cmd, ...args] = args;
+
+            if (Number.isNaN(+id) || !cmd) {
+                msg.reply = 'укажите номер игры и команду';
+                return msg;
+            }
+
+            const entry = stream.game_history[id - 1];
+
+            if (!entry) {
+                msg.reply = `в списке игр всего ${stream.game_history.length} пунктов, а вы запросили ${id}-й`;
+                return msg;
+            }
+
+            switch (cmd) {
+                case 'get':
+                    msg.reply = `${entry.name}`;
+                    return msg;
+                
+                case 'name':
+                    const oldName = entry.name;
+                    entry.name = args.join(' ');
+                    flow.set('stream_status', stream, 'file');
+                    msg.reply = `игра "${oldName}" переименована в "${entry.name}"`;
+                    return msg;
+
+                case 'time':
+                    const newTime = ptime(args[0]);
+
+                    if (Number.isNaN(newTime)) {
+                        msg.reply = 'не удалось распознать формат таймкода';
+                        return msg;
+                    }
+
+                    entry.date = Sugar.Date.advance(
+                        new Date(stream.date),
+                        { seconds: newTime }
+                    ).toISOString();
+
+                    flow.set('stream_status', stream, 'file');
+                    msg.reply = `теперь "${entry.name}" начинается с ${ftime(newTime)}`;
+                    return msg;
+
+                default:
+                    msg.reply = 'доступные команды: get, name <имя>, time <время>';
+                    return msg;
+            }
+
         case 'set':
         case 'split':
         case 'replace':

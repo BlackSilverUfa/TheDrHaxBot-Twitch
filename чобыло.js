@@ -1,4 +1,4 @@
-const { dateDistance, getStreamInfo } = flow.get('func', 'memory');
+const { dateDistance, getStreamInfo, ftime } = flow.get('func', 'memory');
 const now = +new Date();
 
 const stream = getStreamInfo(msg.payload.channel);
@@ -38,10 +38,35 @@ function timeline(stream, history) {
         }).join(', ');
 }
 
+function timecodes(stream, history) {
+    history = history || stream.game_history;
+
+    return history.map((game) => {
+        const delta = (+new Date(game.date) - +new Date(stream.date)) / 1000;
+        return `${ftime(delta)} - ${game.name}`;
+    }).join(', ');
+}
+
+const [cmd] = msg.parsed.query_filtered.split(' ');
+let answer;
+
+switch (cmd) {
+    case 'help':
+        msg.reply = 'доступные команды: help, list';
+        return msg;
+
+    case 'list':
+        answer = timecodes(stream);
+        break;
+    
+    default:
+        answer = timeline(stream);
+}
+
 if (stream.active) {
-    msg.reply = 'сегодня были: ' + timeline(stream);
+    msg.reply = `сегодня были: ${answer}`;
 } else {
-    msg.reply = 'на предыдущем стриме были: ' + timeline(stream);
+    msg.reply = `на предыдущем стриме были: ${answer}`;
 }
 
 return msg;
