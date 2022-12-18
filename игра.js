@@ -80,52 +80,79 @@ if (msg.parsed.level <= 1) { // mods and up
     switch (cmd) {
         case 'edit':
             let id;
-
             [id, cmd, ...args] = args;
+            id -= 1;
 
             if (Number.isNaN(+id) || !cmd) {
                 msg.reply = 'укажите номер игры и команду';
                 return msg;
             }
 
-            const entry = stream.game_history[id - 1];
+            const entry = stream.game_history[id];
 
             if (!entry) {
-                msg.reply = `в списке игр всего ${stream.game_history.length} пунктов, а вы запросили ${id}-й`;
+                msg.reply = `в списке игр всего ${stream.game_history.length} пунктов, а вы запросили ${id + 1}-й`;
                 return msg;
             }
 
+            const streamStart = new Date(stream.date);
+            const now = new Date();
+
             switch (cmd) {
                 case 'get':
-                    msg.reply = `${entry.name}`;
+                    msg.reply = `${entry.name} начинается с ${ftime((+new Date(entry.date) - +streamStart) / 1000)}`;
                     return msg;
-                
+
                 case 'name':
                     const oldName = entry.name;
-                    entry.name = args.join(' ');
-                    flow.set('stream_status', stream, 'file');
-                    msg.reply = `игра "${oldName}" переименована в "${entry.name}"`;
-                    return msg;
+                    const newName = args.join(' ');
 
-                case 'time':
-                    const newTime = ptime(args[0]);
-
-                    if (Number.isNaN(newTime)) {
-                        msg.reply = 'не удалось распознать формат таймкода';
+                    if (newName.length === 0) {
+                        msg.reply = 'укажите новое название';
                         return msg;
                     }
 
-                    entry.date = Sugar.Date.advance(
+                    entry.name = newName;
+                    flow.set('stream_status', stream, 'file');
+                    msg.reply = `игра "${oldName}" переименована в "${newName}"`;
+                    return msg;
+
+                case 'time':
+                    if (id === 0) {
+                        msg.reply = 'у первого пункта можно менять только название';
+                        return msg;
+                    }
+
+                    const newTime = ptime(args[0]);
+
+                    if (Number.isNaN(newTime)) {
+                        msg.reply = 'укажите время в формате HH:MM:SS или MM:SS';
+                        return msg;
+                    }
+
+                    const newDate = Sugar.Date.advance(
                         new Date(stream.date),
                         { seconds: newTime }
-                    ).toISOString();
+                    );
+
+                    const lowerBound = new Date(stream.game_history[id - 1]?.date || streamStart);
+                    const upperBound = new Date(stream.game_history[id + 1]?.date || now);
+
+                    if (newDate <= lowerBound || newDate >= upperBound) {
+                        const lowerBoundStr = ftime((+lowerBound - +streamStart) / 1000);
+                        const upperBoundStr = ftime((+upperBound - +streamStart) / 1000);
+                        msg.reply = `время должно быть между ${lowerBoundStr} и ${upperBoundStr}`;
+                        return msg;
+                    }
+
+                    entry.date = newDate.toISOString();
 
                     flow.set('stream_status', stream, 'file');
                     msg.reply = `теперь "${entry.name}" начинается с ${ftime(newTime)}`;
                     return msg;
 
                 default:
-                    msg.reply = 'доступные команды: get, name <имя>, time <время>';
+                    msg.reply = 'доступные команды: get, name, time';
                     return msg;
             }
 
