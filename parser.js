@@ -5,9 +5,7 @@ function groups(str, regex, group) {
     return [...str.matchAll(regex)].map(x => x[group]);
 }
 
-if (msg.payload.self) {
-    return [null, null];
-}
+msg.payload.self = msg.payload.userstate.username === 'thedrhaxbot';
 
 let parsed = {};
 
