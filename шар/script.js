@@ -223,7 +223,7 @@ const FIXED_ANSWERS = {
 
 // =====================================================
 
-const { choose, rchoose, renderTemplate, agreeWithNum } = flow.get('func', 'memory');
+const { choose, rchoose, renderTemplate, agreeWithNum, smartJoin } = flow.get('func', 'memory');
 const { parse, inflect } = flow.get('inflector', 'memory');
 
 const choice = (x) => renderTemplate(choose(CHOICES), { x });
@@ -277,7 +277,7 @@ const countDecimals = function (x) {
 // =====================================================
 
 const main = () => {
-    const query = msg.parsed.query;
+    const query = msg.parsed.query_filtered;
     let match;
 
     if (query.length === 0) {
@@ -325,6 +325,25 @@ const main = () => {
         }
 
         return choice(choose(options));
+    }
+
+    if (match = query.match(/расставь( .+)?: (.+)/i)) {
+        let [_, __, items] = match;
+        items = items.replace(/ (и|или) /, ', ').split(/, ?/);
+
+        const itemsSorted = [];
+        while (items.length > 0) {
+            itemsSorted.push(
+                items.splice(Math.floor(Math.random() * items.length), 1)
+            );
+        }
+
+        return choice(smartJoin(itemsSorted, ', ', choose([
+            ' и в конце - ',
+            ' и наконец - ',
+            ' и затем ',
+            ', '
+        ])));
     }
 
     if (match = query.match(/от ([+-]?[0-9\.e]+) до ([+-]?[0-9\.e]+)/i)) {
