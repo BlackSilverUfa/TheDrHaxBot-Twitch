@@ -112,6 +112,7 @@ const CONTINUATIONS = [
     'ууууУУУУ BSUbl',
     'уот так уот BSUFlex',
 
+    'Памела Андерсон BSUHey',
     'планер дай Jebaited',
     'повтор YEPPERS',
     'поползень popCat',
@@ -145,6 +146,7 @@ const CONTINUATIONS = [
     'ыаыаы ANYA',
 
     'хубики ANYA',
+    'ху I really want you to call me back... хуууууу CatCrying',
 
     'шорэ пиппи popCat',
 
@@ -250,7 +252,7 @@ const continueStr = (text) => {
 
     return choose(
         CONTINUATIONS
-            .filter((x) => translate(x, 'a', 'а').startsWith(text))
+            .filter((x) => translate(x, 'a', 'а').toLowerCase().startsWith(text))
             .map((x) => x.substring(text.length))
     );
 };
