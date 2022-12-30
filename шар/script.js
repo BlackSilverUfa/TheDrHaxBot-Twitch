@@ -53,6 +53,7 @@ const CONTINUATIONS = [
     'апчхи ANYA',
     'амамам popCat',
     'амогус ඞ',
+    'а gun with one bullet MrDestructoid',
     'аяя AYAYA',
     'ага YEPPERS',
     'ass gachiBASS',
