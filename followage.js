@@ -1,38 +1,13 @@
-const DB = 'twitch_users';
-const { amongo, twitch, smartJoin, dateDistance } = flow.get('func', 'memory');
-
-const channel = msg.payload.channel.substring(1);
-const username = msg.payload.userstate.username;
+const { twitch, dateDistance } = flow.get('func', 'memory');
 
 function reply(text) {
     node.send({ ...msg, reply: text });
 }
 
-async function findUserID(login) {
-    let [user] = await amongo(DB, 'find', { login });
-
-    if (!user) {
-        [user] = await twitch('helix', 'GET', 'users', { login });
-
-        if (!user) {
-            return null;
-        }
-
-        user._id = user.id;
-        await amongo(DB, 'update', { _id: user.id }, user);
-    }
-
-    return user.id;
-}
-
-const from_id = await findUserID(username);
-const to_id = await findUserID(channel);
-
-if (!from_id || !to_id) {
-    return;
-}
-
-const [follow] = await twitch('helix', 'GET', 'users/follows', { from_id, to_id });
+const [follow] = await twitch('helix', 'GET', 'users/follows', {
+    from_id: msg.payload.userstate['user-id'],
+    to_id: msg.payload.userstate['room-id'],
+});
 
 if (!follow) {
     reply('вы не отслеживаете этот канал Jebaited');
