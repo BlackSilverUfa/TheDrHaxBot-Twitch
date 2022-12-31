@@ -38,6 +38,7 @@ const parse = (word, hints = []) => {
 
     const parsed = Az.Morph(word, {
         forceParse: true,
+        stutter: false,
     });
 
     hints = STATIC_HINTS[word.toLowerCase()] || hints;
