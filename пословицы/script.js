@@ -60,7 +60,13 @@ switch (args[0]) {
 const allProverbs = concat(proverbs, static_proverbs[word.forms.nomn] || []);
 msg.reply = renderTemplate(choose(allProverbs), word.forms);
 
-const suffix = suffixes[word.forms.nomn];
+let suffix = null;
+
+for (let s in suffixes) {
+    if (word.forms.nomn.match(new RegExp(`^${s}$`, 'i'))) {
+        suffix = suffixes[s];
+    }
+}
 
 if (suffix) {
     msg.reply += suffix;
