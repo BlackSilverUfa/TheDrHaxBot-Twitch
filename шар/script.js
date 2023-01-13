@@ -202,11 +202,9 @@ const FIXED_ANSWERS = {
     '^я (шепну|прошепчу) тебе на ушко': () => 'аннигиляторная пушка! PepegaAim',
     '^[UO][wωv][UO]$': () => choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ', '👁 👄 👁']),
     '^(PETTHE|пип(ни|\\ |$))': () => choose([
-        'пип PETTHEPEEPO',
-        'пип PETTHEAPTEEPO',
-        'пип PETTHECAT',
-        'пип PETTHEEVAN',
-        'пип PETTHEMOD',
+        ...Object.keys(flow.get('emotes', 'file'))
+            .filter((k) => k.startsWith('PETTHE'))
+            .map((k) => `пип ${k}`),
         'поп popCat',
         'пуп 💩',
         'не пипай Jebaited',
