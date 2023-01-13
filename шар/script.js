@@ -201,12 +201,15 @@ const FIXED_ANSWERS = {
 
     '^я (шепну|прошепчу) тебе на ушко': () => 'аннигиляторная пушка! PepegaAim',
     '^[UO][wωv][UO]$': () => choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ', '👁 👄 👁']),
-    '^(PETTHE|(не )?пип(ай|ни|\\ |$))': () => 'пип ' + choose([
-        'PETTHEPEEPO',
-        'PETTHEAPTEEPO',
-        'PETTHECAT',
-        'PETTHEEVAN',
-        'PETTHEMOD'
+    '^(PETTHE|пип(ни|\\ |$))': () => choose([
+        'пип PETTHEPEEPO',
+        'пип PETTHEAPTEEPO',
+        'пип PETTHECAT',
+        'пип PETTHEEVAN',
+        'пип PETTHEMOD',
+        'поп popCat',
+        'пуп 💩',
+        'не пипай Jebaited',
     ]),
 
     '^(а\\s+)?будет\\s+кукинг': () => choose([
