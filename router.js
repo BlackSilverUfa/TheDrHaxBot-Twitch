@@ -59,11 +59,7 @@ if (command.cooldown && !msg.parsed.cooldown_bypass) {
     isCd &&= msg.parsed.level > 1;
 
     if (isCd) {
-        twitch('helix', 'DELETE', 'moderation/chat', {
-            broadcaster_id: msg.payload.userstate['room-id'],
-            moderator_id: 573134756,
-            message_id: msg.payload.userstate.id,
-        });
+        msg.api.delete();
         return;
     }
 

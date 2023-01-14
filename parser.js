@@ -1,4 +1,4 @@
-const { Patterns: { MENTION, COMMAND } } = flow.get('func', 'memory');
+const { twitch, Patterns: { MENTION, COMMAND } } = flow.get('func', 'memory');
 
 function groups(str, regex, group) {
     group = group == null ? 1 : group;
@@ -6,6 +6,22 @@ function groups(str, regex, group) {
 }
 
 msg.payload.self = msg.payload.userstate.username === 'thedrhaxbot';
+
+/**
+ * Methods
+ */
+
+let api = {};
+
+api.delete = () => twitch(
+    'helix', 'DELETE', 'moderation/chat', {
+        broadcaster_id: msg.payload.userstate['room-id'],
+        moderator_id: 573134756,
+        message_id: msg.payload.userstate.id
+    }
+);
+
+msg.api = api;
 
 let parsed = {};
 
