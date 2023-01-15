@@ -13,11 +13,11 @@ msg.payload.self = msg.payload.userstate.username === 'thedrhaxbot';
 
 let api = {};
 
-api.delete = () => twitch(
+api.delete = (id = msg.payload.userstate.id) => twitch(
     'helix', 'DELETE', 'moderation/chat', {
         broadcaster_id: msg.payload.userstate['room-id'],
         moderator_id: 573134756,
-        message_id: msg.payload.userstate.id
+        message_id: id
     }
 );
 
@@ -50,6 +50,12 @@ parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION);
 /**
  * Parse command and query
  */
+
+const replyTo = msg.payload.userstate['reply-parent-display-name'];
+
+if (replyTo) {
+    msg.payload.message = msg.payload.message.substring(replyTo.length + 2) + ` @${replyTo}`;
+}
 
 const command = msg.payload.message.match(COMMAND);
 
