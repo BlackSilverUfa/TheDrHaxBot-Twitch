@@ -3,6 +3,10 @@ if (msg.init) {
 
     settings.groups.map((group) => {
         group.step = (settings.range.max - settings.range.min) / group.emotes.length;
+
+        if (group.emotes.length === 1) {
+            group.step += 1;
+        }
     });
 
     settings.groups = Object.assign({},
@@ -27,7 +31,41 @@ function rand(min, max) {
 
 async function main() {
     const _id = msg.payload.userstate.username;
+    const [cmd, ...args] = msg.parsed.query_filtered.split(' ');
     let [icq] = await amongo(DB, 'find', { _id });
+
+    switch (cmd) {
+        case 'help':
+            msg.reply = 'доступные команды: lock, unlock, help';
+            return msg;
+        
+        case 'lock':
+            if (!icq) {
+                msg.reply = 'вы ещё не проверяли ICQ BUFANerd';
+                return msg;
+            }
+
+            icq.lock = true;
+            await amongo(DB, 'save', icq);
+
+            msg.reply = 'теперь можно проверять ICQ без изменений peepoComfy';
+            return msg;
+
+        case 'unlock':
+            if (!icq) {
+                msg.reply = 'вы ещё не проверяли ICQ BUFANerd';
+                return msg;
+            }
+
+            icq.lock = false;
+            await amongo(DB, 'save', icq);
+
+            msg.reply = 'теперь каждая проверка будет изменять ICQ YEPPERS';
+            return msg;
+        
+        default:
+            break;
+    }
 
     let value, delta, group;
 
@@ -45,8 +83,8 @@ async function main() {
     } else {
         value = icq.value;
         group = icq.group || Object.keys(groups)[0];
-        
-        if (msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
+
+        if (icq.lock || msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
             delta = 0;
         } else {
             const new_icq = rand(settings.range.min, settings.range.max);
