@@ -11,10 +11,17 @@ groups:
   - SabaPing
   - SlowPoke
   - MonkaChiken
-  - SMOrc
+  - BSUL
   - ANYA
+  - bufaRage
+  - bufaDumb
+  - SMOrc
   - dead5What
+  - bufaUL
+  - BSUHee
   - Pepega
+  - BSUTrolled
+  - bufaHee
   - YEPP
   - MmmHmm
   - peepoThink
@@ -22,6 +29,9 @@ groups:
   - ZZoomer
   - BUFANerd
   - OMEGABSU
+  - HACKERMANS
+  - bufaSm
+  - 5Head
   - Sherlock
   - Kojimaptyp
   special:
@@ -44,6 +54,7 @@ groups:
   - TaBeRu
   - KonCha
   - HungryPaimon
+  - bufaSugoi
   - TehePelo
   - AYAYA
   special:
@@ -55,10 +66,13 @@ groups:
     simple: 'вы состоите на {value}% из борща {emote}'
     delta: 'вы состоите на {value}% из борща ({delta}) {emote}'
   emotes:
+  - bufaRRage
   - Nervous
   - BSEpt
+  - bufaUL
   - BSNONO
   - WTFFF
+  - Tastge
   - BSUSHO
   - ANYA
   special:
