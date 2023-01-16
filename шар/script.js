@@ -215,6 +215,14 @@ const FIXED_ANSWERS = {
         'кукинг стрим завтра! Если завтра уже наступило, прочитайте это сообщение ещё раз Agakakskagesh'
     ]),
 
+    '^(а\\s+)?где\\s+': () => choose([
+        'там keanU',
+        'завтра будет Agakakskagesh',
+        'на бороде Jebaited',
+        'не скажу NOPERS',
+        'не знаю KEKWait'
+    ]),
+
     '^вы прод[ао][её]те ([^?]+)(\\?.*|$)': (match) => {
         switch (match[1].toLowerCase()) {
             case 'скайримов':
