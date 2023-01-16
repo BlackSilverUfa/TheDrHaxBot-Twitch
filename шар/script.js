@@ -215,13 +215,14 @@ const FIXED_ANSWERS = {
         'кукинг стрим завтра! Если завтра уже наступило, прочитайте это сообщение ещё раз Agakakskagesh'
     ]),
 
-    '^(а\\s+)?где\\s+': () => choose([
+    '^(а\\s+|ты\\s+)?где\\s+': () => choose([
         'там keanU',
         'завтра будет Agakakskagesh',
         'на бороде Jebaited',
         'не скажу NOPERS',
         'не знаю KEKWait',
-        'в Караганде bufaBaited'
+        'в Караганде bufaBaited',
+        'в slapSlap'
     ]),
 
     '^вы прод[ао][её]те ([^?]+)(\\?.*|$)': (match) => {
