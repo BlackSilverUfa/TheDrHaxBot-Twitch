@@ -222,7 +222,8 @@ const FIXED_ANSWERS = {
         'не скажу NOPERS',
         'не знаю KEKWait',
         'в Караганде bufaBaited',
-        'в slapSlap'
+        'в slapSlap',
+        'за тобой ariW golfClub'
     ]),
 
     '^вы прод[ао][её]те ([^?]+)(\\?.*|$)': (match) => {
