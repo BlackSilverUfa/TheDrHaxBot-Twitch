@@ -223,7 +223,9 @@ const FIXED_ANSWERS = {
         'не знаю KEKWait',
         'в Караганде bufaBaited',
         'в slapSlap',
-        'за тобой ariW golfClub'
+        'за тобой ariW golfClub',
+        'туть bufaLove',
+        'так вот же keanU'
     ]),
 
     '^вы прод[ао][её]те ([^?]+)(\\?.*|$)': (match) => {
