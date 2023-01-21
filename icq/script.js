@@ -24,6 +24,7 @@ const { amongo, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
 const groups = Object.keys(settings.groups);
+const now = new Date();
 
 function rand(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
@@ -78,7 +79,9 @@ async function main() {
         await amongo(DB, 'save', {
             ...icq,
             value,
-            group
+            group,
+            last_check: now.toISOString(),
+            checks: 1,
         });
     } else {
         value = icq.value;
@@ -96,17 +99,23 @@ async function main() {
         await amongo(DB, 'save', {
             ...icq,
             value,
-            group
+            group,
+            last_check: now.toISOString(),
+            checks: (icq.checks || 0) + 1,
         });
     }
 
     const groupData = settings.groups[group];
-    const template = groupData.templates[delta !== 0 ? 'delta' : 'simple'];
+    let template = groupData.templates[delta !== 0 ? 'delta' : 'simple'];
 
     let emote;
 
     if (Object.keys(groupData.special).indexOf(`${value}`) !== -1) {
         emote = groupData.special[`${value}`];
+
+        if (delta != 0) {
+            template += ' Вы можете закрепить это значение командой "!icq lock" YEPPERS';
+        }
     } else {
         emote = groupData.emotes[Math.floor(value / groupData.step)];
     }
