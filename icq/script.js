@@ -68,6 +68,11 @@ async function main() {
             break;
     }
 
+    if (icq?.last_check && (+now - +new Date(icq.last_check) < 60000)) {
+        msg.reply = 'ICQ можно проверять не чаще раза в минуту BUFANerd';
+        return msg;
+    }
+
     let value, delta, group;
 
     if (!icq) {
