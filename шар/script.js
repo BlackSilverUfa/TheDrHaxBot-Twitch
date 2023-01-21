@@ -208,6 +208,7 @@ const FIXED_ANSWERS = {
         'поп popCat',
         'пуп 💩',
         'не пипай Jebaited',
+        '...а peepoGiggles'
     ]),
 
     '^(а\\s+)?будет\\s+кукинг': () => choose([
