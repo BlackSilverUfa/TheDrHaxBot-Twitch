@@ -4,11 +4,15 @@ if (msg.init) {
     return;
 }
 
+const { range } = _; // = require('lodash');
 const { choose, rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
 const { actions, targets } = context.get('answers', 'memory');
 
-const mentions = msg.parsed.mentions_list;
 const user = msg.payload.userstate.username;
+const mentions = Object.entries(msg.parsed.mentions_list.reduce((obj, curr) => {
+    obj[curr] = (obj[curr] || 0) + 1;
+    return obj;
+}, {}));
 
 function bite(user) {
     switch (user) {
@@ -68,12 +72,12 @@ if (msg.parsed.command == 'куст') {
 
     if (mentions.length == 0) {
         msg.reply += `@${user} за ${bite(user)}`;
-    } else if (mentions.length == 1) {
-        msg.reply += `@${mentions[0]} за ${bite(mentions[0])}`;
-    } else if (mentions.length > 1 && mentions.length <= 5) {
-        msg.reply += smartJoin(mentions.map((user) => `@${user} за ${bite(user)}`), ' , ');
-    } else if (mentions.length > 5) {
-        msg.reply += smartJoin(mentions.map((user) => `@${user}`)) + ` за ${bite()}`;
+    } else if (mentions.length > 0 && mentions.length <= 3) {
+        msg.reply += smartJoin(mentions.map(([user, count]) => (
+            `@${user} ` + smartJoin(range(Math.min(count, 3)).map(() => `за ${bite(user)}`), ' , ')
+        )), ' , ');
+    } else if (mentions.length > 3) {
+        msg.reply += smartJoin(mentions.map(([user]) => `@${user}`)) + ` за ${bite()}`;
     }
 }
 

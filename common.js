@@ -136,18 +136,15 @@ function rchoose(list) {
 }
 
 function wchoose(list, weights) {
-    let total = 0;
+    const cumulative = weights.reduce((arr, curr) => {
+        arr.push(last(arr) + curr);
+        return arr;
+    }, [0]);
 
-    const cumulative = weights.map((x) => {
-        const prev = total;
-        total += x;
-        return prev;
-    });
-
-    cumulative.push(total);
+    const total = last(cumulative);
 
     const x = Math.floor(Math.random() * total);
-    const y = Math.max(...cumulative.filter((weight) => weight < x));
+    const y = Math.max(...cumulative.filter((weight) => weight <= x));
     return list[cumulative.indexOf(y)];
 }
 
