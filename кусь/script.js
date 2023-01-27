@@ -4,11 +4,43 @@ if (msg.init) {
     return;
 }
 
-const { rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
+const { choose, rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
 const { actions, targets } = context.get('answers', 'memory');
 
 const mentions = msg.parsed.mentions_list;
 const user = msg.payload.userstate.username;
+
+function bite(user) {
+    switch (user) {
+        case 'my4hoe': return 'мучное NomNom';
+
+        case 'tomatepotato':
+            return wchoose([
+                'потат Tastge popCat',
+                'батат Tastge',
+                'томат Tastge',
+                'пюрешку Tastge',
+                'попат slapSlap',
+                'ботат MrDestructoid'
+            ], [15, 15, 25, 30, 10, 5]);
+
+        case 'theanatoliygamer':
+            if (Math.random() < 0.5) break;
+            return 'Чон Со Ён AYAYA';
+
+        case 'hurmaowosh1':
+            return wchoose([
+                'пирожок Tastge',
+                'хурму Tastge',
+                'овощ Tastge'
+            ], [20, 30, 50]);
+
+        case 'myasnoe_file': return 'филе popCat';
+        case 'i_pipa': return 'пипу PETTHEPEEPO';
+    }
+
+    return rchoose(targets);
+}
 
 if (mentions.length == 0) {
     msg.reply = `/me ${rchoose(actions)}`;
@@ -22,50 +54,27 @@ if (msg.parsed.command == 'куст') {
     if (mentions.length == 0) {
         msg.reply += `, промахивается мимо @${user}`;
     }
-    
-    msg.reply += ` и кусает себя`;
+
+    msg.reply += ` и кусает себя за ${bite(user)}`;
 } else {
     msg.reply += ' и';
 
-    if (mentions.length > 1) {
+    if (mentions.length > 3) {
         const how = rchoose(['каким-то образом', 'изподвыподверта']);
         msg.reply += ` ${how} одновременно`;
     }
 
     msg.reply += ' кусает ';
 
-    if (mentions.length > 0) {
-        msg.reply += smartJoin(mentions.map((user) => `@${user}`));
-    } else {
-        msg.reply += `@${user}`;
+    if (mentions.length == 0) {
+        msg.reply += `@${user} за ${bite(user)}`;
+    } else if (mentions.length == 1) {
+        msg.reply += `@${mentions[0]} за ${bite(mentions[0])}`;
+    } else if (mentions.length > 1 && mentions.length <= 5) {
+        msg.reply += smartJoin(mentions.map((user) => `@${user} за ${bite(user)}`), ' , ');
+    } else if (mentions.length > 5) {
+        msg.reply += smartJoin(mentions.map((user) => `@${user}`)) + ` за ${bite()}`;
     }
-}
-
-if (mentions.length == 1 && mentions[0] == 'my4hoe') {
-    msg.reply += ' за мучное NomNom';
-} else if (mentions.length == 1 && mentions[0] == 'tomatepotato') {
-    msg.reply += wchoose([
-        ' за потат Tastge popCat',
-        ' за батат Tastge',
-        ' за томат Tastge',
-        ' за пюрешку Tastge',
-        ' за попат slapSlap',
-        ' за ботат MrDestructoid'
-    ], [15, 15, 25, 35, 5, 5]);
-} else if (mentions.length == 1 && mentions[0] == 'theanatoliygamer' && Math.random() < 50) {
-    msg.reply += ' за Чон Со Ён AYAYA';
-} else if (mentions.length == 1 && mentions[0] == 'hurmaowosh1') {
-    msg.reply += wchoose([
-        ' за пирожок Tastge',
-        ' за хурму Tastge',
-        ' за овощ Tastge'
-    ], [20, 30, 50]);
-} else if (mentions.length == 1 && mentions[0] == 'myasnoe_file') {
-    msg.reply += ` за филе popCat`;
-} else if (mentions.length == 1 && mentions[0] == 'i_pipa') {
-    msg.reply += ` за пипу PETTHEPEEPO`;
-} else {
-    msg.reply += ` за ${rchoose(targets)}`;
 }
 
 return msg;
