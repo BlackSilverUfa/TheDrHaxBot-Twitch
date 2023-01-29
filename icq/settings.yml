@@ -85,6 +85,8 @@ groups:
     simple: 'у вас {value} пополз{value#ень,ня,ней} {emote}'
     delta: 'у вас {value} пополз{value#ень,ня,ней} ({delta}) {emote}'
   emotes:
+  - pauseCat
   - popCat
+  - popCat popCat
   special:
     '150': popCat popCat popCat
