@@ -49,7 +49,7 @@ async function main() {
             icq.lock = true;
             await amongo(DB, 'save', icq);
 
-            msg.reply = 'теперь можно проверять ICQ без изменений peepoComfy';
+            msg.reply = 'теперь можно проверять ICQ без изменений peepoComfy Разблокировать можно командой "!icq unlock" YEPPERS';
             return msg;
 
         case 'unlock':

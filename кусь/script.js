@@ -74,7 +74,7 @@ if (msg.parsed.command == 'куст') {
         msg.reply += `@${user} за ${bite(user)}`;
     } else if (mentions.length > 0 && mentions.length <= 3) {
         msg.reply += smartJoin(mentions.map(([user, count]) => (
-            `@${user} ` + smartJoin(range(Math.min(count, 3)).map(() => `за ${bite(user)}`), ' , ')
+            `@${user} за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ')
         )), ' , ');
     } else if (mentions.length > 3) {
         msg.reply += smartJoin(mentions.map(([user]) => `@${user}`)) + ` за ${bite()}`;
