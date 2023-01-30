@@ -291,7 +291,7 @@ async function cmdUpdate(channel, args) {
             try {
                 command.text = updateText(
                     command.text,
-                    ...text.join(' ').split(/\s?\/\/\/\s?/)
+                    ...text.join(' ').split(/(\s\/\/\/\s|\/\/\/)/)
                 );
             } catch (e) {
                 reply(e);
