@@ -126,15 +126,6 @@ function msToDate(ms) {
     return new Date(ms).toISOString().split('T')[0];
 }
 
-function choose(list) {
-    return list[Math.floor(Math.random() * list.length)];
-}
-
-function rchoose(list) {
-    const choice = choose(list);
-    return Array.isArray(choice) ? rchoose(choice) : choice;
-}
-
 function wchoose(list, weights) {
     const cumulative = weights.reduce((arr, curr) => {
         arr.push(last(arr) + curr);
@@ -146,6 +137,20 @@ function wchoose(list, weights) {
     const x = Math.floor(Math.random() * total);
     const y = Math.max(...cumulative.filter((weight) => weight <= x));
     return list[cumulative.indexOf(y)];
+}
+
+function choose(list, bias = null, biasWeight = 0.2) {
+    if (bias) {
+        const weights = list.map((item) => 100 * (1 + biasWeight * Math.sign(bias(item))));
+        return wchoose(list, weights);
+    }
+
+    return list[Math.floor(Math.random() * list.length)];
+}
+
+function rchoose(list) {
+    const choice = choose(list);
+    return Array.isArray(choice) ? rchoose(choice) : choice;
 }
 
 function smartJoin(list, sep, last_sep) {
