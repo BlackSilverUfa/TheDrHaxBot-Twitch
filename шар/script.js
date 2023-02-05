@@ -73,6 +73,7 @@ const CONTINUATIONS = [
     'гивасасай monkaChrist',
 
     'даме да не, даме йо даме на но йо KasugaYeah',
+    'димооон LetMeIn CatCrying',
     'джерри peepoPhonexmas',
 
     'если не мы, то кто? KKomrade',
