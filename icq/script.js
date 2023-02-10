@@ -107,7 +107,7 @@ async function main() {
 
             [sIcq.value, icq.value] = [icq.value, sIcq.value];
             [sIcq.group, icq.group] = [icq.group, sIcq.group];
-            [sIcq.lock, icq.lock] = [icq.lock, sIcq.lock];
+            [sIcq.lock, icq.lock] = [true, true];
             delete icq.transfer;
 
             await Promise.all([
@@ -115,7 +115,7 @@ async function main() {
                 amongo(DB, 'save', sIcq),
             ]);
 
-            msg.reply = 'обмен успешно завёршён! Используйте "!icq?" для проверки или сразу "!icq lock" для блокировки peepoHappier';
+            msg.reply = 'обмен успешно завёршён! Используйте "!icq" для проверки или "!icq unlock" для перезаписи YEPPERS';
             return msg;
 
         case 'decline':
