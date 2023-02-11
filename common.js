@@ -89,7 +89,7 @@ async function twitch(namespace, method, call, payload) {
 const Patterns = {};
 Patterns.COMMAND_NAME = /[a-zа-яё0-9]{2,}/i;
 Patterns.COMMAND = new RegExp(`^!\\s?(${Patterns.COMMAND_NAME.source}),?\\s*(.*)`, 'i');
-Patterns.MENTION = /@([a-z0-9_]{4,30})/ig;
+Patterns.MENTION = /@([a-z0-9_]{4,25})/ig;
 
 const TZ = 3 * 60 * 60 * 1000; // GMT+3
 
