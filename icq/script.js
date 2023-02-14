@@ -1,8 +1,9 @@
 if (msg.init) {
     const settings = msg.settings;
+    const { options: { range } } = settings;
 
     settings.groups.map((group) => {
-        group.step = (settings.range.max - settings.range.min) / group.emotes.length;
+        group.step = (range.max - range.min) / group.emotes.length;
 
         if (group.emotes.length === 1) {
             group.step += 1;
@@ -40,6 +41,57 @@ function emote(icq) {
     return groupData.emotes[Math.floor(icq.value / groupData.step)];
 }
 
+async function performSwap(source, target) {
+    [source.value, target.value] = [target.value, source.value];
+    [source.group, target.group] = [target.group, source.group];
+    [source.lock, target.lock] = [true, true];
+    delete target.transfer;
+
+    return Promise.all([
+        amongo(DB, 'save', source),
+        amongo(DB, 'save', target),
+    ]);
+}
+
+async function abortSwap(target) {
+    delete target.transfer;
+    return amongo(DB, 'save', target);
+}
+
+async function cmdSwapRequest(icq, target) {
+    const [oIcq] = await amongo(DB, 'find', { transfer: icq._id });
+
+    if (oIcq) {
+        msg.reply = `вы уже предложили обмен @${oIcq._id}. Используйте !icq cancel, чтобы отменить YEPPERS`;
+        return msg;
+    }
+
+    const [rIcq] = await amongo(DB, 'find', { _id: target });
+
+    if (!rIcq) {
+        msg.reply = `получатель не найден peepoThink`;
+        return msg;
+    }
+
+    if (rIcq.transfer) {
+        msg.reply = `получателю уже поступил запрос от ${rIcq.transfer}`;
+        return msg;
+    }
+
+    if (settings.options.bots.indexOf(rIcq._id) !== -1) {
+        msg.reply = `@${rIcq._id} молча соглашается поменяться с вами ICQ: ${icq.value} ${emote(icq)} ↔ ${rIcq.value} ${emote(rIcq)} YEPPERS`;
+        await performSwap(icq, rIcq);
+        return msg;
+    }
+
+    rIcq.transfer = icq._id;
+    msg.reply = `@${icq._id} предлагает @${rIcq._id} поменяться ICQ: ${icq.value} ${emote(icq)} ↔ ${rIcq.value} ${emote(rIcq)}`;
+    msg.reply += ' Используйте !icq accept/decline, чтобы принять/отклонить YEPPERS';
+
+    await amongo(DB, 'save', rIcq);
+    return msg;
+}
+
 async function main() {
     const _id = msg.payload.userstate.username;
     const [cmd, ...args] = msg.parsed.query_filtered.split(' ');
@@ -56,32 +108,7 @@ async function main() {
                 return msg;
             }
 
-            const [rName] = msg.parsed.mentions_list;
-            const [oIcq] = await amongo(DB, 'find', { transfer: _id });
-
-            if (oIcq) {
-                msg.reply = `вы уже предложили обмен @${oIcq._id}. Используйте !icq cancel, чтобы отменить YEPPERS`;
-                return msg;
-            }
-
-            const [rIcq] = await amongo(DB, 'find', { _id: rName });
-
-            if (!rIcq) {
-                msg.reply = `получатель не найден peepoThink`;
-                return msg;
-            }
-
-            if (rIcq.transfer) {
-                msg.reply = `получателю уже поступил запрос от ${rIcq.transfer}`;
-                return msg;
-            }
-
-            rIcq.transfer = _id;
-            msg.reply = `@${_id} предлагает @${rName} поменяться ICQ: ${icq.value} ${emote(icq)} ↔ ${rIcq.value} ${emote(rIcq)}`
-            msg.reply += ' Используйте !icq accept/decline, чтобы принять/отклонить YEPPERS';
-
-            await amongo(DB, 'save', rIcq);
-            return msg;
+            return cmdSwapRequest(icq, msg.parsed.mentions_list[0]);
 
         case 'cancel':
             const [cIcq] = await amongo(DB, 'find', { transfer: _id });
@@ -105,15 +132,7 @@ async function main() {
 
             const [sIcq] = await amongo(DB, 'find', { _id: icq.transfer });
 
-            [sIcq.value, icq.value] = [icq.value, sIcq.value];
-            [sIcq.group, icq.group] = [icq.group, sIcq.group];
-            [sIcq.lock, icq.lock] = [true, true];
-            delete icq.transfer;
-
-            await Promise.all([
-                amongo(DB, 'save', icq),
-                amongo(DB, 'save', sIcq),
-            ]);
+            await performSwap(sIcq, icq);
 
             msg.reply = 'обмен успешно завёршён! Используйте "!icq" для проверки или "!icq unlock" для перезаписи YEPPERS';
             return msg;
@@ -125,8 +144,8 @@ async function main() {
             }
 
             const sName = icq.transfer;
-            delete icq.transfer;
-            await amongo(DB, 'save', icq);
+
+            await abortSwap(icq);
 
             msg.reply = `предложение об обмене ICQ с ${sName} отклонено`;
             return msg;
@@ -154,7 +173,7 @@ async function main() {
 
             msg.reply = 'теперь каждая проверка будет изменять ICQ YEPPERS';
             return msg;
-        
+
         default:
             break;
     }
@@ -168,7 +187,7 @@ async function main() {
 
     if (!icq) {
         icq = { _id };
-        value = rand(settings.range.min, settings.range.max);
+        value = rand(settings.options.range.min, settings.options.range.max);
         delta = 0;
         group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
 
@@ -186,7 +205,7 @@ async function main() {
         if (icq.lock || msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
             delta = 0;
         } else {
-            const new_icq = rand(settings.range.min, settings.range.max);
+            const new_icq = rand(settings.options.range.min, settings.options.range.max);
             delta = new_icq - value;
             value = new_icq;
             group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
