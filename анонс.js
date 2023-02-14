@@ -21,7 +21,7 @@ if (msg.parsed.level <= 1) { // mods and up
                 stream.announcement = {
                     text: updateText(
                         stream.announcement.text,
-                        ...args.join(' ').split(/(\s\/\/\/\s|\/\/\/)/)
+                        ...args.join(' ').split(/(\s\/{3}\s|\/{3})/).splice(1)
                     ),
                     photo: stream.announcement.photo,
                     date: msToDate(now + TZ),
