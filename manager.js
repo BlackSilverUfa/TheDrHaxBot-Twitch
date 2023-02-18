@@ -291,7 +291,7 @@ async function cmdUpdate(channel, args) {
             try {
                 command.text = updateText(
                     command.text,
-                    ...text.join(' ').split(/(\s\/{3}\s|\/{3})/).splice(1)
+                    ...text.join(' ').split(/\s\/{3}\s|\/{3}/)
                 );
             } catch (e) {
                 reply(e);
