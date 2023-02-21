@@ -1,6 +1,7 @@
 options:
   bots:
   - nightbot
+  - streamelements
   range:
     min: 0
     max: 150

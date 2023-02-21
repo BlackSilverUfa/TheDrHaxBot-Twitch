@@ -66,7 +66,23 @@ async function cmdSwapRequest(icq, target) {
         return msg;
     }
 
-    const [rIcq] = await amongo(DB, 'find', { _id: target });
+    let [rIcq] = await amongo(DB, 'find', { _id: target });
+
+    if (settings.options.bots.indexOf(target) !== -1) {
+        if (!rIcq) {
+            rIcq = {
+                _id: target,
+                value: rand(settings.options.range.min, settings.options.range.max),
+                group: wchoose(groups, groups.map((group) => settings.groups[group].weight)),
+                last_check: now.toISOString(),
+                checks: 1,
+            };
+        }
+
+        msg.reply = `@${target} молча соглашается поменяться с вами ICQ: ${icq.value} ${emote(icq)} ↔ ${rIcq.value} ${emote(rIcq)} YEPPERS`;
+        await performSwap(icq, rIcq);
+        return msg;
+    }
 
     if (!rIcq) {
         msg.reply = `получатель не найден peepoThink`;
@@ -75,12 +91,6 @@ async function cmdSwapRequest(icq, target) {
 
     if (rIcq.transfer) {
         msg.reply = `получателю уже поступил запрос от ${rIcq.transfer}`;
-        return msg;
-    }
-
-    if (settings.options.bots.indexOf(rIcq._id) !== -1) {
-        msg.reply = `@${rIcq._id} молча соглашается поменяться с вами ICQ: ${icq.value} ${emote(icq)} ↔ ${rIcq.value} ${emote(rIcq)} YEPPERS`;
-        await performSwap(icq, rIcq);
         return msg;
     }
 
