@@ -192,6 +192,8 @@ const FIXED_ANSWERS = {
     ]),
 
     '^omae wa mou shindeiru': () => 'nani?! BSURage',
+    '^osmanthus': () => '...wine tastes the same as I remember KEKLEO',
+    '^osmanthus wine': () => '...tastes the same as I remember KEKLEO',
     '^(h?e\\s?(he)+|х?[еи]\\s?(х[еи])+)(\\s|$)': (match) => (
         `${match[1]} tte nandayo?! loliTriggered`
     ),
