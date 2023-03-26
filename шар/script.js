@@ -80,6 +80,7 @@ const CONTINUATIONS = [
 
     'жесть Zhest',
 
+    'облизан Tastge',
     'ооо, элден ринг KOgasm',
     'оп оп PepoG',
     'оп па Pepega',
