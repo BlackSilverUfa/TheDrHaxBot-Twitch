@@ -18,6 +18,9 @@ function bite(user) {
     switch (user) {
         case 'my4hoe': return 'мучное NomNom';
 
+        case '<@692736268567707719>':
+            if (Math.random() < 0.5) break;
+
         case 'tomatepotato':
             return wchoose([
                 'потат Tastge popCat',
