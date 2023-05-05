@@ -24,6 +24,7 @@ function findConflicts(regex, commands) {
 }
 
 const DB = 'twitch_commands';
+const CHANNEL_DB = 'twitch_channels';
 
 const {
     amongo,
@@ -473,6 +474,61 @@ async function cmdRemove(channel, args) {
     }
 }
 
+async function cmdPlugin(channel, args) {
+    if (args.length < 1) {
+        reply('пример: plugin <имя> <параметры...>');
+        return;
+    }
+
+    const [name] = args;
+    let [config] = await amongo(CHANNEL_DB, 'find', {
+        _id: channel,
+    });
+
+    config ||= { _id: channel, plugins: {} };
+
+    switch (name) {
+        case 'emote-chains':
+            const ecConfig = config.plugins['emote-chains'] || {
+                length: 2,
+                count: 3,
+            };
+
+            let [_, length, count] = args.map(Number);
+
+            if (Number.isInteger(length) && length >= 0 && length <= 10) {
+                ecConfig.length = length;
+            } else {
+                reply(`MIN_LENGTH должен быть целым числом от 0 до 10`);
+                return;
+            }
+
+            if (Number.isInteger(count)) {
+                if (count < 1) {
+                    reply('MAX_COUNT должен быть целым числом не меньше 1');
+                    return;
+                }
+
+                ecConfig.count = count;
+            }
+
+            await amongo(CHANNEL_DB, 'update', { _id: channel }, {
+                '$set': {
+                    'plugins.emote-chains': ecConfig,
+                },
+            });
+
+            reload();
+            reply(`конфигурация ${name} обновлена SeemsGood`);
+
+            break;
+
+        default:
+            reply(`неизвестный плагин "${name}"`);
+            return;
+    }
+}
+
 async function main() {
     let channel = msg.payload.channel;
 
@@ -507,6 +563,9 @@ async function main() {
 
         case 'remove':
             return cmdRemove(channel, args);
+
+        case 'plugin':
+            return cmdPlugin(channel, args);
 
         default:
             reply('доступные команды: show, list, add, update, rename, enable, disable, cooldown, remove');
