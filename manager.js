@@ -494,6 +494,11 @@ async function cmdPlugin(channel, args) {
                 count: 3,
             };
 
+            if (args.length == 1 || args[2] == 'help') {
+                reply('пример: plugin emote-chains MIN_LENGTH [MAX_COUNT]');
+                return;
+            }
+
             let [_, length, count] = args.map(Number);
 
             if (Number.isInteger(length) && length >= 0 && length <= 10) {
