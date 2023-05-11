@@ -116,6 +116,7 @@ const CONTINUATIONS = [
     'уву UwU',
     'ууууУУУУ BSUbl',
     'уот так уот BSUFlex',
+    'уголь Tastge',
 
     'Памела Андерсон BSUHey',
     'планер дай Jebaited',
