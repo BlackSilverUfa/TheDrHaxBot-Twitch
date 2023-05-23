@@ -1,4 +1,4 @@
-const { twitch, Patterns: { MENTION, COMMAND } } = flow.get('func', 'memory');
+const { twitch, Patterns: { MENTION, COMMAND, EMOJI } } = flow.get('func', 'memory');
 
 function groups(str, regex, group) {
     group = group == null ? 1 : group;
@@ -100,7 +100,7 @@ let emotesOnly = true;
 const found = [];
 
 (command ? parsed.query : msg.payload.message).split(' ').reduce((acc, curr) => {
-    if (emotes[curr]) {
+    if (emotes[curr] || curr.match(EMOJI)) {
         found.push({
             emote: emotes[curr],
             start: acc.length,
