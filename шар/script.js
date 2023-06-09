@@ -151,6 +151,7 @@ const CONTINUATIONS = [
 
     'ыаыаы ANYA',
 
+    'хочу к другу CatCrying',
     'хубики ANYA',
     'ху I really want you to call me back... хуууууу CatCrying',
 
