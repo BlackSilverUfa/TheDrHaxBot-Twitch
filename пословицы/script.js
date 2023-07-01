@@ -58,7 +58,26 @@ switch (args[0]) {
 }
 
 const allProverbs = concat(proverbs, static_proverbs[word.forms.nomn] || []);
-msg.reply = renderTemplate(choose(allProverbs), word.forms);
+
+const termsRegex = /(\sи\s|\s?,\s?)/i;
+const terms = word.forms.nomn.split(termsRegex).filter((x, i) => i % 2 === 0);
+const matchingProverbs = allProverbs.filter((p) => (
+    p.match(`(\{.+\}.*?){${terms.length}}`) && !p.match(`(\{.+\}.*?){${terms.length + 1}}`)
+));
+
+if (matchingProverbs && terms.length > 1) {
+    msg.reply = choose(matchingProverbs);
+    let match, count = 0;
+    while (match = msg.reply.match(/\{(.+?)\}/)) {
+        msg.reply = msg.reply.replace(
+            match[0],
+            word.forms[match[1]].split(termsRegex).filter((x, i) => i % 2 === 0)[count]
+        );
+        count++;
+    }
+} else {
+    msg.reply = renderTemplate(choose(allProverbs), word.forms);
+}
 
 let suffix = null;
 
