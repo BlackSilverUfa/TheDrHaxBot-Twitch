@@ -19,6 +19,7 @@ function bite(user) {
         case 'my4hoe': return 'мучное NomNom';
 
         case '<@692736268567707719>':
+        case 'kovalenko_p':
             if (Math.random() < 0.5) break;
 
         case 'tomatepotato':
@@ -32,6 +33,7 @@ function bite(user) {
             ], [15, 15, 25, 30, 10, 5]);
 
         case 'theanatoliygamer':
+        case 'anatoliygamer':
             if (Math.random() < 0.5) break;
             return 'Чон Со Ён AYAYA';
 
