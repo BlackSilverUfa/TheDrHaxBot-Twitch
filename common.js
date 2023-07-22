@@ -227,8 +227,11 @@ const ptime = (t) => {
     return sign * sum(reverse(t.split(':')).map((x, i) => x * 60 ** i))
 };
 
-const ftime = (t) => (
-    range(2, -1, -1).reduce((acc, cur) => {
+const ftime = (t) => {
+    const sign = t < 0;
+    if (sign) t = -t;
+
+    return (sign ? '-' : '') + range(2, -1, -1).reduce((acc, cur) => {
         const res = Math.floor(t / 60 ** cur);
         if (cur === 2 && res === 0) return acc; // skip 0 hours
         t %= 60 ** cur;
@@ -236,10 +239,10 @@ const ftime = (t) => (
             ...acc,
             acc.length > 0
                 ? padStart(res, 2, '0')
-                : res
+                : res,
         ];
-    }, []).join(':')
-);
+    }, []).join(':');
+};
 
 const getStreamInfo = (channel) => {
     if (channel.startsWith('#')) {
