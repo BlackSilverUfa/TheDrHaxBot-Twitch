@@ -328,7 +328,7 @@ const main = () => {
         return msg.parsed.query_filtered;
     }
 
-    if (query.match(/\s(или|or)\s/)) {
+    if (substringBefore(query, '?').match(/\s(или|or)\s/)) {
         let options = substringBefore(query, '?')
             .replace(/\s(или|or)\s/, ', ')
             .split(', ')
