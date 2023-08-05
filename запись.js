@@ -13,9 +13,7 @@ function segmentLink(segment, at = 0) {
     let id = segment.segment;
 
     if (id.indexOf(',') !== -1) {
-        let base;
-        [base, at] = getBaseSegment(db.segments, segment, at);
-        id = base.segment;
+        [id, at] = getBaseSegment(segment, at);
     }
 
     return `drhx.ru/b/${id}${(at > 0) ? `?at=${at}` : ''}`;
