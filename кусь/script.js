@@ -20,9 +20,9 @@ function bite(user) {
 
         case '<@692736268567707719>':
         case 'kovalenko_p':
+        case 'tomatepotato':
             if (Math.random() < 0.5) break;
 
-        case 'tomatepotato':
             return wchoose([
                 'потат Tastge popCat',
                 'батат Tastge',
