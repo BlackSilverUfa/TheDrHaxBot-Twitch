@@ -4,9 +4,9 @@ function reply(text) {
     node.send({ ...msg, reply: text });
 }
 
-const [follow] = await twitch('helix', 'GET', 'users/follows', {
-    from_id: msg.payload.userstate['user-id'],
-    to_id: msg.payload.userstate['room-id'],
+const [follow] = await twitch('helix', 'GET', 'channels/followers', {
+    user_id: msg.payload.userstate['user-id'],
+    broadcaster_id: msg.payload.userstate['room-id'],
 });
 
 if (!follow) {
