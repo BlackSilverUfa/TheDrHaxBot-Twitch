@@ -41,22 +41,31 @@ parsed.level = (
 );
 
 /**
+ * Support for threads
+ */
+
+// const replyTo = msg.payload.userstate['reply-parent-display-name'];
+
+// if (replyTo) {
+//     msg.payload.message = msg.payload.message.substring(replyTo.length + 2);
+// }
+
+/**
  * Parse mentions
  * Streamer is ignored to avoid distraction
  */
 
 parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION);
 
+// if (parsed.mentions_list.length === 0 && replyTo) {
+//     let login = msg.payload.userstate['reply-parent-user-login'];
+//     msg.payload.message += ` @${login}`;
+//     parsed.mentions_list.push(login);
+// }
+
 /**
  * Parse command and query
  */
-
-const replyTo = msg.payload.userstate['reply-parent-display-name'];
-
-if (replyTo && msg.payload.channel === '#thedrhaxbot') {
-    // msg.payload.message = msg.payload.message.substring(replyTo.length + 2) + ` @${replyTo}`;
-    msg.payload.message = msg.payload.message.substring(replyTo.length + 2);
-}
 
 const command = msg.payload.message.match(COMMAND);
 
