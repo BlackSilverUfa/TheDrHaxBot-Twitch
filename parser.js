@@ -51,11 +51,11 @@ parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION);
  * Parse command and query
  */
 
-// const replyTo = msg.payload.userstate['reply-parent-display-name'];
+const replyTo = msg.payload.userstate['reply-parent-display-name'];
 
-// if (replyTo) {
-//     msg.payload.message = msg.payload.message.substring(replyTo.length + 2) + ` @${replyTo}`;
-// }
+if (replyTo && msg.payload.channel === ':thedrhaxbot') {
+    msg.payload.message = msg.payload.message.substring(replyTo.length + 2) + ` @${replyTo}`;
+}
 
 const command = msg.payload.message.match(COMMAND);
 
