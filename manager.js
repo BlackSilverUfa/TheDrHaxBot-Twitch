@@ -27,6 +27,7 @@ const DB = 'twitch_commands';
 const CHANNEL_DB = 'twitch_channels';
 
 const {
+    last,
     amongo,
     Patterns: { COMMAND, COMMAND_NAME },
     smartJoin,
@@ -144,7 +145,7 @@ async function cmdShow(channel, [name]) {
 }
 
 async function cmdList(channel, [name]) {
-    if (name) {
+    if (name && name[0] !== '#') {
         const [command] = await findCommand(channel, name);
 
         if (command == null) {
@@ -160,14 +161,44 @@ async function cmdList(channel, [name]) {
 
     if (commands.length === 0) {
         reply('пока что нет ни одной команды');
-    } else {
-        const commandList = commands.map(c => {
-            const hasAlias = c.pattern.indexOf('|') !== -1 || c.type === 'alias';
-            const flags = (hasAlias ? '⁺' : '') + (c.enabled ? '' : ' (⏻)');
-            return c.name + flags;
-        }).join(', ');
+        return;
+    }
 
-        reply(`доступные команды: ${commandList}`);
+    const maxLength = 500 - msg.payload.userstate.username.length - 'доступные команды (NN/NN): '.length;
+
+    const pages = commands.map(c => {
+        const hasAlias = c.pattern.indexOf('|') !== -1 || c.type === 'alias';
+        const flags = (hasAlias ? '⁺' : '') + (c.enabled ? '' : ' (⏻)');
+        return c.name + flags;
+    }).sort().reduce((acc, cur) => {
+        if (acc[acc.length - 1].length + cur.length + 2 > maxLength) { // "<acc>, <cur>""
+            acc.push(cur);
+        } else {
+            if (acc[acc.length - 1].length > 0) {
+                acc[acc.length - 1] += ', ';
+            }
+            acc[acc.length - 1] += cur;
+        }
+        return acc;
+    }, ['']);
+
+    if (pages.length > 1) {
+        let page = 0;
+
+        if (name && name[0] === '#') {
+            page = Number(name.substring(1));
+
+            if (Number.isNaN(page) || page < 1 || page > pages.length) {
+                reply(`номер страницы должен быть от 1 до ${pages.length}`);
+                return;
+            }
+
+            page -= 1;
+        }
+
+        reply(`доступные команды (${page + 1}/${pages.length}): ${pages[page]}`);
+    } else {
+        reply(`доступные команды: ${pages[0]}`);
     }
 }
 
