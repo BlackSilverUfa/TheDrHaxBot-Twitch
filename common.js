@@ -253,6 +253,10 @@ const getStreamInfo = (channel) => {
         channel = 'blackufa';
     }
 
+    if (channel === 'thedrhaxbot') {
+        channel = 'dariya_willis';
+    }
+
     if (channel === 'blackufa') {
         return flow.get('stream_status', 'file');
     } else {
