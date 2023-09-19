@@ -575,6 +575,10 @@ async function main() {
     const [cmd, ...args] = msg.parsed.query.split(' ');
 
     switch (cmd) {
+        case 'help':
+            reply('подробную инструкцию можно найти тут: drhx.ru/g6E7');
+            return;
+
         case 'show':
             return cmdShow(channel, args);
 
@@ -604,7 +608,7 @@ async function main() {
             return cmdPlugin(channel, args);
 
         default:
-            reply('доступные команды: show, list, add, update, rename, enable, disable, cooldown, remove');
+            reply('доступные команды: help, show, list, add, update, rename, enable, disable, cooldown, remove');
     }
 }
 

@@ -2,7 +2,7 @@ const { last, dateDistance, getStreamInfo } = flow.get('func', 'memory');
 
 const stream = getStreamInfo(msg.payload.channel);
 
-if (!stream || !stream.date) {
+if (!stream || !stream.game_history) {
     msg.reply = 'недостаточно информации о состоянии канала 🤔';
     return msg;
 }

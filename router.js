@@ -29,6 +29,10 @@ if (channel === '#thedrhax') {
     channel = '#blackufa';
 }
 
+if (channel === '#thedrhaxbot') {
+    channel = '#dariya_willis';
+}
+
 const [command] = await amongo(DB, 'find', {
     '$where': `'${msg.parsed.command}'.match(new RegExp('^(' + this.pattern + ')$', 'i'))`,
     'channel': channel,
