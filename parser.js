@@ -110,12 +110,22 @@ let emotesOnly = true;
 const found = [];
 
 (command ? parsed.query : msg.payload.message).split(' ').reduce((acc, curr) => {
-    if (emotes[curr] || curr.match(EMOJI)) {
+    if (emotes[curr]) {
         found.push({
             emote: emotes[curr],
             start: acc.length,
             length: curr.length
-        })
+        });
+    } else if (curr.match(EMOJI)) {
+        found.push({
+            emote: {
+                name: curr,
+                source: 'emoji',
+                scope: 'global',
+            },
+            start: acc.length,
+            length: curr.length
+        });
     } else if (curr.length > 0) {
         emotesOnly = false;
     }
