@@ -4,6 +4,16 @@ const { uniq, range } = lodash; // = require('lodash');
 const DB = 'twitch_commands';
 
 if (msg.init || !context.get('pattern', 'memory')) {
+    const settings = await amongo('twitch_channels', 'find', {});
+
+    const chroot = {};
+    for (let channel of settings) {
+        if (channel.plugins?.chroot) {
+            chroot[channel._id] = channel.plugins.chroot;
+        }
+    }
+    context.set('chroot', chroot, 'memory');
+
     const cmds = await amongo(DB, 'find', {
         enabled: true,
     });
@@ -18,6 +28,7 @@ if (msg.init || !context.get('pattern', 'memory')) {
 }
 
 const pattern = context.get('pattern', 'memory');
+const chroot = context.get('chroot', 'memory') || {};
 
 if (!pattern || !msg.parsed.command.match(pattern)) {
     return;
@@ -25,12 +36,8 @@ if (!pattern || !msg.parsed.command.match(pattern)) {
 
 let channel = msg.payload.channel;
 
-if (channel === '#thedrhax') {
-    channel = '#blackufa';
-}
-
-if (channel === '#thedrhaxbot') {
-    channel = '#dariya_willis';
+if (chroot[channel]) {
+    channel = chroot[channel];
 }
 
 const [command] = await amongo(DB, 'find', {

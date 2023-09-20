@@ -559,6 +559,56 @@ async function cmdPlugin(channel, args) {
 
             break;
 
+        case 'chroot':
+            if (channel[0] !== '#') {
+                reply('этот плагин доступен только на Twitch');
+                return;
+            }
+
+            if (msg.parsed.level >= 0) {
+                reply('только администратор может использовать этот плагин');
+                return;
+            }
+
+            if (!args[1]) {
+                if (config.plugins?.chroot) {
+                    reply(`чат подключён к каналу @${config.plugins.chroot.substring(1)}`);
+                } else {
+                    reply('chroot отключён');
+                }
+                return;
+            }
+
+            if (channel == `#${args[1]}`) {
+                await amongo(CHANNEL_DB, 'update', { _id: channel }, {
+                    '$unset': {
+                        'plugins.chroot': 1,
+                    },
+                });
+
+                reload();
+                reply('chroot отключён SeemsGood');
+                return;
+            }
+
+            const [target] = await amongo(DB, 'find', { 'channel': `#${args[1]}` });
+
+            if (!target) {
+                reply('бот не активен на этом канале');
+                return;
+            }
+
+            await amongo(CHANNEL_DB, 'update', { _id: channel }, {
+                '$set': {
+                    'plugins.chroot': `#${args[1]}`,
+                },
+            });
+
+            reload();
+            reply(`конфигурация ${name} обновлена SeemsGood`);
+
+            break;
+
         default:
             reply(`неизвестный плагин "${name}"`);
             return;
@@ -568,11 +618,12 @@ async function cmdPlugin(channel, args) {
 async function main() {
     let channel = msg.payload.channel;
 
-    if (channel === '#thedrhax') {
-        channel = '#blackufa';
-    }
-
     const [cmd, ...args] = msg.parsed.query.split(' ');
+
+    const [settings] = await amongo('twitch_channels', 'find', { _id: channel });
+    if (settings?.plugins?.chroot && (cmd !== 'plugin' || args[0] !== 'chroot')) {
+        channel = settings.plugins.chroot;
+    }
 
     switch (cmd) {
         case 'help':
