@@ -31,45 +31,31 @@ if (msg.parsed.level <= 1) { // mods and up
                 };
             } catch (e) {
                 msg.reply = e;
-                return [msg, null];
+                return msg;
             }
 
             flow.set('stream_status', stream, 'file');
 
             msg.reply = 'анонс обновлён SeemsGood';
-            return [msg, null];
-
-        case 'vk':
-            const postId = args[0];
-
-            if (postId && isNaN(postId)) {
-                msg.reply = 'ID поста должен состоять только из цифр BUFANerd';
-                return msg;
-            }
-
-            msg.message = msg.payload;
-            msg.date = msToDate(now + TZ);
-            msg.payload = { id: postId };
-
-            return [null, msg];
+            return msg;
 
         case 'reuse':
             stream.announcement.date = msToDate(now + lag);
             flow.set('stream_status', stream, 'file');
 
             msg.reply = 'анонс обновлён SeemsGood';
-            return [msg, null];
+            return msg;
 
         case 'reset':
             stream.announcement.date = '0000-00-00';
             flow.set('stream_status', stream, 'file');
 
             msg.reply = 'анонс удалён bigBossSalut';
-            return [msg, null];
+            return msg;
         
         case 'help':
             msg.reply = 'доступные команды: update, vk, reuse, reset';
-            return [msg, null];
+            return msg;
     }
 }
 
@@ -84,4 +70,4 @@ if (stream.announcement.date == msToDate(now + lag)) {
     msg.reply = `сегодня не было ${command}а peepoSHAKE`;
 }
 
-return [msg, null];
+return msg;
