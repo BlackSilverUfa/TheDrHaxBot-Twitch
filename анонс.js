@@ -1,4 +1,4 @@
-const stream = flow.get('stream_status', 'file');
+const stream = flow.get('twitch_channels', 'file').blackufa;
 const { TZ, msToDate, Patterns: { COMMAND }, updateText } = flow.get('func', 'memory');
 
 const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
@@ -34,21 +34,21 @@ if (msg.parsed.level <= 1) { // mods and up
                 return msg;
             }
 
-            flow.set('stream_status', stream, 'file');
+            flow.set('twitch_channels.blackufa', stream, 'file');
 
             msg.reply = 'анонс обновлён SeemsGood';
             return msg;
 
         case 'reuse':
             stream.announcement.date = msToDate(now + lag);
-            flow.set('stream_status', stream, 'file');
+            flow.set('twitch_channels.blackufa', stream, 'file');
 
             msg.reply = 'анонс обновлён SeemsGood';
             return msg;
 
         case 'reset':
             stream.announcement.date = '0000-00-00';
-            flow.set('stream_status', stream, 'file');
+            flow.set('twitch_channels.blackufa', stream, 'file');
 
             msg.reply = 'анонс удалён bigBossSalut';
             return msg;

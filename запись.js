@@ -3,7 +3,7 @@ const { renderTemplate, choose, ftime, last } = flow.get('func', 'memory');
 const { getBaseSegment, resolveSegment } = flow.get('blackufa_db_func', 'memory');
 
 const db = flow.get('blackufa_db', 'memory')();
-const stream = flow.get('stream_status', 'file');
+const stream = flow.get('twitch_channels.blackufa', 'file');
 
 const MAX_RESULTS = 8;
 

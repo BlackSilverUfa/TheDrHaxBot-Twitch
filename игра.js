@@ -1,5 +1,5 @@
-const stream = flow.get('stream_status', 'file');
-const db = flow.get('blackufa_db', 'memory')();
+const key = 'twitch_channels.' + msg.command.channel.substring(1);
+const stream = flow.get(key, 'file');
 
 const { smartJoin, last, renderTemplate, ptime, ftime } = flow.get('func', 'memory');
 const { zip } = lodash;
@@ -23,55 +23,6 @@ function updateGameHistory(name, replace) {
             date: now.toISOString()
         });
     }
-}
-
-function streamTimeline(id) {
-    let games = [];
-
-    db.segments.find({ streams: { $contains: id } })
-        .filter(s => s.games.length > 0)
-        .map(segment => {
-            let abs_start = segment.abs_start;
-            let abs_end = segment.abs_end;
-
-            if (segment.offsets) {
-                const index = segment.streams.indexOf(id);
-                abs_start = segment.offsets[index];
-                abs_end = segment.offsets[index + 1] || abs_end;
-            }
-
-            segment.games.map(id => db.games.findOne({ id })).map(game => {
-                game.streams
-                    .filter(ref => (segment.segment == ref.segment))
-                    .map(ref => {
-                        (ref.subrefs || [ref]).map(subref => {
-                            const start = (subref.start || 0) - abs_start;
-                            const name = game.type == 'list' ? subref.name : game.name;
-
-                            if (start < abs_end)
-                                games.push([start, name]);
-                        });
-                    });
-            });
-        });
-
-    games.sort((a, b) => a[0] > b[0] ? 1 : -1);
-
-    const prevGames = games.filter(([s]) => s < 0);
-    games = games.filter(([s]) => s >= 0);
-
-    if ((games.length == 0 || games[0][0] > 0) && prevGames.length > 0) {
-        games.unshift([0, last(prevGames)[1]]);
-    }
-
-    return games;
-}
-
-function streamDuration(id) {
-    return db.segments.find({ streams: { $contains: id } })
-        .filter(s => s.streams.length == 1)
-        .map(s => s.abs_end - s.abs_start)
-        .reduce((a, b) => a + b);
 }
 
 if (msg.parsed.level <= 1) { // mods and up
@@ -113,7 +64,7 @@ if (msg.parsed.level <= 1) { // mods and up
                     }
 
                     entry.name = newName;
-                    flow.set('stream_status', stream, 'file');
+                    flow.set(key, stream, 'file');
                     msg.reply = `игра "${oldName}" переименована в "${newName}"`;
                     return msg;
 
@@ -147,7 +98,7 @@ if (msg.parsed.level <= 1) { // mods and up
 
                     entry.date = newDate.toISOString();
 
-                    flow.set('stream_status', stream, 'file');
+                    flow.set(key, stream, 'file');
                     msg.reply = `теперь "${entry.name}" начинается с ${ftime(newTime)}`;
                     return msg;
 
@@ -160,7 +111,7 @@ if (msg.parsed.level <= 1) { // mods and up
         case 'split':
         case 'replace':
             if (!stream.active) {
-                msg.reply = 'сейчас нет активной трансляции peepoThink';
+                msg.reply = 'сейчас нет активной трансляции 🤔';
                 return msg;
             }
 
@@ -177,28 +128,28 @@ if (msg.parsed.level <= 1) { // mods and up
                 updateGameHistory(stream.game_forced, cmd == 'replace');
             }
 
-            flow.set('stream_status', stream, 'file');
+            flow.set(key, stream, 'file');
 
             msg.reply = `игра изменена на ${stream.game_forced} SeemsGood`;
             return msg;
 
         case 'delete':
             if (!stream.active) {
-                msg.reply = 'сейчас нет активной трансляции peepoThink';
+                msg.reply = 'сейчас нет активной трансляции 🤔';
                 return msg;
             }
 
             if (stream.game_history.length === 1) {
-                msg.reply = 'нельзя удалить единственную игру - используйте команду replace PepoG';
+                msg.reply = 'нельзя удалить единственную игру - используйте команду replace 🤓';
                 return msg;
             }
 
             stream.game_forced = null;
 
             const game = stream.game_history.pop();
-            flow.set('stream_status', stream, 'file');
+            flow.set(key, stream, 'file');
 
-            msg.reply = `игра ${game.name} удалена из истории monkaGunshake`;
+            msg.reply = `игра ${game.name} удалена из истории 🫡`;
             return msg;
 
         case 'reset':
@@ -208,7 +159,7 @@ if (msg.parsed.level <= 1) { // mods and up
                 updateGameHistory(stream.game);
             }
 
-            flow.set('stream_status', stream, 'file');
+            flow.set(key, stream, 'file');
 
             if (stream.active) {
                 msg.reply = `игра изменена на ${stream.game} SeemsGood`;
@@ -226,11 +177,11 @@ if (msg.parsed.level <= 1) { // mods and up
 
 const now = +new Date();
 
-if (stream.active) {
+if (stream?.active) {
     let game = stream.game_forced || stream.game;
-    msg.reply = `сейчас транслируется ${game} YEPPERS`;
+    msg.reply = `сейчас транслируется ${game} SeemsGood`;
 } else {
-    msg.reply = 'сейчас нет активной трансляции peepoSHAKE';
+    msg.reply = 'сейчас нет активной трансляции :(';
 }
 
 return msg;

@@ -1,7 +1,8 @@
-const { dateDistance, getStreamInfo, ftime } = flow.get('func', 'memory');
+const { dateDistance, ftime } = flow.get('func', 'memory');
 const now = +new Date();
 
-const stream = getStreamInfo(msg.payload.channel);
+const key = 'twitch_channels.' + msg.command.channel.substring(1);
+const stream = flow.get(key, 'file');
 
 if (!stream || !stream.game_history) {
     msg.reply = 'недостаточно информации о состоянии канала 🤔';
