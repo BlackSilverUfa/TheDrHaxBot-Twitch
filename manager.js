@@ -524,6 +524,7 @@ async function cmdPlugin(channel, args) {
                 length: 2,
                 count: 3,
             };
+            config.plugins['emote-chains'] = ecConfig;
 
             if (args.length == 1 || args[2] == 'help') {
                 reply('пример: plugin emote-chains MIN_LENGTH [MAX_COUNT]');
@@ -548,11 +549,7 @@ async function cmdPlugin(channel, args) {
                 ecConfig.count = count;
             }
 
-            await amongo(CHANNEL_DB, 'update', { _id: channel }, {
-                '$set': {
-                    'plugins.emote-chains': ecConfig,
-                },
-            });
+            await amongo(CHANNEL_DB, 'save', config);
 
             reload();
             reply(`конфигурация ${name} обновлена SeemsGood`);
@@ -580,11 +577,8 @@ async function cmdPlugin(channel, args) {
             }
 
             if (channel == `#${args[1]}`) {
-                await amongo(CHANNEL_DB, 'update', { _id: channel }, {
-                    '$unset': {
-                        'plugins.chroot': 1,
-                    },
-                });
+                delete config.plugins.chroot;
+                await amongo(CHANNEL_DB, 'save', config);
 
                 reload();
                 reply('chroot отключён SeemsGood');
@@ -598,11 +592,8 @@ async function cmdPlugin(channel, args) {
                 return;
             }
 
-            await amongo(CHANNEL_DB, 'update', { _id: channel }, {
-                '$set': {
-                    'plugins.chroot': `#${args[1]}`,
-                },
-            });
+            config.plugins.chroot = `#${args[1]}`;
+            await amongo(CHANNEL_DB, 'save', config);
 
             reload();
             reply(`конфигурация ${name} обновлена SeemsGood`);
