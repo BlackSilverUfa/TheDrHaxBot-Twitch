@@ -96,3 +96,19 @@ groups:
   special:
     '69': bufaLewd
     '150': popCat popCat popCat
+- name: bipki
+  weight: 300
+  templates:
+    simple: 'у вас {value} бип{value#ка,ки,ок} {emote}'
+    delta: 'у вас {value} бип{value#ка,ки,ок} ({delta}) {emote}'
+  emotes:
+  - SlowPoke
+  - 🤔
+  - ppBounce
+  - peepoThink
+  - ppCircle
+  - pauseCat
+  - ppHop
+  - UHMMM
+  - ANYA
+  special: {}

@@ -34,7 +34,7 @@ function rand(min, max) {
 function emote(icq) {
     const groupData = settings.groups[icq.group];
 
-    if (Object.keys(groupData.special).indexOf(`${icq.value}`) !== -1) {
+    if (groupData.special && Object.keys(groupData.special).indexOf(`${icq.value}`) !== -1) {
         return groupData.special[`${icq.value}`];
     }
 
