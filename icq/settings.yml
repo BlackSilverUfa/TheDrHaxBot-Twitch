@@ -97,7 +97,7 @@ groups:
     '69': bufaLewd
     '150': popCat popCat popCat
 - name: bipki
-  weight: 300
+  weight: 10
   templates:
     simple: 'у вас {value} бип{value#ка,ки,ок} {emote}'
     delta: 'у вас {value} бип{value#ка,ки,ок} ({delta}) {emote}'
