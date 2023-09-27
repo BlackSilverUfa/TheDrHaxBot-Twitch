@@ -148,6 +148,8 @@ const CONTINUATIONS = [
     'кодзима гений Kojimaptyp',
     'кози peepoBlanket',
     'ктулху фхтагн Squid1 Squid2 Squid3 Squid4',
+    
+    'найс KEKLEO',
 
     'фэмэлэ ANYA',
 
