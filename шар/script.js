@@ -80,6 +80,7 @@ const CONTINUATIONS = [
     'джерри peepoPhonexmas',
 
     'если не мы, то кто? KKomrade',
+    'еш ANYA',
 
     'жесть Zhest',
 
