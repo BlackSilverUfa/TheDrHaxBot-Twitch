@@ -258,7 +258,7 @@ const FIXED_ANSWERS = {
 
 // =====================================================
 
-const { choose, rchoose, renderTemplate, agreeWithNum, smartJoin } = flow.get('func', 'memory');
+const { choose, wchoose, renderTemplate, agreeWithNum, smartJoin } = flow.get('func', 'memory');
 const { parse, inflect } = flow.get('inflector', 'memory');
 
 const choice = (x) => renderTemplate(choose(CHOICES), { x });
@@ -440,7 +440,7 @@ const main = () => {
         return `...${match}`;
     }
 
-    return rchoose(Object.values(ANSWERS));
+    return choose(wchoose(Object.values(ANSWERS), [10, 10, 5, 10, 10]));
 }
 
 msg.reply = main();
