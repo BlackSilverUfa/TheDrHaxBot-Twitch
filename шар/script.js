@@ -440,7 +440,7 @@ const main = () => {
         return `...${match}`;
     }
 
-    return choose(wchoose(Object.values(ANSWERS), [10, 10, 5, 10, 10]));
+    return choose(wchoose(Object.values(ANSWERS), [10, 10, 2, 10, 10]));
 }
 
 msg.reply = main();
