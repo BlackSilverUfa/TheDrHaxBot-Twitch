@@ -68,6 +68,7 @@ const CONTINUATIONS = [
     'блюй пей dead5What MedTime',
     'бежать некуда ariW',
     'бипки peepoGiggles',
+    'бирюса popCat',
 
     'вертуфайзен bUrself',
     'вы продоёте рыбов? ANYA',
