@@ -233,18 +233,26 @@ const FIXED_ANSWERS = {
         'кукинг стрим завтра! Если завтра уже наступило, прочитайте это сообщение ещё раз Agakakskagesh'
     ]),
 
-    '^(а\\s+|ты\\s+)?где\\s+': () => choose([
-        'там keanU',
-        'завтра будет Agakakskagesh',
-        'на бороде Jebaited',
-        'не скажу NOPERS',
-        'не знаю KEKWait',
-        'в Караганде bufaBaited',
-        'в slapSlap',
-        'за тобой ariW golfClub',
-        'туть bufaLove',
-        'так вот же keanU'
-    ]),
+    '^где\\s+([^?]*)': (match) => {
+        const answers = [
+            'там keanU',
+            'завтра будет Agakakskagesh',
+            'на бороде Jebaited',
+            'не скажу NOPERS',
+            'не знаю KEKWait',
+            'в Караганде bufaBaited',
+            'в slapSlap',
+            'за тобой ariW golfClub',
+            'туть bufaLove',
+            'так вот же keanU',
+        ];
+
+        if (match[1]) {
+            answers.push(`все спрашивают "где ${match[1]}?", но никто не спрашивает "как ${match[1]}?" KEKWait`);
+        }
+
+        return choose(answers);
+    },
 
     '^вы прод[ао][её]те ([^?]+)(\\?.*|$)': (match) => {
         switch (match[1].toLowerCase()) {
