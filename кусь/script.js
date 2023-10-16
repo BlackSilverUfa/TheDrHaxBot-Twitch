@@ -29,7 +29,8 @@ function bite(user) {
                 'томат Tastge',
                 'пюрешку Tastge',
                 'попат slapSlap',
-                'ботат MrDestructoid'
+                'ботат MrDestructoid',
+                'ляжку catNom',
             ], [15, 15, 25, 30, 10, 5]);
 
         case 'theanatoliygamer':
