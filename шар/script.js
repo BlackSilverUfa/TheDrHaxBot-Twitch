@@ -426,7 +426,7 @@ const main = () => {
         return choice(`${x} ${pluralizedTerm} из ${range}`);
     }
 
-    if (match = query.match(/оцени(.+) в (.+)/i)) {
+    if (match = query.match(/оцени(.*) в (.+)/i)) {
         const term = match[2];
         const x = Math.floor(Math.random() * 11);
 
