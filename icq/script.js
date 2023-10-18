@@ -225,7 +225,7 @@ async function main() {
             ...icq,
             value,
             group,
-            last_check: now.toISOString(),
+            last_check: delta !== 0 ? now.toISOString() : icq.last_check,
             checks: (icq.checks || 0) + 1,
         });
     }
