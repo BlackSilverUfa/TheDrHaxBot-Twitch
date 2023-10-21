@@ -105,7 +105,6 @@ groups:
     delta: 'у вас {value} бип{value#ка,ки,ок} ({delta}) {emote}'
   emotes:
   - SlowPoke
-  - 🤔
   - ppBounce
   - peepoThink
   - ppCircle
@@ -113,4 +112,5 @@ groups:
   - ppHop
   - UHMMM
   - ANYA
-  special: {}
+  special:
+    '150': ppHop ppCircle ppBounce
