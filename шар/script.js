@@ -145,6 +145,7 @@ const CONTINUATIONS = [
     'кукусики NomNom',
     'кул кола KEKLEO',
     'купи toddW',
+    'кусь catNom',
     'кушац Tastge',
     'крыжовник терпкий, сладкая сирень ANYA',
     'кодзима гений Kojimaptyp',
