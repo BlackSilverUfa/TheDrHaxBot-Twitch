@@ -268,7 +268,7 @@ const FIXED_ANSWERS = {
 
 // =====================================================
 
-const { choose, wchoose, renderTemplate, agreeWithNum, smartJoin } = flow.get('func', 'memory');
+const { random, choose, wchoose, renderTemplate, agreeWithNum, smartJoin } = flow.get('func', 'memory');
 const { parse, inflect } = flow.get('inflector', 'memory');
 
 const choice = (x) => renderTemplate(choose(CHOICES), { x });
@@ -380,7 +380,7 @@ const main = () => {
         const itemsSorted = [];
         while (items.length > 0) {
             itemsSorted.push(
-                items.splice(Math.floor(Math.random() * items.length), 1)
+                items.splice(Math.floor(random() * items.length), 1)
             );
         }
 
@@ -396,7 +396,7 @@ const main = () => {
         let [_, a, b] = match;
         [a, b] = [a, b].map((x) => Number(x)).sort((a, b) => a - b);
 
-        const x = Math.random() * (b - a) * 1.2 + a - (b - a) * 0.1;
+        const x = random() * (b - a) * 1.2 + a - (b - a) * 0.1;
 
         if (x > b) {
             return `думаю, что больше ${b} YEPPERS`;
@@ -410,7 +410,7 @@ const main = () => {
 
     if (match = query.match(/сколько (.+) из ([0-9]+)/i)) {
         const [_, term, range] = match;
-        const x = Math.floor(Math.random() * (Number(range) + 1));
+        const x = Math.floor(random() * (Number(range) + 1));
 
         const pluralizedTerm = term
             .split(' ')
@@ -429,7 +429,7 @@ const main = () => {
 
     if (match = query.match(/оцени(.*) в (.+)/i)) {
         const term = match[2];
-        const x = Math.floor(Math.random() * 11);
+        const x = Math.floor(random() * 11);
 
         const pluralizedTerm = term
             .split(' ')

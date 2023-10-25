@@ -21,14 +21,14 @@ if (msg.init) {
 }
 
 const DB = 'icq_results';
-const { amongo, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
+const { amongo, random, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
 const groups = Object.keys(settings.groups);
 const now = new Date();
 
 function rand(min, max) {
-    return min + Math.floor(Math.random() * (max - min + 1));
+    return min + Math.floor(random() * (max - min + 1));
 }
 
 function emote(icq) {

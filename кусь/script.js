@@ -5,7 +5,7 @@ if (msg.init) {
 }
 
 const { range } = _; // = require('lodash');
-const { choose, rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
+const { choose, random, rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
 const { actions, targets } = context.get('answers', 'memory');
 
 const user = msg.payload.userstate.username;
@@ -21,7 +21,7 @@ function bite(user) {
         case '<@692736268567707719>':
         case 'kovalenko_p':
         case 'tomatepotato':
-            if (Math.random() < 0.5) break;
+            if (random() < 0.5) break;
 
             return wchoose([
                 'потат Tastge popCat',
@@ -35,7 +35,7 @@ function bite(user) {
 
         case 'theanatoliygamer':
         case 'anatoliygamer':
-            if (Math.random() < 0.5) break;
+            if (random() < 0.5) break;
             return 'Чон Со Ён AYAYA';
 
         case 'hurmaowosh1':
