@@ -67,7 +67,7 @@ const CONTINUATIONS = [
     'борода popCat',
     'блюй пей dead5What MedTime',
     'бежать некуда ariW',
-    'бипки peepoGiggles',
+    'бипки ppHop',
     'бирюса popCat',
 
     'вертуфайзен bUrself',
@@ -186,6 +186,10 @@ const FIXED_ANSWERS = {
     ]),
 
     '^пинг$': () => 'понг Pepega',
+    '^бип\.*$': () => choose([
+        '...ки ppHop',
+        'буп MrDestructoid',
+    ]),
 
     '^(а\\s)?может\\s': () => 'а может тебя? Jebaited',
 
@@ -333,6 +337,10 @@ const main = () => {
         ]);
     }
 
+    if (match = continueStr(msg.parsed.query_filtered)) {
+        return `...${match}`;
+    }
+
     for (let key in FIXED_ANSWERS) {
         if (match = msg.parsed.query_filtered.match(new RegExp(key, 'i'))) {
             return FIXED_ANSWERS[key](match);
@@ -444,10 +452,6 @@ const main = () => {
             .join(' ');
 
         return choice(`${x} ${pluralizedTerm} из 10`);
-    }
-
-    if (match = continueStr(msg.parsed.query_filtered)) {
-        return `...${match}`;
     }
 
     return choose(wchoose(Object.values(ANSWERS), [10, 10, 2, 10, 10]));
