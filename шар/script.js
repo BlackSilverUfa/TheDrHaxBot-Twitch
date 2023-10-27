@@ -186,7 +186,7 @@ const FIXED_ANSWERS = {
     ]),
 
     '^пинг$': () => 'понг Pepega',
-    '^бип\.*$': () => choose([
+    '^бип$': () => choose([
         '...ки ppHop',
         'буп MrDestructoid',
     ]),
