@@ -93,6 +93,7 @@ groups:
     delta: 'у вас {value} пополз{value#ень,ня,ней} ({delta}) {emote}'
   emotes:
   - CatEyes
+  - MYAAA
   - Catge
   - catNom
   - CatoPog
