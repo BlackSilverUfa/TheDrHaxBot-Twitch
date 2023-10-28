@@ -17,6 +17,7 @@ const { uniq, sum, reverse, padStart, range } = lodash; // = require('lodash');
 // }
 
 // const random = mulberry32(+new Date());
+
 const random = Math.random;
 
 function dateDistance(start, end, options) {
