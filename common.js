@@ -7,18 +7,17 @@ const {
 
 const { uniq, sum, reverse, padStart, range } = lodash; // = require('lodash');
 
-// function mulberry32(a) {
-//     return function () {
-//         var t = a += 0x6D2B79F5;
-//         t = Math.imul(t ^ t >>> 15, t | 1);
-//         t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-//         return ((t ^ t >>> 14) >>> 0) / 4294967296;
-//     }
-// }
+function mulberry32(a) {
+    return function () {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
 
-// const random = mulberry32(+new Date());
-
-const random = Math.random;
+const random = mulberry32(+new Date());
+// const random = Math.random;
 
 function dateDistance(start, end, options) {
     let { parts, accusative, short, zero, timestamp } = options || {};

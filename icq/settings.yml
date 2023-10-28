@@ -92,6 +92,10 @@ groups:
     simple: 'у вас {value} пополз{value#ень,ня,ней} {emote}'
     delta: 'у вас {value} пополз{value#ень,ня,ней} ({delta}) {emote}'
   emotes:
+  - CatEyes
+  - Catge
+  - catNom
+  - CatoPog
   - pauseCat
   - popCat
   - popCat popCat
