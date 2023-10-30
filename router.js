@@ -85,7 +85,7 @@ const index = [
     'counter',
     'function',
     'native',
-    'countup'
+    'countup',
 ].indexOf(command.type);
 
 if (index < 0) {

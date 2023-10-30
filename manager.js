@@ -28,6 +28,7 @@ const CHANNEL_DB = 'twitch_channels';
 
 const {
     last,
+    renderTemplate,
     amongo,
     Patterns: { COMMAND, COMMAND_NAME },
     smartJoin,
