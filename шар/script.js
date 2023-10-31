@@ -189,6 +189,7 @@ const FIXED_ANSWERS = {
     '^бип$': () => choose([
         '...ки ppHop',
         'буп MrDestructoid',
+        'не бипай Jebaited',
     ]),
 
     '^(а\\s)?может\\s': () => 'а может тебя? Jebaited',
