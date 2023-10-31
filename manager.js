@@ -334,6 +334,7 @@ async function cmdUpdate(channel, args) {
     switch (command.type) {
         case 'helper':
         case 'counter':
+        case 'music':
         case 'function':
         case 'countup':
             try {
