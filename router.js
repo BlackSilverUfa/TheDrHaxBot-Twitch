@@ -86,6 +86,7 @@ const index = [
     'function',
     'native',
     'countup',
+    'music',
 ].indexOf(command.type);
 
 if (index < 0) {

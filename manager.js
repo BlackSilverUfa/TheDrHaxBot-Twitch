@@ -51,6 +51,14 @@ async function isValidCommand(command) {
         return false;
     }
 
+    switch (command.type) {
+        case 'music':
+            if (['artist', 'track', 'album'].map((t) => command.text.indexOf(`{${t}}`) !== -1).indexOf(true) === -1) {
+                reply('шаблон ответа должен содержать хотя бы одну переменную (artist, track или album)');
+                return false;
+            }
+    }
+
     const commands = await amongo(DB, 'find', {
         _id: { $ne: command._id },
         channel: command.channel
@@ -205,7 +213,7 @@ async function cmdList(channel, [name]) {
 
 async function cmdAdd(channel, args) {
     if (args.length < 2) {
-        reply('пример: add (helper|counter|alias|function|native) <имя> <значение>');
+        reply('пример: add (helper|counter|alias|music|function|native) <имя> <значение>');
         return;
     }
 
@@ -227,6 +235,11 @@ async function cmdAdd(channel, args) {
     }
 
     switch (type) {
+        case 'music':
+            if (text.length === 0) {
+                text.push('сейчас играет {artist} - {track}');
+            }
+
         case 'helper':
             params.text = text.join(' ');
             break;
@@ -296,6 +309,8 @@ async function cmdAdd(channel, args) {
     if (res) {
         if (data.type === 'native') {
             reply(`команда !${name} добавлена SeemsGood (ID: ${res._id})`);
+        } else if (data.type === 'music') {
+            reply(`команда !${name} добавлена SeemsGood Завершите настройку здесь: red.drhx.ru/scrobble?command=${name}`);
         } else {
             reply(`команда !${name} добавлена SeemsGood`);
         }
