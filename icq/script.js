@@ -122,7 +122,7 @@ function randGroup() {
                 Object.values(group.special).map((e) => e.split(' ')),
             ]);
             const boosted = intersection(emotes, groupEmotes).length > 0;
-            return group.weight + (boosted ? (totalWeight * 0.5) : 0);
+            return group.weight + (boosted ? (totalWeight * 0.25) : 0);
         });
 
     return wchoose(groups, weights);
