@@ -21,6 +21,7 @@ if (msg.init) {
 }
 
 const DB = 'icq_results';
+const { intersection, flattenDeep } = _; // = require('lodash');
 const { amongo, random, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
@@ -100,6 +101,31 @@ async function cmdSwapRequest(icq, target) {
 
     await amongo(DB, 'save', rIcq);
     return msg;
+}
+
+function randGroup() {
+    const totalWeight = groups
+        .map((g) => settings.groups[g])
+        .reduce((acc, cur) => acc + cur.weight, 0);
+
+    const emotes = msg.parsed.emotes.map(({ emote: { name }}) => name);
+
+    const weights = groups
+        .map((g) => settings.groups[g])
+        .map((group) => {
+            if (group.weight >= 100) {
+                return group.weight;
+            }
+
+            const groupEmotes = flattenDeep([
+                group.emotes.map((e) => e.split(' ')),
+                Object.values(group.special).map((e) => e.split(' ')),
+            ]);
+            const boosted = intersection(emotes, groupEmotes).length > 0;
+            return group.weight + (boosted ? (totalWeight * 0.5) : 0);
+        });
+
+    return wchoose(groups, weights);
 }
 
 async function main() {
@@ -199,7 +225,7 @@ async function main() {
         icq = { _id };
         value = rand(settings.options.range.min, settings.options.range.max);
         delta = 0;
-        group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
+        group = randGroup();
 
         await amongo(DB, 'save', {
             ...icq,
@@ -218,7 +244,7 @@ async function main() {
             const new_icq = rand(settings.options.range.min, settings.options.range.max);
             delta = new_icq - value;
             value = new_icq;
-            group = wchoose(groups, groups.map((group) => settings.groups[group].weight));
+            group = randGroup();
         }
 
         await amongo(DB, 'save', {

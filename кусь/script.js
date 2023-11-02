@@ -23,7 +23,7 @@ function bite(user) {
         case 'tomatepotato':
             if (random() < 0.5) break;
 
-            return wchoose([
+            return choose([
                 'потат Tastge popCat',
                 'батат Tastge',
                 'томат Tastge',
@@ -31,7 +31,7 @@ function bite(user) {
                 'попат slapSlap',
                 'ботат MrDestructoid',
                 'ляжку catNom',
-            ], [15, 15, 25, 30, 10, 5]);
+            ]);
 
         case 'theanatoliygamer':
         case 'anatoliygamer':
@@ -39,11 +39,11 @@ function bite(user) {
             return 'Чон Со Ён AYAYA';
 
         case 'hurmaowosh1':
-            return wchoose([
+            return choose([
                 'пирожок Tastge',
                 'хурму Tastge',
                 'овощ Tastge'
-            ], [20, 30, 50]);
+            ]);
 
         case 'myasnoe_file': return 'филе popCat';
         case 'i_pipa': return 'пипу PETTHEPEEPO';
