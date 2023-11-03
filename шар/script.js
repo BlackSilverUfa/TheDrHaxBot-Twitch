@@ -338,14 +338,14 @@ const main = () => {
         ]);
     }
 
-    if (match = continueStr(msg.parsed.query_filtered)) {
-        return `...${match}`;
-    }
-
     for (let key in FIXED_ANSWERS) {
         if (match = msg.parsed.query_filtered.match(new RegExp(key, 'i'))) {
             return FIXED_ANSWERS[key](match);
         }
+    }
+
+    if (match = continueStr(msg.parsed.query_filtered)) {
+        return `...${match}`;
     }
 
     if (msg.parsed.emotesOnly && msg.parsed.emotes.length <= 3) {
