@@ -76,10 +76,13 @@ if (msg.parsed.command == 'куст') {
 
     msg.reply += ' кусает ';
 
+    const match = msg.parsed.command.match(/^к(у+)с[ьт]/, 'i');
+    const count = match ? match[1].length : 1;
+
     if (mentions.length == 0) {
-        msg.reply += `@${user} за ${bite(user)}`;
+        msg.reply += `@${user} за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ');
     } else if (mentions.length > 0 && mentions.length <= 5) {
-        msg.reply += smartJoin(mentions.map(([user, count]) => (
+        msg.reply += smartJoin(mentions.map(([user]) => (
             `@${user} за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ')
         )), ' , ');
     } else if (mentions.length > 5) {
