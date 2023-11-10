@@ -58,14 +58,17 @@ if (mentions.length == 0) {
     msg.reply = `@${user} ${rchoose(actions)}`;
 }
 
-if (msg.parsed.command == 'куст') {
+const match = msg.parsed.command.match(/^к(у+)с[ьт]/, 'i');
+const count = match ? match[1].length : 1;
+
+if (msg.parsed.command.match(/ку+ст/i)) {
     msg.reply += `, однако спотыкается о куст`;
 
     if (mentions.length == 0) {
         msg.reply += `, промахивается мимо @${user}`;
     }
 
-    msg.reply += ` и кусает себя за ${bite(user)}`;
+    msg.reply += ` и кусает себя за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ');
 } else {
     msg.reply += ' и';
 
@@ -75,9 +78,6 @@ if (msg.parsed.command == 'куст') {
     }
 
     msg.reply += ' кусает ';
-
-    const match = msg.parsed.command.match(/^к(у+)с[ьт]/, 'i');
-    const count = match ? match[1].length : 1;
 
     if (mentions.length == 0) {
         msg.reply += `@${user} за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ');
