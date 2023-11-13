@@ -24,9 +24,9 @@ function bite(user) {
             if (random() < 0.5) break;
 
             return choose([
-                'потат Tastge popCat',
-                'батат Tastge',
-                'томат Tastge',
+                'потат Tastge 🥔',
+                'батат Tastge 🥔',
+                'томат Tastge 🍅',
                 'пюрешку Tastge',
                 'попат slapSlap',
                 'ботат MrDestructoid',
