@@ -186,10 +186,23 @@ const FIXED_ANSWERS = {
     ]),
 
     '^пинг$': () => 'понг Pepega',
-    '^бип$': () => choose([
+    '^би+п$': () => choose([
         '...ки ppHop',
         'буп MrDestructoid',
         'не бипай Jebaited',
+    ]),
+    '^пу+к$': () => choose([
+        'не пукай Jebaited',
+        'Dushno',
+    ]),
+    '^пи+п(ни|\\s|$)': () => choose([
+        ...Object.keys(flow.get('emotes', 'file'))
+            .filter((k) => k.startsWith('PETTHE'))
+            .map((k) => `пип ${k}`),
+        'поп popCat',
+        'пуп 💩',
+        'не пипай Jebaited',
+        '...а peepoGiggles'
     ]),
 
     '^(а\\s)?может\\s': () => 'а может тебя? Jebaited',
@@ -224,15 +237,6 @@ const FIXED_ANSWERS = {
         'аннигиляторная клюшка! BSURage golfClub'
     ]),
     '^[UO][wωv][UO]$': () => choose(['UωU', 'òωó', 'OωO', 'ಠ_ಠ', '👁 👄 👁']),
-    '^пип(ни|\\s|$)': () => choose([
-        ...Object.keys(flow.get('emotes', 'file'))
-            .filter((k) => k.startsWith('PETTHE'))
-            .map((k) => `пип ${k}`),
-        'поп popCat',
-        'пуп 💩',
-        'не пипай Jebaited',
-        '...а peepoGiggles'
-    ]),
 
     '^(а\\s+)?будет\\s+кукинг': () => choose([
         'конечно будет, уже завтра Agakakskagesh',
