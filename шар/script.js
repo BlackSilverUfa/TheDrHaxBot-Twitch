@@ -221,6 +221,12 @@ const FIXED_ANSWERS = {
         'нет, ты keanU'
     ]),
 
+    '.*пахсив.*': () => choose([
+        'пахсив YEPPERS',
+        'мелюзина NOPERS',
+    ]),
+    '^oratrice': () => 'Jammies Mecanique BSUJam d\'Analyse kiryuJAM Cardinale BSUFlex',
+
     '^omae wa mou shindeiru': () => 'nani?! BSURage',
     '^osmanthus': () => '...wine tastes the same as I remember KEKLEO',
     '^osmanthus wine': () => '...tastes the same as I remember KEKLEO',
