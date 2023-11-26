@@ -5,6 +5,7 @@ options:
   range:
     min: 0
     max: 150
+  slots: 3
 groups:
 - name: ICQ
   weight: 100

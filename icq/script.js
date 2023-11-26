@@ -21,7 +21,7 @@ if (msg.init) {
 }
 
 const DB = 'icq_results';
-const { intersection, flattenDeep } = _; // = require('lodash');
+const { intersection, flattenDeep, range, inRange } = _; // = require('lodash');
 const { amongo, random, choose, wchoose, renderTemplate } = flow.get('func', 'memory');
 
 const settings = context.get('settings', 'memory');
@@ -138,6 +138,64 @@ async function main() {
             msg.reply = 'доступные команды: lock, unlock, help, swap';
             return msg;
 
+        case 'slot':
+            icq.slot ||= 0;
+            icq.slots ||= [];
+            while (icq.slots.length < settings.options.slots - 1) {
+                icq.slots.push(null);
+            }
+
+            if (args.length === 0) {
+                msg.reply = 'у вас есть: ' + range(settings.options.slots).map((i) => (
+                    i === 0 && i !== icq.slot ? icq.slots[icq.slot] :
+                    i === icq.slot ? { value: icq.value, group: icq.group } :
+                    icq.slots[i]
+                )).map((data) => {
+                    if (!data) return 'пусто';
+                    return data.value + ' ' + emote(data);
+                }).join(' | ');
+
+                return msg;
+            }
+
+            const targetSlot = args[0] - 1;
+
+            if (!inRange(targetSlot, 0, settings.options.slots)) {
+                msg.reply = `укажите номер слота от 1 до ${settings.options.slots}`;
+                return msg;
+            }
+
+            const [oIcq] = await amongo(DB, 'find', { transfer: icq._id });
+
+            if (oIcq) {
+                msg.reply = `вы предложили обмен @${oIcq._id}, сначала отмените с помощью "!icq cancel" YEPPERS`;
+                return msg;
+            }
+
+            function swapSlots(icq, i) {
+                icq.slots[i] ||= {
+                    value: rand(settings.options.range.min, settings.options.range.max),
+                    group: randGroup(),
+                };
+
+                const slot = icq.slots[i];
+
+                [icq.value, slot.value] = [slot.value, icq.value];
+                [icq.group, slot.group] = [slot.group, icq.group];
+            }
+
+            if (icq.slot) {
+                swapSlots(icq, icq.slot);
+                icq.slot = 0;
+            }
+
+            swapSlots(icq, targetSlot);
+            icq.slot = targetSlot;
+
+            delete icq.transfer;
+            await amongo(DB, 'save', icq);
+            break;
+
         case 'swap':
             if (msg.parsed.mentions_list.length === 0) {
                 msg.reply = 'укажите ник получателя через @';
@@ -237,12 +295,15 @@ async function main() {
     } else {
         value = icq.value;
         group = icq.group || Object.keys(groups)[0];
+        delta = 0
 
-        if (icq.lock || msg.payload.message.split(' ')[0].indexOf('?') !== -1) { // !icq?
-            delta = 0;
-        } else {
+        if (!icq.lock && msg.payload.message.split(' ')[0].indexOf('?') === -1) { // !icq?
             const new_icq = rand(settings.options.range.min, settings.options.range.max);
-            delta = new_icq - value;
+
+            if (value != null) {
+                delta = new_icq - value;
+            }
+
             value = new_icq;
             group = randGroup();
         }
