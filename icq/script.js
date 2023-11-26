@@ -128,6 +128,31 @@ function randGroup() {
     return wchoose(groups, weights);
 }
 
+function newResult() {
+    return {
+        value: rand(settings.options.range.min, settings.options.range.max),
+        group: randGroup(),
+    };
+}
+
+function renderResult(icq, delta = 0) {
+    const groupData = settings.groups[icq.group];
+    let template = groupData.templates[delta !== 0 ? 'delta' : 'simple'];
+
+    if (Object.keys(groupData.special).indexOf(`${icq.value}`) !== -1 && delta != 0) {
+        template += ' Вы можете закрепить это значение командой "!icq lock" YEPPERS';
+    }
+
+    return renderTemplate(template, {
+        value: icq.value,
+        delta: delta > 0 ? `+${delta}` : delta,
+        emote: emote({
+            value: icq.value,
+            group: icq.group,
+        }),
+    });
+}
+
 async function main() {
     const _id = msg.payload.userstate.username;
     const [cmd, ...args] = msg.parsed.query_filtered.split(' ');
@@ -135,7 +160,7 @@ async function main() {
 
     switch (cmd) {
         case 'help':
-            msg.reply = 'доступные команды: lock, unlock, help, swap';
+            msg.reply = 'доступные команды: lock, unlock, swap @пользователь, slot [номер]';
             return msg;
 
         case 'slot':
@@ -147,12 +172,12 @@ async function main() {
 
             if (args.length === 0) {
                 msg.reply = 'у вас есть: ' + range(settings.options.slots).map((i) => (
-                    i === 0 && i !== icq.slot ? icq.slots[icq.slot] :
-                    i === icq.slot ? { value: icq.value, group: icq.group } :
-                    icq.slots[i]
+                    i === icq.slot ? icq :
+                    i === 0 ? icq.slots[icq.slot - 1] :
+                    icq.slots[i - 1]
                 )).map((data) => {
                     if (!data) return 'пусто';
-                    return data.value + ' ' + emote(data);
+                    return data.value + (data.lock ? '⁺' : '') + ' ' + emote(data);
                 }).join(' | ');
 
                 return msg;
@@ -165,6 +190,11 @@ async function main() {
                 return msg;
             }
 
+            if (targetSlot === icq.slot) {
+                msg.reply = 'этот слот уже выбран YEPPERS';
+                return msg;
+            }
+
             const [oIcq] = await amongo(DB, 'find', { transfer: icq._id });
 
             if (oIcq) {
@@ -173,28 +203,30 @@ async function main() {
             }
 
             function swapSlots(icq, i) {
-                icq.slots[i] ||= {
-                    value: rand(settings.options.range.min, settings.options.range.max),
-                    group: randGroup(),
-                };
+                icq.slots[i] ||= newResult();
 
                 const slot = icq.slots[i];
 
                 [icq.value, slot.value] = [slot.value, icq.value];
                 [icq.group, slot.group] = [slot.group, icq.group];
+                [icq.lock, slot.lock] = [slot.lock, icq.lock];
             }
 
             if (icq.slot) {
-                swapSlots(icq, icq.slot);
+                swapSlots(icq, icq.slot - 1);
                 icq.slot = 0;
             }
 
-            swapSlots(icq, targetSlot);
-            icq.slot = targetSlot;
+            if (targetSlot > 0) {
+                swapSlots(icq, targetSlot - 1);
+                icq.slot = targetSlot;
+            }
 
             delete icq.transfer;
             await amongo(DB, 'save', icq);
-            break;
+
+            msg.reply = renderResult(icq);
+            return msg;
 
         case 'swap':
             if (msg.parsed.mentions_list.length === 0) {
@@ -277,61 +309,42 @@ async function main() {
         return msg;
     }
 
-    let value, delta, group;
+    let delta = 0;
 
     if (!icq) {
-        icq = { _id };
-        value = rand(settings.options.range.min, settings.options.range.max);
-        delta = 0;
-        group = randGroup();
+        icq = {
+            _id,
+            ...newResult(),
+        };
 
         await amongo(DB, 'save', {
             ...icq,
-            value,
-            group,
             last_check: now.toISOString(),
             checks: 1,
         });
     } else {
-        value = icq.value;
-        group = icq.group || Object.keys(groups)[0];
-        delta = 0
+        icq.group ||= Object.keys(groups)[0];
 
         if (!icq.lock && msg.payload.message.split(' ')[0].indexOf('?') === -1) { // !icq?
-            const new_icq = rand(settings.options.range.min, settings.options.range.max);
+            const res = newResult();
 
-            if (value != null) {
-                delta = new_icq - value;
+            if (icq.value != null) {
+                delta = res.value - icq.value;
             }
 
-            value = new_icq;
-            group = randGroup();
+            icq.value = res.value;
+            icq.group = res.group;
         }
 
         await amongo(DB, 'save', {
             ...icq,
-            value,
-            group,
             last_check: delta !== 0 ? now.toISOString() : icq.last_check,
             checks: (icq.checks || 0) + 1,
         });
     }
 
-    const groupData = settings.groups[group];
-    let template = groupData.templates[delta !== 0 ? 'delta' : 'simple'];
-
-    if (Object.keys(groupData.special).indexOf(`${value}`) !== -1 && delta != 0) {
-        template += ' Вы можете закрепить это значение командой "!icq lock" YEPPERS';
-    }
-
-    return {
-        ...msg,
-        reply: renderTemplate(template, {
-            value,
-            delta: delta > 0 ? `+${delta}` : delta,
-            emote: emote({ value, group }),
-        })
-    };
+    msg.reply = renderResult(icq, delta);
+    return msg;
 }
 
 return main();
