@@ -25,7 +25,7 @@ function bite(user) {
 
             return choose([
                 'потат Tastge 🥔',
-                'батат Tastge 🥔',
+                'батат Tastge 🍠',
                 'томат Tastge 🍅',
                 'пюрешку Tastge',
                 'попат slapSlap',
