@@ -8,6 +8,7 @@ suffixes:
   'рыб': ' SabaPing'
   'кушац': ' peepoFat'
   'ку+сь': ' catNom'
+  'подарок': ' peepoGift'
 
 static_proverbs: {}
 

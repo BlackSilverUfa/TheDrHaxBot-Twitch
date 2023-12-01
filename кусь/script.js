@@ -36,7 +36,10 @@ function bite(user) {
         case 'theanatoliygamer':
         case 'anatoliygamer':
             if (random() < 0.5) break;
-            return 'Чон Со Ён AYAYA';
+            return choose([
+                'Чон Со Ён AYAYA',
+                'Winter of Aespa AYAYA',
+            ]);
 
         case 'hurmaowosh1':
             return choose([
