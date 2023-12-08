@@ -69,7 +69,7 @@ if (command.cooldown && !msg.parsed.cooldown_bypass) {
     isCd ||= (cdMap[userKey] || 0) + cd.user * 1000 > now;
     isCd &&= msg.parsed.level > 1;
 
-    if (isCd) {
+    if (isCd && msg.api.delete) {
         msg.api.delete();
         return;
     }
