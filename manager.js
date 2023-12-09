@@ -638,6 +638,10 @@ async function main() {
             reply('подробную инструкцию можно найти тут: drhx.ru/g6E7');
             return;
 
+        case 'id':
+            reply(`ID канала: ${msg.payload.channel}`);
+            return;
+
         case 'show':
             return cmdShow(channel, args);
 
