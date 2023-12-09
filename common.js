@@ -98,6 +98,15 @@ async function twitch(namespace, method, call, payload) {
     return reply.payload.data;
 }
 
+async function telegram(call, payload) {
+    const reply = await AF.invoke('telegram', { call, payload });
+    if (reply.payload.ok === false) {
+        node.error(reply.payload);
+        return null;
+    }
+    return reply.payload;
+}
+
 const Patterns = {};
 Patterns.COMMAND_NAME = /[a-zа-яё0-9\-_]{2,}/i;
 Patterns.COMMAND = new RegExp(`^!\\s?(${Patterns.COMMAND_NAME.source}),?\\s*(.*)`, 'i');
@@ -260,6 +269,7 @@ flow.set('func', {
     amongo,
     random,
     twitch,
+    telegram,
     Patterns,
     TZ,
     tokenize,
