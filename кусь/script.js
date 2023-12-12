@@ -31,6 +31,10 @@ function bite(user) {
                 'попат slapSlap',
                 'ботат MrDestructoid',
                 'ляжку catNom',
+                'котат ' + choose([
+                    'MYAAA',
+                    'catNom'
+                ]),
             ]);
 
         case 'theanatoliygamer':
