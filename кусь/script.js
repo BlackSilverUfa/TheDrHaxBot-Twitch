@@ -61,39 +61,38 @@ function bite(user) {
 
 if (mentions.length == 0) {
     msg.reply = `/me ${rchoose(actions)}`;
+    mentions.push([user, 1]);
 } else {
     msg.reply = `@${user} ${rchoose(actions)}`;
 }
 
-const match = msg.parsed.command.match(/^к(у+)с[ьт]/, 'i');
+const match = msg.parsed.command.match(/^к(у*)с[ьт]/, 'i');
 const count = match ? match[1].length : 1;
 
-if (msg.parsed.command.match(/ку+ст/i)) {
+if (msg.parsed.command.match(/ку*ст/i)) {
     msg.reply += `, однако спотыкается о куст`;
 
     if (mentions.length == 0) {
         msg.reply += `, промахивается мимо @${user}`;
     }
 
-    msg.reply += ` и кусает себя за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ');
+    msg.reply += ' и кусает себя ' + (count > 0 ? 'за ' : '');
+    msg.reply += smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ');
 } else {
-    msg.reply += ' и';
+    msg.reply += ' и кусает ';
 
-    if (mentions.length > 3) {
-        const how = rchoose(['каким-то образом', 'изподвыподверта']);
-        msg.reply += ` ${how} одновременно`;
-    }
-
-    msg.reply += ' кусает ';
-
-    if (mentions.length == 0) {
-        msg.reply += `@${user} за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ');
-    } else if (mentions.length > 0 && mentions.length <= 5) {
+    if (mentions.length <= 5) {
         msg.reply += smartJoin(mentions.map(([user]) => (
-            `@${user} за ` + smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ')
+            `@${user} ` + 
+            (count > 0 ? 'за ' : '') +
+            smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ')
         )), ' , ');
-    } else if (mentions.length > 5) {
-        msg.reply += smartJoin(mentions.map(([user]) => `@${user}`)) + ` за ${bite()}`;
+    } else {
+        msg.reply += smartJoin(mentions.map(([user]) => `@${user}`));
+
+        if (count > 0) {
+            msg.reply += ` за ${bite()}`;
+        }
     }
 }
 
