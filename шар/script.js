@@ -225,7 +225,7 @@ const FIXED_ANSWERS = {
         'пахсив YEPPERS',
         'мелюзина NOPERS',
     ]),
-    '^oratrice': () => 'Jammies Mecanique BSUJam d\'Analyse kiryuJAM Cardinale BSUFlex',
+    '^oratrice': () => 'Jammies Mecanique BSUJam d\'Analyse kiryuJAM Cardinale OUIP',
 
     '^omae wa mou shindeiru': () => 'nani?! BSURage',
     '^osmanthus': () => '...wine tastes the same as I remember KEKLEO',
