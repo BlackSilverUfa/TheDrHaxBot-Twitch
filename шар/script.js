@@ -250,7 +250,7 @@ const FIXED_ANSWERS = {
     ]),
 
     '^как\\s+([^?]*)': (match) => {
-        msg.parsed.query_filtered = `оцени что-нибудь в ${choose(['ка', 'пу'])}ках`;
+        msg.parsed.query_filtered = `оцени что-нибудь во ${choose(['ка', 'пу'])}ках`;
         return main();
     },
 
@@ -451,7 +451,7 @@ const main = () => {
         return choice(`${x} ${pluralizedTerm} из ${range}`);
     }
 
-    if (match = query.match(/оцени(.*) в (.+)/i)) {
+    if (match = query.match(/оцени(.*) во? (.+)/i)) {
         const term = match[2];
         const x = Math.floor(random() * 11);
 
