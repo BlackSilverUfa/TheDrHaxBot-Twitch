@@ -470,6 +470,11 @@ const main = () => {
         return choice(`${x} ${pluralizedTerm} из 10`);
     }
 
+    if (match = query.match(/оцени(\s.*)?/i)) {
+        const x = Math.floor(random() * 11);
+        return choice(`${x} из 10`);
+    }
+
     return choose(wchoose(Object.values(ANSWERS), [10, 10, 2, 10, 10]));
 }
 
