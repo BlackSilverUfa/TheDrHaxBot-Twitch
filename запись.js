@@ -5,7 +5,7 @@ const { getBaseSegment, resolveSegment } = flow.get('blackufa_db_func', 'memory'
 const db = flow.get('blackufa_db', 'memory')();
 const stream = flow.get('twitch_channels.blackufa', 'file');
 
-const MAX_RESULTS = 5;
+const MAX_RESULTS = 3;
 
 let query = msg.parsed.query_filtered;
 
