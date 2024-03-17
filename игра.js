@@ -86,17 +86,18 @@ if (msg.parsed.level <= 1) { // mods and up
                         { seconds: newTime }
                     );
 
-                    const lowerBound = new Date(stream.game_history[id - 1]?.date || streamStart);
+                    const lowerBound = new Date(streamStart);
                     const upperBound = new Date(stream.game_history[id + 1]?.date || stream.date_end || now);
 
                     if (newDate <= lowerBound || newDate >= upperBound) {
-                        const lowerBoundStr = ftime((+lowerBound - +streamStart) / 1000);
                         const upperBoundStr = ftime((+upperBound - +streamStart) / 1000);
-                        msg.reply = `время должно быть между ${lowerBoundStr} и ${upperBoundStr}`;
+                        msg.reply = `время должно быть между 0:00 и ${upperBoundStr}`;
                         return msg;
                     }
 
                     entry.date = newDate.toISOString();
+                    stream.game_history = stream.game_history
+                        .sort((a, b) => +new Date(a.date) - +new Date(b.date));
 
                     flow.set(key, stream, 'file');
                     msg.reply = `теперь "${entry.name}" начинается с ${ftime(newTime)}`;
