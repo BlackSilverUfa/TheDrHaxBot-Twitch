@@ -87,7 +87,7 @@ if (msg.parsed.level <= 1) { // mods and up
                     );
 
                     const lowerBound = new Date(streamStart);
-                    const upperBound = new Date(stream.game_history[id + 1]?.date || stream.date_end || now);
+                    const upperBound = new Date(stream.date_end || now);
 
                     if (newDate <= lowerBound || newDate >= upperBound) {
                         const upperBoundStr = ftime((+upperBound - +streamStart) / 1000);
