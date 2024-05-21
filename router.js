@@ -2,6 +2,15 @@ const { amongo, twitch, renderTemplate } = flow.get('func', 'memory');
 const { uniq, range } = lodash; // = require('lodash');
 
 const DB = 'twitch_commands';
+const OUTPUTS = [
+    'helper',
+    'counter',
+    'function',
+    'native',
+    'countup',
+    'music',
+    'cooldown',
+];
 
 if (msg.init || !context.get('pattern', 'memory')) {
     const settings = await amongo('twitch_channels', 'find', {});
@@ -65,13 +74,14 @@ if (command.cooldown && !msg.parsed.cooldown_bypass) {
         .filter(([k, v]) => v + Math.max(cd.channel, cd.user) * 1000 < now)
         .map(([key]) => delete cdMap[key])
 
-    let isCd = (cdMap[channelKey] || 0) + cd.channel * 1000 > now;
-    isCd ||= (cdMap[userKey] || 0) + cd.user * 1000 > now;
-    isCd &&= msg.parsed.level > 1;
+    const isCdChannel = (cdMap[channelKey] || 0) + cd.channel * 1000 > now;
+    const isCdUser = (cdMap[userKey] || 0) + cd.user * 1000 > now;
+    const isCd = (isCdChannel || isCdUser) && msg.parsed.level > -11;
 
-    if (isCd && msg.api.delete) {
-        msg.api.delete();
-        return;
+    if (isCd) {
+        msg.cooldown = { isCdChannel, isCdUser };
+        const index = OUTPUTS.indexOf('cooldown');
+        return range(index + 1).map((i) => (i == index ? msg : null));
     }
 
     cdMap[channelKey] = now;
@@ -80,14 +90,7 @@ if (command.cooldown && !msg.parsed.cooldown_bypass) {
     context.set('cooldown', cdMap, 'memory');
 }
 
-const index = [
-    'helper',
-    'counter',
-    'function',
-    'native',
-    'countup',
-    'music',
-].indexOf(command.type);
+const index = OUTPUTS.indexOf(command.type);
 
 if (index < 0) {
     node.error(`Unknown command type: ${command.type}`, msg);
