@@ -76,7 +76,7 @@ if (command.cooldown && !msg.parsed.cooldown_bypass) {
 
     const isCdChannel = (cdMap[channelKey] || 0) + cd.channel * 1000 > now;
     const isCdUser = (cdMap[userKey] || 0) + cd.user * 1000 > now;
-    const isCd = (isCdChannel || isCdUser) && msg.parsed.level > -11;
+    const isCd = (isCdChannel || isCdUser) && msg.parsed.level > 1;
 
     if (isCd) {
         msg.cooldown = { isCdChannel, isCdUser };
