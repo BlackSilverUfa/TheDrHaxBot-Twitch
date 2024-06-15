@@ -46,6 +46,7 @@ const CONTINUATIONS = [
     'аня ANYA',
     'анлаки BSUHee',
     'алло peepoPhone',
+    'анмод monkaBAN',
     'ада, я люблю тебя ANYA',
     'абсолютли YEPPERS',
     'аыаыа ANYA',
