@@ -352,7 +352,12 @@ const main = () => {
     let match;
 
     if (query.length === 0) {
-        const [_, vowels] = msg.payload.message.match(/^!ш+([ао]+)р+/i) || ['а'];
+        let [_, vowels] = msg.payload.message.match(/^!ш+([ао]+)р+/i) || ['а'];
+
+        if (!vowels) {
+            vowels = 'а';
+        }
+
         return choose([
             `чт${translate(vowels, 'АаОоУу', 'ОоАаОо')}? Jebaited`,
             `${translate(vowels, 'Оо', 'Аа')}? Jebaited`

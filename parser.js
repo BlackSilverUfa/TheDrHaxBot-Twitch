@@ -1,3 +1,5 @@
+const SELF = 'thedrhaxbot';
+
 const { twitch, Patterns: { MENTION, COMMAND, EMOJI } } = flow.get('func', 'memory');
 
 function groups(str, regex, group) {
@@ -69,6 +71,15 @@ parsed.level = (
 
 parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION);
 
+let mentioned = msg.payload.userstate['reply-parent-user-login'] === SELF;
+
+if (!mentioned) {
+    mentioned = parsed.mentions_list.indexOf(SELF) !== -1;
+    if (mentioned) {
+        parsed.mentions_list.splice(parsed.mentions_list.indexOf(SELF), 1);
+    }
+}
+
 // if (parsed.mentions_list.length === 0 && replyTo) {
 //     let login = msg.payload.userstate['reply-parent-user-login'];
 //     msg.payload.message += ` @${login}`;
@@ -79,7 +90,16 @@ parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION);
  * Parse command and query
  */
 
-const command = msg.payload.message.match(COMMAND);
+let command = msg.payload.message.match(COMMAND);
+
+if (!command && mentioned) {
+    command = [
+        '!_main_ ' + msg.payload.message.replace(/@thedrhaxbot,?\s*/ig, ''),
+        '_main_',
+        msg.payload.message.replace(/@thedrhaxbot,?\s*/ig, ''),
+    ];
+
+}
 
 if (command) {
     parsed.command = command[1];
