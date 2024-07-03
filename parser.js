@@ -7,7 +7,7 @@ function groups(str, regex, group) {
     return [...str.matchAll(regex)].map(x => x[group]);
 }
 
-msg.payload.self = msg.payload.userstate.username === 'thedrhaxbot';
+msg.payload.self = msg.payload.userstate.username === SELF;
 
 /**
  * Methods
@@ -75,6 +75,7 @@ let mentioned = msg.payload.userstate['reply-parent-user-login'] === SELF;
 
 if (!mentioned) {
     mentioned = parsed.mentions_list.indexOf(SELF) !== -1;
+
     if (mentioned) {
         parsed.mentions_list.splice(parsed.mentions_list.indexOf(SELF), 1);
     }
@@ -93,12 +94,13 @@ if (!mentioned) {
 let command = msg.payload.message.match(COMMAND);
 
 if (!command && mentioned) {
-    command = [
-        '!_main_ ' + msg.payload.message.replace(/@thedrhaxbot,?\s*/ig, ''),
-        '_main_',
-        msg.payload.message.replace(/@thedrhaxbot,?\s*/ig, ''),
-    ];
+    let tmpmsg = msg.payload.message.replace(new RegExp(`@${SELF},?\s*`, 'ig'), '');
 
+    command = [
+        '!_main_ ' + tmpmsg,
+        '_main_',
+        tmpmsg,
+    ];
 }
 
 if (command) {
