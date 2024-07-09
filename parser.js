@@ -58,11 +58,11 @@ parsed.level = (
  * Support for threads
  */
 
-const replyTo = msg.payload.userstate['reply-parent-display-name'];
+// const replyTo = msg.payload.userstate['reply-parent-display-name'];
 
-if (replyTo) {
-    msg.payload.message = msg.payload.message.substring(replyTo.length + 2);
-}
+// if (replyTo) {
+//     msg.payload.message = msg.payload.message.substring(replyTo.length + 2);
+// }
 
 /**
  * Parse mentions
