@@ -36,6 +36,10 @@ if (msg.init || !context.get('pattern', 'memory')) {
     if (msg.init) return;
 }
 
+if (msg.payload.self) {
+    return;
+}
+
 const pattern = context.get('pattern', 'memory');
 const chroot = context.get('chroot', 'memory') || {};
 
