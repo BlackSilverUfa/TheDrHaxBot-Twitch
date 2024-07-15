@@ -439,11 +439,11 @@ async function cmdToggle(channel, args, enabled) {
 
 async function cmdCooldown(channel, args) {
     if (args.length < 1) {
-        reply('пример: cooldown <имя> [канал] [польз.]');
+        reply('пример: cooldown <имя> [канал] [польз.] [действ.]');
         return;
     }
 
-    const [name, cdChannel, cdUser] = args;
+    const [name, cdChannel, cdUser, cdAction] = args;
 
     const [command] = await findCommand(channel, name);
 
@@ -462,7 +462,11 @@ async function cmdCooldown(channel, args) {
             res.push(`${cd.user} сек./пользователь`);
         }
 
-        reply(`КД команды "${command.name}": ` + smartJoin(res));
+        if (cd.action) {
+            res.push(`режим ${cd.action}`);
+        }
+
+        reply(`КД команды "${command.name}": ${res.join(', ')}`);
     };
 
     const validateAndAssign = (name, value) => {
@@ -480,6 +484,12 @@ async function cmdCooldown(channel, args) {
 
     validateAndAssign('channel', cdChannel);
     validateAndAssign('user', cdUser);
+
+    if (['ignore'].indexOf(cdAction) !== -1) {
+        cd.action = cdAction;
+    } else {
+        delete cd.action;
+    }
 
     await saveCommand(command);
     finish();
