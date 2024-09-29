@@ -33,7 +33,8 @@ function bite(user) {
                 'ляжку catNom',
                 'котат ' + choose([
                     'MYAAA',
-                    'catNom'
+                    'catNom',
+                    'MEOW'
                 ]),
             ]);
 
