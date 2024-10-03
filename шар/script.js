@@ -140,6 +140,7 @@ const CONTINUATIONS = [
     'ты не имеешь права, о ты не имеешь права LetMeIn',
 
     'кб ANYA',
+    'кекю KEKYou',
     'кто, если не мы? KKomrade',
     'кукинг стрим завтра Agakakskagesh',
     'куля-буля ANYA',
