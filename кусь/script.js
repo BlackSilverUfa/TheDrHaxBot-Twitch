@@ -36,6 +36,7 @@ function bite(user) {
                     'catNom',
                     'MEOW'
                 ]),
+                'купат Tastge'
             ]);
 
         case 'theanatoliygamer':
