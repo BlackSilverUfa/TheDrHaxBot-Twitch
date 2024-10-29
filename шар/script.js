@@ -214,8 +214,11 @@ const FIXED_ANSWERS = {
         '...а peepoGiggles'
     ]),
 
-    '^(а\\s)?может\\s': () => 'а может тебя? Jebaited',
-
+    '^(а\\s)?может\\s': () => choose([
+        'а может тебя? Jebaited',
+        'а можно KEKLEO',
+    ]),
+    
     '^балл?он с чем': () => choose([
         'с пропаааном! Pepega',
         'с воздухом BSUHee',
