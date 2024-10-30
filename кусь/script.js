@@ -87,7 +87,7 @@ if (msg.parsed.command.match(/ку*ст/i)) {
         msg.reply += smartJoin(mentions.map(([user]) => (
             `@${user} ` +
             (count > 0 ? 'за ' : '') +
-            smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ')
+            smartJoin(range(Math.min(count, 5)).map(() => bite(user)), ' , ')
         )), ' , ');
     } else {
         msg.reply += smartJoin(mentions.map(([user]) => `@${user}`));
