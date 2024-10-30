@@ -79,7 +79,7 @@ if (msg.parsed.command.match(/ку*ст/i)) {
     }
 
     msg.reply += ' и кусает себя ' + (count > 0 ? 'за ' : '');
-    msg.reply += smartJoin(range(Math.min(count, 3)).map(() => bite(user)), ' , ');
+    msg.reply += smartJoin(range(Math.min(count, 5)).map(() => bite(user)), ' , ');
 } else {
     msg.reply += ' и кусает ';
 
