@@ -204,7 +204,7 @@ if (query.length == 0) {
     } else {
         query = stream.vod;
     }
-} else if (query.startsWith('дай')) {
+} else if (query.match(/^(от)?дай$/)) {
     const randomGame = choose(db.index.find({ 'category.search': { $ne: false } }));
     msg.reply = formatGames([randomGame]);
     return msg;
