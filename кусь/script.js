@@ -21,7 +21,7 @@ function bite(user) {
         case '<@692736268567707719>':
         case 'kovalenko_p':
         case 'tomatepotato':
-            if (random() < 0.5) break;
+            if (random() < 0.25) break;
 
             return choose([
                 'потат Tastge 🥔',
@@ -41,7 +41,7 @@ function bite(user) {
 
         case 'theanatoliygamer':
         case 'anatoliygamer':
-            if (random() < 0.5) break;
+            if (random() < 0.25) break;
             return choose([
                 'Чон Со Ён AYAYA',
                 'Winter of Aespa AYAYA',
