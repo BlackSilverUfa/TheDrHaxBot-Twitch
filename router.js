@@ -65,6 +65,15 @@ if (!command) {
 
 msg.command = command;
 
+msg.api.cooldown = {
+    reset_user: () => {
+        const cdMap = context.get('cooldown', 'memory') || {};
+        const userKey = `${command._id}|${msg.payload.userstate.username}`;
+        delete cdMap[userKey];
+        context.set('cooldown', cdMap, 'memory');
+    },
+};
+
 if (command.cooldown && !msg.parsed.cooldown_bypass) {
     const now = +new Date();
     const cdMap = context.get('cooldown', 'memory') || {};
