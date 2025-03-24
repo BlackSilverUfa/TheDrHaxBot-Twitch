@@ -64,6 +64,7 @@ const CONTINUATIONS = [
     'бан monkaBAN',
     'батат BSULoot',
     'буба BOOBA',
+    'бу, испугался? ariW',
     'боря CatCrying',
     'борода popCat',
     'блюй пей dead5What MedTime',

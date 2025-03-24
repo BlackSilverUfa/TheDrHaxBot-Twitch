@@ -3,7 +3,7 @@ const { TZ, msToDate, Patterns: { COMMAND }, updateText } = flow.get('func', 'me
 
 const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
 const channel = msg.payload.channel.substring(1);
-const CHANNEL_LINK = new RegExp(`\[?(https?://)?twitch\.tv/${channel}[^\\s]*`, 'i');
+const CHANNEL_LINK = new RegExp(`\\[?(https?://)?twitch\.tv/${channel}[^\\s]*`, 'i');
 
 const now = +new Date();
 const lag = TZ - 6*60*60*1000; // reset date at 6:00
