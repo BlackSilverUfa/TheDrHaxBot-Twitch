@@ -559,13 +559,19 @@ async function cmdPlugin(channel, args) {
                         return;
                     }
 
-                    const ctx = flow.get(`context["${channel}"]`, 'file') || [];
+                    const ctx = flow.get('context', 'file') || {};
+                    const chanCtx = ctx[channel] || [];
+                    node.error(chanCtx);
+
                     const pattern = new RegExp(args.join(' '), 'i');
+                    const newCtx = chanCtx.filter((m) => !m.payload.message?.match(pattern));
+                    ctx[channel] = newCtx;
 
-                    const new_ctx = ctx.filter((m) => !m.payload.message?.match(pattern));
-
-                    flow.set(`context["${channel}"]`, new_ctx, 'file');
-                    reply(`удалено ${new_ctx.length - ctx.length} сообщений`);
+                    flow.set(`context`, ctx, 'file');
+                    reply(renderTemplate(
+                        'удалено {n} сообщени{n#е,я,й}',
+                        { n: chanCtx.length - newCtx.length }
+                    ));
                     return;
 
                 case 'clear':
@@ -635,7 +641,7 @@ async function cmdPlugin(channel, args) {
                 return;
             }
 
-            if (channel == args[0]) {
+            if (channel == args[0] || args[0] === '-') {
                 delete config.plugins.chroot;
                 await amongo(CHANNEL_DB, 'save', config);
 
