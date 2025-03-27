@@ -539,6 +539,8 @@ async function cmdPlugin(channel, args) {
     }
 
     const [name] = args;
+    args.shift();
+
     let [config] = await amongo(CHANNEL_DB, 'find', {
         _id: channel,
     });
@@ -546,6 +548,36 @@ async function cmdPlugin(channel, args) {
     config ||= { _id: channel, plugins: {} };
 
     switch (name) {
+        case 'context':
+            const [ctxCmd] = args;
+            args.shift();
+
+            switch (ctxCmd) {
+                case 'remove':
+                    if (args.length === 0) {
+                        reply('укажите шаблон');
+                        return;
+                    }
+
+                    const ctx = flow.get(`context["${channel}"]`, 'file') || [];
+                    const pattern = new RegExp(args.join(' '), 'i');
+
+                    const new_ctx = ctx.filter((m) => !m.payload.message?.match(pattern));
+
+                    flow.set(`context["${channel}"]`, new_ctx, 'file');
+                    reply(`удалено ${new_ctx.length - ctx.length} сообщений`);
+                    return;
+
+                case 'clear':
+                    flow.set(`context["${channel}"]`, [], 'file');
+                    reply('контекст очищен SeemsGood');
+                    return;
+
+                default:
+                    reply('доступные команды: forget <regex>, clear');
+                    return;
+            }
+
         case 'emote-chains':
             const ecConfig = config.plugins['emote-chains'] || {
                 length: 2,
@@ -553,12 +585,12 @@ async function cmdPlugin(channel, args) {
             };
             config.plugins['emote-chains'] = ecConfig;
 
-            if (args.length == 1 || args[2] == 'help') {
+            if (args.length == 0 || args[1] == 'help') {
                 reply('пример: plugin emote-chains MIN_LENGTH [MAX_COUNT]');
                 return;
             }
 
-            let [_, length, count] = args.map(Number);
+            let [length, count] = args.map(Number);
 
             if (Number.isInteger(length) && length >= 0 && length <= 10) {
                 ecConfig.length = length;
@@ -594,7 +626,7 @@ async function cmdPlugin(channel, args) {
                 return;
             }
 
-            if (!args[1]) {
+            if (!args[0]) {
                 if (config.plugins?.chroot) {
                     reply(`чат подключён к каналу ${config.plugins.chroot}`);
                 } else {
@@ -603,7 +635,7 @@ async function cmdPlugin(channel, args) {
                 return;
             }
 
-            if (channel == args[1]) {
+            if (channel == args[0]) {
                 delete config.plugins.chroot;
                 await amongo(CHANNEL_DB, 'save', config);
 
@@ -612,14 +644,14 @@ async function cmdPlugin(channel, args) {
                 return;
             }
 
-            const [target] = await amongo(DB, 'find', { 'channel': args[1] });
+            const [target] = await amongo(DB, 'find', { 'channel': args[0] });
 
             if (!target) {
                 reply('бот не активен на этом канале');
                 return;
             }
 
-            config.plugins.chroot = args[1];
+            config.plugins.chroot = args[0];
             await amongo(CHANNEL_DB, 'save', config);
 
             reload();
