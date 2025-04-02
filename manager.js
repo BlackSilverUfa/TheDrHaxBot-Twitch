@@ -549,8 +549,8 @@ async function cmdPlugin(channel, args) {
 
     switch (name) {
         case 'context':
-            const [ctxCmd] = args;
-            args.shift();
+            const ctxCmd = args.shift();
+            const ctx = flow.get('context', 'file') || {};
 
             switch (ctxCmd) {
                 case 'remove':
@@ -559,9 +559,7 @@ async function cmdPlugin(channel, args) {
                         return;
                     }
 
-                    const ctx = flow.get('context', 'file') || {};
                     const chanCtx = ctx[channel] || [];
-                    node.error(chanCtx);
 
                     const pattern = new RegExp(args.join(' '), 'i');
                     const newCtx = chanCtx.filter((m) => !m.payload.message?.match(pattern));
@@ -575,7 +573,8 @@ async function cmdPlugin(channel, args) {
                     return;
 
                 case 'clear':
-                    flow.set(`context["${channel}"]`, [], 'file');
+                    delete ctx[channel];
+                    flow.set(`context`, ctx, 'file');
                     reply('контекст очищен SeemsGood');
                     return;
 
@@ -677,7 +676,7 @@ async function main() {
     const [cmd, ...args] = msg.parsed.query.split(' ');
 
     const [settings] = await amongo('twitch_channels', 'find', { _id: channel });
-    if (settings?.plugins?.chroot && (cmd !== 'id' && (cmd !== 'plugin' || args[0] !== 'chroot'))) {
+    if (settings?.plugins?.chroot && (cmd !== 'id' && cmd !== 'plugin')) {
         channel = settings.plugins.chroot;
     }
 
