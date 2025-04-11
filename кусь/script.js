@@ -60,11 +60,11 @@ function bite(user) {
 
     const res = rchoose(targets);
 
-    if (res.indexOf('бан') === 0) {
-        const ctx = flow.get('context', 'file')[msg.payload.channel];
-        const m = find(ctx, (m) => m.payload.userstate.username === user);
-        if (m) msg.api.timeout(60, 'кусь catNom', m.payload.userstate['user-id']);
-    }
+    //if (res.indexOf('бан') === 0) {
+    //    const ctx = flow.get('context', 'file')[msg.payload.channel];
+    //    const m = find(ctx, (m) => m.payload.userstate.username === user);
+    //    if (m) msg.api.timeout(60, 'кусь catNom', m.payload.userstate['user-id']);
+    //}
 
     return res;
 }
