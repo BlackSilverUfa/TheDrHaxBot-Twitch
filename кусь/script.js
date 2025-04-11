@@ -4,7 +4,7 @@ if (msg.init) {
     return;
 }
 
-const { range } = _; // = require('lodash');
+const { range, find } = _; // = require('lodash');
 const { choose, random, rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
 const { actions, targets } = context.get('answers', 'memory');
 
@@ -62,11 +62,8 @@ function bite(user) {
 
     if (res.indexOf('бан') === 0) {
         const ctx = flow.get('context', 'file')[msg.payload.channel];
-        const msgs = ctx.filter((m) => m.payload.userstate.username === user);
-
-        if (msgs.length > 0) {
-            msg.api.timeout(300, 'кусь', msgs[0].payload.userstate['user-id']);
-        }
+        const m = find(ctx, (m) => m.payload.userstate.username === user);
+        if (m) msg.api.timeout(60, 'кусь catNom', m.payload.userstate['user-id']);
     }
 
     return res;
