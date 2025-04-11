@@ -23,12 +23,12 @@ api.delete = (id = msg.payload.userstate.id) => twitch(
     },
 );
 
-api.timeout = (duration = 1, reason = '') => twitch(
+api.timeout = (duration = 1, reason = '', id = msg.payload.userstate['user-id']) => twitch(
     'helix', 'POST',
     `moderation/bans?broadcaster_id=${msg.payload.userstate['room-id']}&moderator_id=573134756`,
     {
         data: {
-            user_id: msg.payload.userstate['user-id'],
+            user_id: id,
             duration,
             reason,
         },

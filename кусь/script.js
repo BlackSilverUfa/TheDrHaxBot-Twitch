@@ -58,7 +58,18 @@ function bite(user) {
         case 'i_pipa': return 'пипу PETTHEPEEPO';
     }
 
-    return rchoose(targets);
+    const res = rchoose(targets);
+
+    if (res.indexOf('бан') === 0) {
+        const ctx = flow.get('context', 'file')[msg.payload.channel];
+        const msgs = ctx.filter((m) => m.payload.userstate.username === user);
+
+        if (msgs.length > 0) {
+            msg.api.timeout(300, 'кусь', msgs[0].payload.userstate['user-id']);
+        }
+    }
+
+    return res;
 }
 
 if (mentions.length == 0) {
