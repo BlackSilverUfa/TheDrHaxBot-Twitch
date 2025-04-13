@@ -551,9 +551,13 @@ async function cmdPlugin(channel, args) {
         case 'context':
             const ctxCmd = args.shift();
             const ctx = flow.get('context', 'file') || {};
+            let restore = false;
 
             switch (ctxCmd) {
+                case 'restore':
+                    restore = true;
                 case 'remove':
+                case 'delete':
                     if (args.length === 0) {
                         reply('укажите шаблон');
                         return;
@@ -562,13 +566,22 @@ async function cmdPlugin(channel, args) {
                     const chanCtx = ctx[channel] || [];
 
                     const pattern = new RegExp(args.join(' '), 'i');
-                    const newCtx = chanCtx.filter((m) => !m.payload.message?.match(pattern));
-                    ctx[channel] = newCtx;
+
+                    const modified = chanCtx
+                        .filter((m) => m.payload.message?.match(pattern))
+                        .filter((m) => !!m.deleted == restore)
+                        .map((m) => {
+                            m.deleted = !restore;
+                            return m;
+                        });
 
                     flow.set(`context`, ctx, 'file');
                     reply(renderTemplate(
-                        'удалено {n} сообщени{n#е,я,й}',
-                        { n: chanCtx.length - newCtx.length }
+                        '{act} {n} сообщени{n#е,я,й}',
+                        {
+                            n: modified.length,
+                            act: restore ? 'восстановлено' : 'удалено'
+                        }
                     ));
                     return;
 
@@ -579,7 +592,7 @@ async function cmdPlugin(channel, args) {
                     return;
 
                 default:
-                    reply('доступные команды: forget <regex>, clear');
+                    reply('доступные команды: remove <regex>, restore <regex>, clear');
                     return;
             }
 
