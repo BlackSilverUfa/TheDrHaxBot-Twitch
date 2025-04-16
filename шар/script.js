@@ -49,6 +49,7 @@ const CONTINUATIONS = [
     'анмод monkaBAN',
     'ада, я люблю тебя ANYA',
     'абсолютли YEPPERS',
+    'ass gachiBASS',
     'аыаыа ANYA',
     'ауф 🐺',
     'апчхи ANYA',
@@ -59,7 +60,6 @@ const CONTINUATIONS = [
     'а gun with one bullet MrDestructoid',
     'аяя AYAYA',
     'ага YEPPERS',
-    'ass gachiBASS',
 
     'бан monkaBAN',
     'батат BSULoot',
