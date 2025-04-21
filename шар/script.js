@@ -129,6 +129,7 @@ const CONTINUATIONS = [
     'уголь Tastge',
 
     'пауки пришли Spider',
+    'пыуки пришли Spider',
     'Памела Андерсон BSUHey',
     'планер дай Jebaited',
     'повтор YEPPERS',
