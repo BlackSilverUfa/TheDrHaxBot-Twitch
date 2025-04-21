@@ -1,5 +1,6 @@
 options:
   bots:
+  - thedrhaxbot
   - nightbot
   - streamelements
   range:

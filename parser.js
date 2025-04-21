@@ -76,9 +76,9 @@ let mentioned = msg.payload.userstate['reply-parent-user-login'] === SELF;
 if (!mentioned) {
     mentioned = parsed.mentions_list.indexOf(SELF) !== -1;
 
-    if (mentioned) {
-        parsed.mentions_list.splice(parsed.mentions_list.indexOf(SELF), 1);
-    }
+    // if (mentioned) {
+    //     parsed.mentions_list.splice(parsed.mentions_list.indexOf(SELF), 1);
+    // }
 }
 
 // if (parsed.mentions_list.length === 0 && replyTo) {
