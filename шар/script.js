@@ -104,7 +104,6 @@ const CONTINUATIONS = [
     'мегамаки gachiHYPER',
 
     'ну Дииима Jebaited',
-    'ну Полинаа MYAAA',
     'ноо popCat ноо popCat ноо popCat',
 
     'реакция мангуста Pepega',
