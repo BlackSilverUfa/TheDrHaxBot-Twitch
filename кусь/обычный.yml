@@ -24,7 +24,18 @@ targets:
 - сосок BSUHey
 - ляжку catNom
 - нос dead5What
-- палец BSUTrolled
+- each:
+  -
+    - большой палец
+    - указательный палец
+    - средний палец
+    - безымянный палец
+    - мизинец
+  -
+    - правой
+    - левой
+  -
+    - руки BSUTrolled
 - язык BLELELE
 - щёчку peepoWow
 - любовь FeelsLoveMan

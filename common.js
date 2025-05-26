@@ -173,6 +173,17 @@ function choose(list, bias = null, biasWeight = 0.2) {
 
 function rchoose(list) {
     const choice = choose(list);
+
+    if (Array.isArray(choice.each)) {
+        const res = [];
+
+        for (let i of choice.each) {
+            res.push(rchoose(i));
+        }
+
+        return res.join(choice.sep || ' ');
+    }
+
     return Array.isArray(choice) ? rchoose(choice) : choice;
 }
 
