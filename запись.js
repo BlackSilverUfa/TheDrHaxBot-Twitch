@@ -158,6 +158,8 @@ function findByDate(query) {
         return true; // date is recognized, we should stop now
     }
 
+    node.error(segments);
+
     msg.reply = formatSegments(segments);
     return true;
 }
