@@ -78,7 +78,7 @@ function formatSegment(segment, at = 0, t = 0) {
 }
 
 function formatSegments(segments) {
-    return segments.map(formatSegment).join(' | ');
+    return segments.map(x => formatSegment(x)).join(' | ');
 }
 
 function formatGames(games) {
@@ -157,8 +157,6 @@ function findByDate(query) {
         msg.reply = 'в тот день не было стримов KEKWait';
         return true; // date is recognized, we should stop now
     }
-
-    node.error(segments);
 
     msg.reply = formatSegments(segments);
     return true;
