@@ -2,8 +2,9 @@ const stream = flow.get('twitch_channels', 'file').blackufa;
 const { TZ, msToDate, Patterns: { COMMAND }, updateText } = flow.get('func', 'memory');
 
 const LINK = /\s*<.*?href="(.*?)".*?>.*?<\/.*?>\s*/ig;
-const channel = msg.payload.channel.substring(1);
-const CHANNEL_LINK = new RegExp(`\\[?(https?://)?twitch\.tv/${channel}[^\\s]*`, 'i');
+const channel = 'blackufa';
+const TWITCH_LINK = new RegExp(`(https?://)?twitch\.tv/${channel}[^\\s]*`, 'i');
+const VK_LINK = new RegExp(`(ВК: )?(https?://)?live\.vkvideo\.ru/${channel}[^\\s]*`, 'i');
 
 const now = +new Date();
 const lag = TZ - 6*60*60*1000; // reset date at 6:00
@@ -63,7 +64,8 @@ if (stream.announcement.date == msToDate(now + lag)) {
     let text = stream.announcement.text
         .replace(/\n/g, ' ')
         .replace(LINK, (a, b) => b)
-        .replace(CHANNEL_LINK, ' ');
+        .replace(TWITCH_LINK, ' ')
+        .replace(VK_LINK, ' ');
 
     msg.reply = `сегодняшний ${command}: ${text.trim()}`;
 } else {
