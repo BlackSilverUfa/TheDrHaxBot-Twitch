@@ -1,6 +1,6 @@
 const SELF = 'thedrhaxbot';
 
-const { twitch, Patterns: { MENTION, COMMAND, EMOJI } } = flow.get('func', 'memory');
+const { twitch, Patterns: { MENTION, COMMAND }, parseEmotes } = flow.get('func', 'memory');
 
 function groups(str, regex, group) {
     group = group == null ? 1 : group;
@@ -139,33 +139,7 @@ parsed.mentions = parsed.mentions_list
  * Parse emotes
  */
 
-const emotes = flow.get('emotes', 'file') || {};
-let emotesOnly = true;
-const found = [];
-
-(command ? parsed.query : msg.payload.message).split(' ').reduce((acc, curr) => {
-    if (emotes[curr]) {
-        found.push({
-            emote: emotes[curr],
-            start: acc.length,
-            length: curr.length
-        });
-    } else if (curr.match(EMOJI)) {
-        found.push({
-            emote: {
-                name: curr,
-                source: 'emoji',
-                scope: 'global',
-            },
-            start: acc.length,
-            length: curr.length
-        });
-    } else if (curr.length > 0) {
-        emotesOnly = false;
-    }
-
-    return `${acc} ${curr}`;
-}, '');
+const [found, emotesOnly] = parseEmotes(command ? parsed.query : msg.payload.message);
 
 parsed.emotes = found;
 parsed.emotesOnly = emotesOnly && found.length > 0;

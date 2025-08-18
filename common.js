@@ -277,6 +277,48 @@ const ftime = (t) => {
     }, []).join(':');
 };
 
+const parseEmotes = (text) => {
+    const emotes = flow.get('emotes', 'file');
+
+    let found = [];
+    let emotesOnly = false;
+
+    text.split(' ').reduce((acc, curr) => {
+        if (emotes[curr]) {
+            found.push({
+                emote: emotes[curr],
+                start: acc.length,
+                length: curr.length
+            });
+        } else if (curr.match(Patterns.EMOJI)) {
+            found.push({
+                emote: {
+                    name: curr,
+                    source: 'emoji',
+                    scope: 'global',
+                },
+                start: acc.length,
+                length: curr.length
+            });
+        } else if (curr.match(/<:.+:[0-9]+>/)) {
+            found.push({
+                emote: {
+                    name: curr,
+                    source: 'discord',
+                },
+                start: acc.length,
+                length: curr.length
+            })
+        } else if (curr.length > 0) {
+            emotesOnly = false;
+        }
+
+        return `${acc} ${curr}`;
+    }, '');
+
+    return [found, emotesOnly];
+};
+
 flow.set('func', {
     amongo,
     random,
@@ -297,6 +339,7 @@ flow.set('func', {
     last,
     ptime,
     ftime,
+    parseEmotes,
 }, 'memory');
 
 node.status('Ready');
