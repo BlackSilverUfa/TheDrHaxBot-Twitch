@@ -113,6 +113,7 @@ Patterns.COMMAND = new RegExp(`^!\\s?(${Patterns.COMMAND_NAME.source}),?\\s*(.*)
 Patterns.MENTION = /@([a-z0-9_]{4,25})/ig;
 // Patterns.EMOJI = /\p{Emoji_Presentation}/ug;
 Patterns.EMOJI = /\p{Extended_Pictographic}/ug;
+Patterns.DOMAIN = /((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})/i;
 
 const TZ = 3 * 60 * 60 * 1000; // GMT+3
 
