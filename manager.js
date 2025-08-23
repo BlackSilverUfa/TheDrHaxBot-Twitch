@@ -568,7 +568,7 @@ async function cmdPlugin(channel, args) {
                     const pattern = new RegExp(args.join(' '), 'i');
 
                     const modified = chanCtx
-                        .filter((m) => m.payload.message?.match(pattern))
+                        .filter((m) => m.payload.message?.match(pattern) || m.payload.userstate?.username?.match(pattern))
                         .filter((m) => !!m.deleted == restore)
                         .map((m) => {
                             m.deleted = !restore;
