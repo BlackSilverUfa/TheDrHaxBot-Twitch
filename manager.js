@@ -546,6 +546,7 @@ async function cmdPlugin(channel, args) {
     });
 
     config ||= { _id: channel, plugins: {} };
+    config.plugins ||= {};
 
     switch (name) {
         case 'context':
