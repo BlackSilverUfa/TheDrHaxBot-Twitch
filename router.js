@@ -10,6 +10,7 @@ const OUTPUTS = [
     'countup',
     'music',
     'cooldown',
+    'loopback'
 ];
 
 if (msg.init || !context.get('pattern', 'memory')) {
