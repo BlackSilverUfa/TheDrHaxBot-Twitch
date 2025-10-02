@@ -154,7 +154,7 @@ function renderResult(icq, delta = 0) {
 }
 
 async function main() {
-    const _id = msg.payload.userstate.username;
+    const _id = msg.origin.userstate.username;
     const [cmd, ...args] = msg.parsed.query_filtered.split(' ');
     let [icq] = await amongo(DB, 'find', { _id });
 
@@ -325,7 +325,7 @@ async function main() {
     } else {
         icq.group ||= Object.keys(groups)[0];
 
-        if (!icq.lock && msg.payload.message.split(' ')[0].indexOf('?') === -1) { // !icq?
+        if (!icq.lock && msg.origin.message.split(' ')[0].indexOf('?') === -1) { // !icq?
             const res = newResult();
 
             if (icq.value != null) {

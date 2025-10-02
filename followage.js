@@ -5,8 +5,8 @@ function reply(text) {
 }
 
 const [follow] = await twitch('helix', 'GET', 'channels/followers', {
-    user_id: msg.payload.userstate['user-id'],
-    broadcaster_id: msg.payload.userstate['room-id'],
+    user_id: msg.origin.userstate['user-id'],
+    broadcaster_id: msg.origin.userstate['room-id'],
 });
 
 if (!follow) {

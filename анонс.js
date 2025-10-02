@@ -5,7 +5,7 @@ const now = +new Date();
 const lag = TZ - 6*60*60*1000; // reset date at 6:00
 
 const query = msg.parsed.query_filtered;
-const command = msg.payload.message.match(COMMAND)[1];
+const command = msg.origin.message.match(COMMAND)[1];
 
 if (msg.parsed.level <= 1) { // mods and up
     const [cmd, ...args] = query.split(' ');
@@ -22,7 +22,7 @@ if (msg.parsed.level <= 1) { // mods and up
                     photo: stream.announcement.photo,
                     date: msToDate(now + TZ),
                     source: {
-                        twitch: msg.payload.userstate.username,
+                        twitch: msg.origin.userstate.username,
                     },
                 };
             } catch (e) {

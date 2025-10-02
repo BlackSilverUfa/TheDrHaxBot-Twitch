@@ -9,8 +9,7 @@ const OUTPUTS = [
     'native',
     'countup',
     'music',
-    'cooldown',
-    'loopback'
+    'cooldown'
 ];
 
 if (msg.init || !context.get('pattern', 'memory')) {
@@ -37,7 +36,7 @@ if (msg.init || !context.get('pattern', 'memory')) {
     if (msg.init) return;
 }
 
-if (msg.payload.self) {
+if (msg.origin.self) {
     return;
 }
 
@@ -48,7 +47,7 @@ if (!pattern || !msg.parsed.command.match(pattern)) {
     return;
 }
 
-let channel = msg.payload.channel;
+let channel = msg.origin.channel;
 
 if (chroot[channel]) {
     channel = chroot[channel];
@@ -69,7 +68,7 @@ msg.command = command;
 msg.api.cooldown = {
     reset_user: () => {
         const cdMap = context.get('cooldown', 'memory') || {};
-        const userKey = `${command._id}|${msg.payload.userstate.username}`;
+        const userKey = `${command._id}|${msg.origin.userstate.username}`;
         delete cdMap[userKey];
         context.set('cooldown', cdMap, 'memory');
     },
@@ -81,7 +80,7 @@ if (command.cooldown && !msg.parsed.cooldown_bypass) {
     const cd = command.cooldown;
 
     const channelKey = `${command._id}`;
-    const userKey = `${command._id}|${msg.payload.userstate.username}`;
+    const userKey = `${command._id}|${msg.origin.userstate.username}`;
 
     Object.entries(cdMap)
         .filter(([k]) => k.startsWith(command._id))

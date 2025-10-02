@@ -173,7 +173,7 @@ async function cmdList(channel, [name]) {
         return;
     }
 
-    const maxLength = 500 - msg.payload.userstate.username.length - 'доступные команды (NN/NN): '.length;
+    const maxLength = 500 - msg.origin.userstate.username.length - 'доступные команды (NN/NN): '.length;
 
     const pages = commands.map(c => {
         const hasAlias = c.pattern.indexOf('|') !== -1 || c.type === 'alias';
@@ -276,7 +276,7 @@ async function cmdAdd(channel, args) {
             break;
 
         case 'native':
-            if (msg.payload.userstate.username != 'thedrhax') {
+            if (msg.origin.userstate.username != 'thedrhax') {
                 reply(`команды native может добавлять только TheDrHax`);
                 return;
             }
@@ -522,7 +522,7 @@ async function cmdRemove(channel, args) {
             reply(`шаблон "${toRemove[0]}" удалён из команды "${command.name}" SeemsGood`);
         }
     } else {
-        if (command.type === 'native' && msg.payload.userstate.username !== 'thedrhax') {
+        if (command.type === 'native' && msg.origin.userstate.username !== 'thedrhax') {
             reply('команды native может удалять только TheDrHax');
             return;
         }
@@ -568,7 +568,7 @@ async function cmdPlugin(channel, args) {
                     const pattern = new RegExp(args.join(' '), 'i');
 
                     const modified = chanCtx
-                        .filter((m) => m.payload.message?.match(pattern) || m.payload.userstate?.username?.match(pattern))
+                        .filter((m) => m.origin.message?.match(pattern) || m.origin.userstate?.username?.match(pattern))
                         .filter((m) => !!m.deleted == restore)
                         .map((m) => {
                             m.deleted = !restore;
@@ -684,7 +684,7 @@ async function cmdPlugin(channel, args) {
 }
 
 async function main() {
-    let channel = msg.payload.channel;
+    let channel = msg.origin.channel;
 
     const [cmd, ...args] = msg.parsed.query.split(' ');
 
@@ -699,7 +699,7 @@ async function main() {
             return;
 
         case 'id':
-            reply(`ID канала: ${msg.payload.channel}`);
+            reply(`ID канала: ${msg.origin.channel}`);
             return;
 
         case 'show':

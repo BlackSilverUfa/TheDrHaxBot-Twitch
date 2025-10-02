@@ -7,7 +7,12 @@ function groups(str, regex, group) {
     return [...str.matchAll(regex)].map(x => x[group]);
 }
 
-msg.payload.self = msg.payload.userstate.username === SELF;
+msg.origin = msg.payload;
+msg.payload = {};
+
+msg.payload = msg.origin; // compat
+
+msg.origin.self = msg.origin.userstate.username === SELF;
 
 /**
  * Methods
@@ -15,17 +20,17 @@ msg.payload.self = msg.payload.userstate.username === SELF;
 
 let api = {};
 
-api.delete = (id = msg.payload.userstate.id) => twitch(
+api.delete = (id = msg.origin.userstate.id) => twitch(
     'helix', 'DELETE', 'moderation/chat', {
-        broadcaster_id: msg.payload.userstate['room-id'],
+        broadcaster_id: msg.origin.userstate['room-id'],
         moderator_id: 573134756,
         message_id: id,
     },
 );
 
-api.timeout = (duration = 1, reason = '', id = msg.payload.userstate['user-id']) => twitch(
+api.timeout = (duration = 1, reason = '', id = msg.origin.userstate['user-id']) => twitch(
     'helix', 'POST',
-    `moderation/bans?broadcaster_id=${msg.payload.userstate['room-id']}&moderator_id=573134756`,
+    `moderation/bans?broadcaster_id=${msg.origin.userstate['room-id']}&moderator_id=573134756`,
     {
         data: {
             user_id: id,
@@ -43,10 +48,10 @@ let parsed = {};
  * Level based on badges
  */
 
-const badges = Object.keys(msg.payload.userstate.badges || {});
+const badges = Object.keys(msg.origin.userstate.badges || {});
 
 parsed.level = (
-    msg.payload.userstate.username == 'thedrhax' ? -1 :
+    msg.origin.userstate.username == 'thedrhax' ? -1 :
     badges.indexOf('broadcaster') !== -1 ? 0 :
     badges.indexOf('moderator') !== -1 ? 1 :
     badges.indexOf('vip') !== -1 ? 2 :
@@ -58,10 +63,10 @@ parsed.level = (
  * Support for threads
  */
 
-const replyTo = msg.payload.userstate['reply-parent-display-name'];
+const replyTo = msg.origin.userstate['reply-parent-display-name'];
 
 if (replyTo) {
-    msg.payload.message = msg.payload.message.substring(replyTo.length + 2);
+    msg.origin.message = msg.origin.message.substring(replyTo.length + 2);
 }
 
 /**
@@ -69,9 +74,9 @@ if (replyTo) {
  * Streamer is ignored to avoid distraction
  */
 
-parsed.mentions_list = groups(msg.payload.message.toLowerCase(), MENTION);
+parsed.mentions_list = groups(msg.origin.message.toLowerCase(), MENTION);
 
-let mentioned = msg.payload.userstate['reply-parent-user-login'] === SELF;
+let mentioned = msg.origin.userstate['reply-parent-user-login'] === SELF;
 
 if (!mentioned) {
     mentioned = parsed.mentions_list.indexOf(SELF) !== -1;
@@ -82,8 +87,8 @@ if (!mentioned) {
 }
 
 // if (parsed.mentions_list.length === 0 && replyTo) {
-//     let login = msg.payload.userstate['reply-parent-user-login'];
-//     msg.payload.message += ` @${login}`;
+//     let login = msg.origin.userstate['reply-parent-user-login'];
+//     msg.origin.message += ` @${login}`;
 //     parsed.mentions_list.push(login);
 // }
 
@@ -91,10 +96,10 @@ if (!mentioned) {
  * Parse command and query
  */
 
-let command = msg.payload.message.match(COMMAND);
+let command = msg.origin.message.match(COMMAND);
 
 if (!command && mentioned) {
-    let tmpmsg = msg.payload.message.replace(new RegExp(`@${SELF},?\s*`, 'ig'), '');
+    let tmpmsg = msg.origin.message.replace(new RegExp(`@${SELF},?\s*`, 'ig'), '');
 
     command = [
         '!_main_ ' + tmpmsg,
@@ -129,7 +134,7 @@ if (command) {
  */
 
 parsed.mentions_list = parsed.mentions_list
-    .filter(x => (x != msg.payload.channel.substring(1) || parsed.level <= 2));
+    .filter(x => (x != msg.origin.channel.substring(1) || parsed.level <= 2));
 
 parsed.mentions = parsed.mentions_list
     .map(x => `@${x}`)
@@ -139,7 +144,7 @@ parsed.mentions = parsed.mentions_list
  * Parse emotes
  */
 
-const [found, emotesOnly] = parseEmotes(command ? parsed.query : msg.payload.message);
+const [found, emotesOnly] = parseEmotes(command ? parsed.query : msg.origin.message);
 
 parsed.emotes = found;
 parsed.emotesOnly = emotesOnly && found.length > 0;

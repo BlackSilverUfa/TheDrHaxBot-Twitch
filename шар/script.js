@@ -372,7 +372,7 @@ const main = () => {
     let match;
 
     if (query.length === 0) {
-        let [_, vowels] = msg.payload.message.match(/^!ш+([ао]+)р+/i) || ['а'];
+        let [_, vowels] = msg.origin.message.match(/^!ш+([ао]+)р+/i) || ['а'];
 
         if (!vowels) {
             vowels = 'а';

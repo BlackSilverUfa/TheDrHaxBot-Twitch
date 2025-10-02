@@ -8,7 +8,7 @@ const { range, find } = _; // = require('lodash');
 const { choose, random, rchoose, wchoose, smartJoin } = flow.get('func', 'memory');
 const { actions, targets } = context.get('answers', 'memory');
 
-const user = msg.payload.userstate.username;
+const user = msg.origin.userstate.username;
 const mentions = Object.entries(msg.parsed.mentions_list.reduce((obj, curr) => {
     obj[curr] = (obj[curr] || 0) + 1;
     return obj;
@@ -61,9 +61,9 @@ function bite(user) {
     const res = rchoose(targets);
 
     //if (res.indexOf('бан') === 0) {
-    //    const ctx = flow.get('context', 'file')[msg.payload.channel];
-    //    const m = find(ctx, (m) => m.payload.userstate.username === user);
-    //    if (m) msg.api.timeout(60, 'кусь catNom', m.payload.userstate['user-id']);
+    //    const ctx = flow.get('context', 'file')[msg.origin.channel];
+    //    const m = find(ctx, (m) => m.origin.userstate.username === user);
+    //    if (m) msg.api.timeout(60, 'кусь catNom', m.origin.userstate['user-id']);
     //}
 
     return res;
