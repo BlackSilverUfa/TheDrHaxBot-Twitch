@@ -123,7 +123,7 @@ if (command) {
             query = query.substring(0, index);
         }
         
-        parsed.query_filtered = query.trim();
+        parsed.query_filtered = query.replace(/\u034F/ug, '').trim();
     } else {
         parsed.query_filtered = '';
     }

@@ -8,6 +8,7 @@ const stream = flow.get('twitch_channels.blackufa', 'file');
 const MAX_RESULTS = 3;
 
 let query = msg.parsed.query_filtered.trim();
+node.error(query);
 
 function segmentLink(segment, at = 0) {
     let id = segment.segment;
