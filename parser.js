@@ -108,6 +108,13 @@ if (!command && mentioned) {
     ];
 }
 
+// Ignore other rooms in Shared Chat
+if (command && msg.origin.userstate['source-room-id']) {
+    if (msg.origin.userstate['source-room-id'] != msg.origin.userstate['room-id']) {
+        command = null;
+    }
+}
+
 if (command) {
     parsed.command = command[1];
     parsed.icommand = command[1].toLowerCase();
