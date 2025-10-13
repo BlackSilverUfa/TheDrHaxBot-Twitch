@@ -314,7 +314,7 @@ const FIXED_ANSWERS = {
 
 // =====================================================
 
-const { random, choose, wchoose, renderTemplate, agreeWithNum, smartJoin } = flow.get('func', 'memory');
+const { random, choose, wchoose, renderTemplate, pluralize, smartJoin } = flow.get('func', 'memory');
 const { parse, inflect } = flow.get('inflector', 'memory');
 
 const choice = (x) => renderTemplate(choose(CHOICES), { x });
@@ -471,7 +471,7 @@ const main = () => {
             .split(' ')
             .map((word) => inflect(
                 parse(word, ['gent', 'plur']),
-                agreeWithNum(x, [
+                pluralize(x, [
                     ['nomn', 'sing'],
                     ['gent', 'sing'],
                     ['gent', 'plur']
@@ -490,7 +490,7 @@ const main = () => {
             .split(' ')
             .map((word) => inflect(
                 parse(word, ['loct', 'plur']),
-                agreeWithNum(x, [
+                pluralize(x, [
                     ['nomn', 'sing'],
                     ['gent', 'sing'],
                     ['gent', 'plur']

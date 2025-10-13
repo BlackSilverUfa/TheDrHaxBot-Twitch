@@ -19,6 +19,22 @@ function mulberry32(a) {
 const random = mulberry32(+new Date());
 // const random = Math.random;
 
+const throttle = (func, delay) => {
+    let timer = null;
+
+    return (...args) => {
+        if (timer === null) {
+            const res = func(...args);
+
+            timer = setTimeout(() => {
+                timer = null;
+            }, delay);
+
+            return res;
+        }
+    };
+};
+
 function dateDistance(start, end, options) {
     let { parts, accusative, short, zero, timestamp } = options || {};
 
@@ -63,13 +79,13 @@ function dateDistance(start, end, options) {
             return a + duration[k] * multiplier;
         }, 0).toFixed(1).replace(/\.0$/, '');
 
-        return value + ' ' + agreeWithNum(value, locale[mainPart]);
+        return value + ' ' + pluralize(value, locale[mainPart]);
     }
 
     return smartJoin(parts
         .filter(p => duration[p] > 0 || zero)
         .filter((p, i) => !short || i === 0)
-        .map((p) => duration[p] + ' ' + agreeWithNum(duration[p], locale[p]))
+        .map((p) => duration[p] + ' ' + pluralize(duration[p], locale[p]))
         .filter(p => p != null));
 }
 
@@ -125,7 +141,7 @@ function tokenize(text) {
     }).filter((w) => w);
 }
 
-function agreeWithNum(num, words) {
+function pluralize(num, words) {
     if (num < 0) {
         num = Math.abs(num);
     }
@@ -236,7 +252,7 @@ function renderTemplate(str, vars) {
             }
         } else if (key.indexOf('#') !== -1) {
             const [valKey, args] = key.split('#');
-            value = agreeWithNum(vars[valKey], args.split(','));
+            value = pluralize(vars[valKey], args.split(','));
         } else {
             value = vars[key];
         }
@@ -324,12 +340,13 @@ const parseEmotes = (text) => {
 flow.set('func', {
     amongo,
     random,
+    throttle,
     twitch,
     telegram,
     Patterns,
     TZ,
     tokenize,
-    agreeWithNum,
+    pluralize,
     dateDistance,
     msToDate,
     choose,
