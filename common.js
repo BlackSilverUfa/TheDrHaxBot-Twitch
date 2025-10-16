@@ -299,7 +299,7 @@ const parseEmotes = (text) => {
     const emotes = flow.get('emotes', 'file');
 
     let found = [];
-    let emotesOnly = false;
+    let emotesOnly = true;
 
     text.split(' ').reduce((acc, curr) => {
         if (emotes[curr]) {
