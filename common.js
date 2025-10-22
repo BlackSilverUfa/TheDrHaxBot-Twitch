@@ -295,18 +295,21 @@ const ftime = (t) => {
     }, []).join(':');
 };
 
-const parseEmotes = (text) => {
+const parseEmotes = (text, manualRanges = []) => {
     const emotes = flow.get('emotes', 'file');
 
     let found = [];
     let emotesOnly = true;
 
     text.split(' ').reduce((acc, curr) => {
+        const start = acc.length;
+        const length = curr.length;
+
         if (emotes[curr]) {
             found.push({
                 emote: emotes[curr],
-                start: acc.length,
-                length: curr.length
+                start,
+                length
             });
         } else if (curr.match(Patterns.EMOJI)) {
             found.push({
@@ -315,8 +318,8 @@ const parseEmotes = (text) => {
                     source: 'emoji',
                     scope: 'global',
                 },
-                start: acc.length,
-                length: curr.length
+                start,
+                length
             });
         } else if (curr.match(/<:.+:[0-9]+>/)) {
             found.push({
@@ -324,11 +327,27 @@ const parseEmotes = (text) => {
                     name: curr,
                     source: 'discord',
                 },
-                start: acc.length,
-                length: curr.length
+                start,
+                length
             })
         } else if (curr.length > 0) {
-            emotesOnly = false;
+            const manual = manualRanges.find(([x, y]) => x === start);
+
+            if (manual) {
+                const [x, y] = manual;
+
+                found.push({
+                    emote: {
+                        name: text.substring(x, y),
+                        source: 'manual',
+                        scope: 'global',
+                    },
+                    start: x,
+                    length: y - x,
+                });
+            } else {
+                emotesOnly = false;
+            }
         }
 
         return `${acc} ${curr}`;

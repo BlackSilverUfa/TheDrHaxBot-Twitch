@@ -1,6 +1,7 @@
 const SELF = 'thedrhaxbot';
 
 const { twitch, Patterns: { MENTION, COMMAND }, parseEmotes } = flow.get('func', 'memory');
+const { flatten } = _; // = require('lodash');
 
 function groups(str, regex, group) {
     group = group == null ? 1 : group;
@@ -151,7 +152,25 @@ parsed.mentions = parsed.mentions_list
  * Parse emotes
  */
 
-const [found, emotesOnly] = parseEmotes(command ? parsed.query : msg.origin.message);
+const twitchEmotes = flatten(Object.values(msg.origin.userstate.emotes || {}))
+    .map((range) => {
+        let [x, y] = range.split('-').map((a) => +a);
+        y += 1;
+
+        if (command) {
+            const prefix = msg.origin.message.length - parsed.query.length;
+
+            x -= prefix;
+            y -= prefix;
+        }
+
+        return [x, y];
+    });
+
+const [found, emotesOnly] = parseEmotes(
+    command ? parsed.query : msg.origin.message,
+    twitchEmotes,
+);
 
 parsed.emotes = found;
 parsed.emotesOnly = emotesOnly && found.length > 0;
