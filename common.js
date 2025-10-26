@@ -123,6 +123,16 @@ async function telegram(call, payload) {
     return reply.payload;
 }
 
+async function ytdl(url) {
+    const res = await AF.invoke('yt-dlp', { payload: { id: url } });
+    node.warn(res);
+    if (!res.ytdl || res.ytdl.error) {
+        node.error(res.ytdl, { payload: { id: url } });
+        return null;
+    }
+    return res.ytdl;
+}
+
 const Patterns = {};
 Patterns.COMMAND_NAME = /[a-zа-яё0-9\-_]{2,}/i;
 Patterns.COMMAND = new RegExp(`^!\\s?(${Patterns.COMMAND_NAME.source}),?\\s*(.*)`, 'i');
@@ -362,6 +372,7 @@ flow.set('func', {
     throttle,
     twitch,
     telegram,
+    ytdl,
     Patterns,
     TZ,
     tokenize,
