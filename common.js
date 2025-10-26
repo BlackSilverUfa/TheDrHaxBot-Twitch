@@ -125,12 +125,11 @@ async function telegram(call, payload) {
 
 async function ytdl(url) {
     const res = await AF.invoke('yt-dlp', { payload: { id: url } });
-    node.warn(res);
-    if (!res.ytdl || res.ytdl.error) {
-        node.error(res.ytdl, { payload: { id: url } });
+    if (!res.payload?.ytdl || res.payload?.ytdl?.error) {
+        node.error(res.payload?.ytdl?.error, { payload: { id: url } });
         return null;
     }
-    return res.ytdl;
+    return res.payload.ytdl;
 }
 
 const Patterns = {};
