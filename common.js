@@ -141,6 +141,15 @@ async function vk(call, payload) {
     return res.payload.response;
 }
 
+async function youtube(method, call, payload) {
+    const res = await AF.invoke('youtube', { method, call, payload });
+    if (res.statusCode > 299) {
+        node.error(res.payload, { payload: { method, call, payload } });
+        return null;
+    }
+    return res.payload;
+}
+
 const Patterns = {};
 Patterns.COMMAND_NAME = /[a-zа-яё0-9\-_]{2,}/i;
 Patterns.COMMAND = new RegExp(`^!\\s?(${Patterns.COMMAND_NAME.source}),?\\s*(.*)`, 'i');
@@ -378,10 +387,13 @@ flow.set('func', {
     amongo,
     random,
     throttle,
+
     twitch,
     telegram,
     ytdl,
     vk,
+    youtube,
+
     Patterns,
     TZ,
     tokenize,
