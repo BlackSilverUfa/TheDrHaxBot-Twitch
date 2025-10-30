@@ -141,10 +141,10 @@ async function vk(call, payload) {
     return res.payload.response;
 }
 
-async function youtube(method, call, payload, channel=null) {
+async function youtube(method, call, payload, channel = null) {
     const res = await AF.invoke('youtube', { channel, method, call, payload });
     if (res.statusCode > 299) {
-        node.error(res.payload, { channel, payload: { method, call, payload } });
+        node.error(res.payload.error, { channel, payload: { method, call, payload } });
         return null;
     }
     return res.payload;
