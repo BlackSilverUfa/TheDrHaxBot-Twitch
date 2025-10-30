@@ -147,6 +147,9 @@ async function youtube(method, call, payload, channel = null) {
         node.error(res.payload.error, { channel, payload: { method, call, payload } });
         return null;
     }
+    if (res.statusCode === 204) {
+        res.payload = true;
+    }
     return res.payload;
 }
 
