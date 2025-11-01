@@ -91,6 +91,8 @@ function dateDistance(start, end, options) {
 
 const AF = global.get('actionflows');
 
+const error = (func, req, res) => node.send([null, { payload: { func, req, res } }]);
+
 async function amongo(collection, operation, query, payload) {
     if (operation !== 'update') {
         payload = query;
@@ -100,11 +102,7 @@ async function amongo(collection, operation, query, payload) {
     const res = await AF.invoke('amongo', { collection, operation, query, payload });
 
     if (res.error) {
-        node.error(JSON.stringify({
-            func: 'amongo',
-            req: { collection, operation, query, payload },
-            res: res.error,
-        }, null, 2));
+        error('amongo', { collection, operation, query, payload }, res.error);
         return null;
     }
 
@@ -114,11 +112,7 @@ async function amongo(collection, operation, query, payload) {
 async function twitch(namespace, method, call, payload) {
     const res = await AF.invoke('twitch', { namespace, method, call, payload });
     if (res.payload.error) {
-        node.error(JSON.stringify({
-            func: 'twitch',
-            req: { namespace, method, call, payload },
-            res: res.payload,
-        }, null, 2));
+        error('twitch', { namespace, method, call, payload }, res.payload);
         return null;
     }
     return res.payload.data;
@@ -127,11 +121,7 @@ async function twitch(namespace, method, call, payload) {
 async function telegram(call, payload) {
     const res = await AF.invoke('telegram', { call, payload });
     if (res.payload.ok === false) {
-        node.error(JSON.stringify({
-            func: 'telegram',
-            req: { call, payload },
-            res: res.payload,
-        }, null, 2));
+        error('telegram', { call, payload }, res.payload);
         return null;
     }
     return res.payload;
@@ -140,11 +130,7 @@ async function telegram(call, payload) {
 async function ytdl(url) {
     const res = await AF.invoke('yt-dlp', { payload: { id: url } });
     if (!res.payload?.ytdl || res.payload?.ytdl?.error) {
-        node.error(JSON.stringify({
-            func: 'ytdl',
-            req: { url },
-            res: res.payload?.ytdl?.error,
-        }, null, 2));
+        error('ytdl', { url }, res.payload?.ytdl?.error || res.payload);
         return null;
     }
     return res.payload.ytdl;
@@ -153,11 +139,7 @@ async function ytdl(url) {
 async function vk(call, payload) {
     const res = await AF.invoke('vk', { call, payload });
     if (!res.payload || res.payload?.error) {
-        node.error(JSON.stringify({
-            func: 'vk',
-            req: { call, payload },
-            res: res.payload,
-        }, null, 2));
+        error('vk', { call, payload }, res.payload);
         return null;
     }
     return res.payload.response;
@@ -166,11 +148,7 @@ async function vk(call, payload) {
 async function youtube(method, call, payload, channel = null) {
     const res = await AF.invoke('youtube', { channel, method, call, payload });
     if (res.statusCode > 299) {
-        node.error(JSON.stringify({
-            func: 'youtube',
-            req: { channel, payload: { method, call, payload } },
-            res: res.payload,
-        }, null, 2));
+        error('youtube', { channel, method, call, payload }, res.payload);
         return null;
     }
     if (res.statusCode === 204) {
