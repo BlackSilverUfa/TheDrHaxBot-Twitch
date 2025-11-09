@@ -91,7 +91,11 @@ function dateDistance(start, end, options) {
 
 const AF = global.get('actionflows');
 
-const error = (func, req, res) => node.send([null, { payload: { func, req, res } }]);
+const error = (func, req, res) => node.send([null, { payload: {
+    func,
+    req: JSON.stringify(req, null, 2),
+    res: JSON.stringify(res, null, 2),
+} }]);
 
 async function amongo(collection, operation, query, payload) {
     if (operation !== 'update') {
