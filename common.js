@@ -131,10 +131,10 @@ async function telegram(call, payload) {
     return res.payload;
 }
 
-async function ytdl(url) {
-    const res = await AF.invoke('yt-dlp', { payload: { id: url } });
+async function ytdl(url, profile = null) {
+    const res = await AF.invoke('yt-dlp', { profile, payload: { id: url } });
     if (!res.payload?.ytdl || res.payload?.ytdl?.error) {
-        error('ytdl', { url }, res.payload?.ytdl?.error || res.payload);
+        error('ytdl', { profile, url }, res.payload?.ytdl?.error || res.payload);
         return null;
     }
     return res.payload.ytdl;
