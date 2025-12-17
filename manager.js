@@ -678,6 +678,44 @@ async function cmdPlugin(channel, args) {
 
             break;
 
+        case 'silent':
+            if (!channel.startsWith('@telegram+')) {
+                reply('этот плагин в данный момент поддерживается только в Telegram');
+                return;
+            }
+
+            if (!args[0]) {
+                if (config.plugins?.silent) {
+                    reply('тихий режим активен');
+                } else {
+                    reply('тихий режим не активен');
+                }
+                return;
+            }
+
+            switch (args[0]) {
+                case 'true':
+                case 'on':
+                    config.plugins.silent = true;
+                    reply('тихий режим активирован');
+                    break;
+
+                case 'false':
+                case 'off':
+                    delete config.plugins.silent;
+                    reply('тихий режим отключён');
+                    break;
+                
+                default:
+                    reply('доступные команды: true, false, help');
+                    return;
+            }
+
+            await amongo(CHANNEL_DB, 'save', config);
+            reload();
+
+            break;
+
         default:
             reply(`неизвестный плагин "${name}"`);
             return;
