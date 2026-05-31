@@ -1124,3 +1124,8 @@
   Например, S.P.O.R.T. - Рыбалка SabaPing
   drhx.ru/b/2589892339?at=5390
 
+'бррр ящкере':
+  'regex': '(бр+|[яэ][щс]ь?ке[рл]е+)'
+  'answer': >
+    это звуки, которые издавал персонаж в Scary Game 2: The Mad Shepherd bufaUL
+    drhx.ru/b/2774222879?at=7011
