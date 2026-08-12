@@ -161,6 +161,7 @@ const CONTINUATIONS = [
     'крыжовник терпкий, сладкая сирень ANYA',
     'кодзима гений Kojimaptyp',
     'кози peepoBlanket',
+    'косинь косинь AYAYA',
     'ктулху фхтагн Squid1 Squid2 Squid3 Squid4',
     
     'найс KEKLEO',
