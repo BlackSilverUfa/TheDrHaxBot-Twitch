@@ -564,7 +564,7 @@ async function cmdPlugin(channel, args) {
                         return;
                     }
 
-                    const chanCtx = ctx[channel] || [];
+                    const chanCtx = ctx[config.plugins?.chroot || channel] || [];
 
                     const pattern = new RegExp(args.join(' '), 'i');
 
